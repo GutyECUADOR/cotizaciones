@@ -1,6 +1,6 @@
-<?php namespace models;
+<?php namespace App\Models;
 
-class CotizacionClass extends conexion {
+class CotizacionClass extends Conexion {
     
     public function __construct(){
         parent::__construct();

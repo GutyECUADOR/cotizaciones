@@ -16,12 +16,12 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">
         <?php
-              if (isset($_SESSION["usuarioRUC"])){
+              if (isset($_SESSION["usuarioRUC".APP_UNIQUE_KEY])){
                 echo '
                 <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Bienvenido, '.$_SESSION["usuarioNOMBRE"].'<span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Bienvenido, '.$_SESSION["usuarioNOMBRE".APP_UNIQUE_KEY].'<span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="#">DB: '.$_SESSION["empresaAUTH"].' </a></li>
+                    <li><a href="#">DB: '.$_SESSION["empresaAUTH".APP_UNIQUE_KEY].' </a></li>
                     <li><a href="?action=logout">Cerrar Sesion </a></li>
                    
                   </ul>

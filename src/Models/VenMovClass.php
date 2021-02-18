@@ -1,6 +1,6 @@
-<?php namespace models;
+<?php namespace App\Models;
 
-class venMovClass {
+class VenMovClass {
     public $oficina;
     public $ejercicio;
     public $tipoDoc;

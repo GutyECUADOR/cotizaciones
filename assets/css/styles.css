@@ -54,8 +54,7 @@ body {
 .logo {
     position: relative;
     text-align: center;
-    max-width: 170px;
-    max-height: 80px;
+    max-width: 100%;
     margin: auto;
     padding-bottom: 10px;
 }

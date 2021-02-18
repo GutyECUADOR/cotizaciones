@@ -1,4 +1,4 @@
-<?php namespace models;
+<?php namespace App\Models;
 /**
  * @author Lic. Gutiérrez R. José
  */
@@ -25,7 +25,7 @@ class conexion {
         /*CONEXION PARA DESAROLLO*/
         $this->driver = 'sqlsrv';
         $this->host = "SRV-IMPERIUM";
-        $this->dbname = "IMPERIUM";
+        $this->dbname = "";
         $this->port = "1433";
         $this->user = "sfb";
         $this->pass = "sfb123";

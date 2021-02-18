@@ -1,12 +1,14 @@
-<?php namespace controllers;
+<?php namespace App\Controllers;
 
-class loginController  {
+use App\Models\LoginModel;
+
+class LoginController  {
 
     public $loginModel;
 
     public function __construct()
     {
-        $this->loginModel = new \models\loginModel();
+        $this->loginModel = new LoginModel();
     }
     
     public function loadtemplate() {
@@ -24,16 +26,15 @@ class loginController  {
                 //Funcion validar acceso retorna array de resultados
                     if (!empty($arrayResultados)) {
                         session_start();
-                        $_SESSION["usuarioRUC"] =  $arrayResultados['Codigo'] ;
-                        $_SESSION["usuarioNOMBRE"] =  $arrayResultados['Nombre'] ;
-                        $_SESSION["empresaAUTH"] = $codigoDB;
+                        $_SESSION["usuarioRUC".APP_UNIQUE_KEY] =  $arrayResultados['Codigo'] ;
+                        $_SESSION["usuarioNOMBRE".APP_UNIQUE_KEY] =  $arrayResultados['Nombre'] ;
+                        $_SESSION["empresaAUTH".APP_UNIQUE_KEY] = $codigoDB;
                         header("Location: index.php?&action=inicio");
                     
                     }else{
                         echo '
-                            <div class="uk-alert uk-alert-danger" data-uk-alert="">
-                                <a href="#" class="uk-alert-close uk-close"></a>
-                                No se pudo realizar el logeo con el usuario: '. $arrayDatos['usuario'] .' en la empresa seleccionada.
+                            <div class="alert alert-danger text-center">
+                                No se pudo ingresar con el usuario: <strong>'. $arrayDatos['usuario'] .'</strong> en la empresa seleccionada, reintente.
                             </div>
                         ';
                        
@@ -147,8 +148,8 @@ class loginController  {
         $opciones = $this->loginModel->getAllDataBaseList();
 
         foreach ($opciones as $opcion) {
-            $codigo = $opcion['Codigo'];
-            $texto = $opcion['Nombre'];
+            $codigo = $opcion['dbname'];
+            $texto = $opcion['nombre'];
             echo "<option value='$codigo'>$texto</option>";
     
         }

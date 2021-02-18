@@ -1,8 +1,8 @@
-<?php namespace models;
+<?php namespace App\Models;
 
 /* LOS MODELOS del MVC retornaran unicamente arrays PHP sin serializar*/
 
-class ajaxModel extends conexion  {
+class AjaxModel extends Conexion  {
     
     public function __construct() {
         parent::__construct();
@@ -246,14 +246,8 @@ class ajaxModel extends conexion  {
 
         $stmt = $this->instancia->prepare($query); 
     
-        $arrayResultados = array();
-
             if($stmt->execute()){
-                while ($row = $stmt->fetch( \PDO::FETCH_ASSOC )) {
-                    array_push($arrayResultados, $row);
-                }
-                return $arrayResultados;
-                
+                return $stmt->fetchAll( \PDO::FETCH_ASSOC );
             }else{
                 $resulset = false;
             }

@@ -1,6 +1,6 @@
-<?php namespace models;
+<?php namespace App\Models;
 
-class mainModel {
+class MainModel {
     
     public function actionCatcherModel($action){
         switch ($action) {

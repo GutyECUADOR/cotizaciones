@@ -718,7 +718,7 @@ $(document).ready(function() {
         $("#loaderClientes").css("display", "block");
         $.ajax({
             type: 'get',
-            url: 'views/modulos/ajax/API_cotizaciones.php?action=searchClientes',
+            url: './api/index.php?action=searchClientes',
             dataType: "json",
     
             data: { terminoBusqueda:terminoBusqueda, tipoBusqueda:tipoBusqueda },

@@ -1,6 +1,6 @@
-<?php namespace models;
+<?php namespace App\Models;
 
-class venCabClass {
+class VenCabClass {
     public $pcID;
     public $oficina;
     public $ejercicio;

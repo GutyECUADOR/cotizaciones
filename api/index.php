@@ -1,20 +1,19 @@
 <?php
+
+use App\Controllers\AjaxController;
+
+header('Content-Type: application/json');
 date_default_timezone_set('America/Lima');
 session_start();
-require_once '../../../config/global.php';
-require_once '../../../vendor/autoload.php';
-require_once '../../../core/models/conexion.php';
-require_once '../../../core/controllers/ajaxController.php';
-require_once '../../../core/models/ajaxModel.php';
-require_once '../../../core/models/venCabClass.php';
-require_once '../../../core/models/venMovClass.php';
+
+require_once '../vendor/autoload.php';
 
 class ajax{
   private $ajaxController;
    
     public function __construct() {
       /*Creamos instancia general del controlador*/
-      $this->ajaxController = new \controllers\ajaxController();
+      $this->ajaxController = new AjaxController();
     }
 
     /*Métodos disponibles del API */

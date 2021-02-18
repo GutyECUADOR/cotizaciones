@@ -1,13 +1,13 @@
-<?php namespace models;
+<?php  namespace App\Models;
 
-class loginModel extends conexion {
+class LoginModel extends Conexion {
  
     public function __construct() {
         parent::__construct();
     }
 
 
-    public function validaIngreso($arrayDatos, $dataBaseName='SBIOKAO'){
+    public function validaIngreso($arrayDatos, $dataBaseName='MODELO'){
 
         $this->setDbname($dataBaseName);
         $this->conectarDB();
@@ -33,7 +33,7 @@ class loginModel extends conexion {
 
     public function validaMail($mail){
         $query = "SELECT ruc, nombre, email, password FROM tbl_cliente WHERE email = :mail"; 
-        $stmt = $this->db->prepare($query); 
+        $stmt = $this->instancia->prepare($query); 
         $stmt->bindParam(':mail', $mail); 
         $stmt->execute(); 
        
@@ -45,7 +45,7 @@ class loginModel extends conexion {
     /* Retorna el nombre array con la clave NameDatabase para el nombre de la DB, para ser usada en la conexion*/ 
     public function getDBNameByCodigo($codigoDB){
         $query = "SELECT TOP 1 NameDatabase, Codigo FROM SBIOKAO.dbo.Empresas_WF WHERE Codigo = :codigo"; 
-        $stmt = $this->db->prepare($query); 
+        $stmt = $this->instancia->prepare($query); 
         $stmt->bindParam(':codigo', $codigoDB); 
        
             if($stmt->execute()){
@@ -59,7 +59,7 @@ class loginModel extends conexion {
     /* Retorna el nombre array con la clave NameDatabase y Codigo para el nombre de la DB, para ser usada en la conexion*/ 
     public function getCodeDBByName($nombreDB){
         $query = "SELECT TOP 1 NameDatabase, Codigo FROM SBIOKAO.dbo.Empresas_WF WHERE NameDatabase = :NameDatabase"; 
-        $stmt = $this->db->prepare($query); 
+        $stmt = $this->instancia->prepare($query); 
         $stmt->bindParam(':NameDatabase', $nombreDB); 
     
             if($stmt->execute()){
@@ -72,16 +72,10 @@ class loginModel extends conexion {
 
     /* Retorna el nombre array con la clave Codigo, Nombre para el nombre de la DB, para ser usada en la conexion*/ 
     public function getAllDataBaseList(){
-        $query = "SELECT Codigo, NameDataBase, Nombre FROM SBIOKAO.dbo.Empresas_WF"; 
-        $stmt = $this->db->prepare($query); 
-        $arrayResultados = array();
-
+        $query = "SELECT nombre, dbname FROM WSSP.dbo.databases_info"; 
+        $stmt = $this->instancia->prepare($query); 
             if($stmt->execute()){
-                while ($row = $stmt->fetch( \PDO::FETCH_ASSOC )) {
-                    array_push($arrayResultados, $row);
-                }
-                return $arrayResultados;
-                
+              return $stmt->fetchAll( \PDO::FETCH_ASSOC);
             }else{
                 $resulset = false;
             }

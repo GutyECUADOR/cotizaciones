@@ -1,13 +1,14 @@
-<?php namespace controllers;
+<?php namespace App\Controllers;
 
-class mainController {
+use App\Models\MainModel;
+
+class MainController {
     
     public $mainmodel;
     
     public function __construct()
     {
-        require_once 'core/models/mainModel.php';
-        $this->mainmodel = new \models\mainModel();
+        $this->mainmodel = new MainModel();
     }
     
     public function loadtemplate(){

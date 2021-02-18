@@ -1,4 +1,6 @@
-<?php namespace controllers;
+<?php namespace App\Controllers;
+
+use App\Models\CotizacionClass;
 
 class CotizacionController  {
 
@@ -6,8 +8,8 @@ class CotizacionController  {
     public $cotizacion;
 
     public function __construct() {
-        $this->defaulDataBase = $_SESSION["empresaAUTH"];
-        $this->cotizacion = new \models\CotizacionClass();
+        $this->defaulDataBase = $_SESSION["empresaAUTH".APP_UNIQUE_KEY];
+        $this->cotizacion = new CotizacionClass();
         $this->cotizacion->setDbname($this->defaulDataBase);
         $this->cotizacion->conectarDB();
     }
