@@ -1,12 +1,14 @@
 <?php
+
+use App\Models\AjaxModel;
+
 session_start();
-require_once '../config/global.php';
-require_once '../core/models/conexion.php';
-require_once '../core/models/ajaxModel.php';
-require_once '../core/controllers/ajaxController.php';
+require_once '../vendor/autoload.php';
 
-$ajax = new \controllers\ajaxController();
+$ajax = new AjaxModel();
+$ajax->setDbname('MODELO1');
+$ajax->conectarDB();
 
-$response = $ajax->getVEN_CABController('992018PRO00014099');
+$response = $ajax->getVENCABByID('992020COT00000003');
 
-var_dump(json_encode($response));
+var_dump($response);

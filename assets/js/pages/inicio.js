@@ -363,7 +363,7 @@ $(document).ready(function() {
     // Boton de creacion de PDF en busqueda de documentos
     $("#tblResultadosBusquedaDocumentos").on("click", '.btnModalGeneraPDF', function(event) {
         let IDDocument = $(this).data("codigo");
-        window.open('./views/modulos/ajax/API_cotizaciones.php?action=generaProforma&IDDocument='+IDDocument);
+        window.open('././api/index.php?action=generaProforma&IDDocument='+IDDocument);
        
     });
      
@@ -410,7 +410,7 @@ $(document).ready(function() {
         console.log(JSON.parse(formData));
         $.ajax({
             type: 'POST',
-            url: 'views/modulos/ajax/API_cotizaciones.php?action=saveCotizacion',
+            url: './api/index.php?action=saveCotizacion',
             dataType: "json",
     
             data: { formData: formData },
@@ -540,7 +540,7 @@ $(document).ready(function() {
         console.log(arrayProductos)
         $('#tblResultadosBusquedaProductos').find("tr:gt(0)").remove();
         let cont = 1;
-        let precioDisplay = 'Precio_'+cotizacion.cliente.tipoPrecio;
+        let precioDisplay = 'PreaA';
         console.log(precioDisplay);
         arrayProductos.forEach(producto => {
             let row = `
@@ -601,7 +601,7 @@ $(document).ready(function() {
     
         $.ajax({
             type: 'get',
-            url: 'views/modulos/ajax/API_cotizaciones.php?action=getInfoCliente',
+            url: './api/index.php?action=getInfoCliente',
             dataType: "json",
     
             data: { ruc: CI_RUC },
@@ -646,7 +646,7 @@ $(document).ready(function() {
 
         $.ajax({
             type: 'get',
-            url: 'views/modulos/ajax/API_cotizaciones.php?action=getInfoProducto', // API retorna objeto JSON de producto, false caso contrario.
+            url: './api/index.php?action=getInfoProducto', // API retorna objeto JSON de producto, false caso contrario.
             dataType: "json",
 
             data: { codigo: codProducto, clienteRUC: clienteRUC },
@@ -680,7 +680,7 @@ $(document).ready(function() {
         console.log('Validando', codProducto, clienteRUC, cantidad)
         $.ajax({
             type: 'get',
-            url: 'views/modulos/ajax/API_cotizaciones.php?action=getInfoProducto', // API retorna objeto JSON de producto, false caso contrario.
+            url: './api/index.php?action=getInfoProducto', // API retorna objeto JSON de producto, false caso contrario.
             dataType: "json",
 
             data: { codigo: codProducto, clienteRUC: clienteRUC },
@@ -739,7 +739,7 @@ $(document).ready(function() {
        
         $.ajax({
             type: 'get',
-            url: 'views/modulos/ajax/API_cotizaciones.php?action=searchProductos',
+            url: './api/index.php?action=searchProductos',
             dataType: "json",
     
             data: { terminoBusqueda:terminoBusqueda, tipoBusqueda:tipoBusqueda },
@@ -760,7 +760,7 @@ $(document).ready(function() {
        
         $.ajax({
             type: 'get',
-            url: 'views/modulos/ajax/API_cotizaciones.php?action=searchDocumentos',
+            url: './api/index.php?action=searchDocumentos',
             dataType: "json",
     
             data: { fechaINI:fechaINI, fechaFIN:fechaFIN, stringBusqueda: stringBusqueda },
@@ -827,7 +827,7 @@ $(document).ready(function() {
     }
 
     function showModalEmail(IDDocument){
-        fetch(`./views/modulos/ajax/API_cotizaciones.php?action=getInfoVENCAB&IDDocument=${ IDDocument }`)
+        fetch(`././api/index.php?action=getInfoVENCAB&IDDocument=${ IDDocument }`)
         .then(function(response) {
             return response.json();
         })
@@ -854,7 +854,7 @@ $(document).ready(function() {
             
           });
 
-        fetch(`./views/modulos/ajax/API_cotizaciones.php?action=sendEmailByCustomEmail&email=${ emails }&IDDocument=${ IDDocument }&message=${ message }`)
+        fetch(`././api/index.php?action=sendEmailByCustomEmail&email=${ emails }&IDDocument=${ IDDocument }&message=${ message }`)
             .then(function(response) {
                 console.log(response);
                 return response.json();
@@ -889,7 +889,7 @@ $(document).ready(function() {
             
           });
 
-        fetch(`./views/modulos/ajax/API_cotizaciones.php?action=getInfoVENCAB&IDDocument=${ IDDocument }`)
+        fetch(`././api/index.php?action=getInfoVENCAB&IDDocument=${ IDDocument }`)
             .then(function(response) {
                 return response.json();
             })
@@ -904,7 +904,7 @@ $(document).ready(function() {
                         alert("Se requiere al menos 1 email para el envio.");
                         return;
                     }else{
-                        fetch(`./views/modulos/ajax/API_cotizaciones.php?action=sendEmailByCustomEmail&email=${ emails }&IDDocument=${ IDDocument }`)
+                        fetch(`././api/index.php?action=sendEmailByCustomEmail&email=${ emails }&IDDocument=${ IDDocument }`)
                         .then(function(response) {
                             return response.json();
                         })
@@ -938,7 +938,7 @@ $(document).ready(function() {
                 
               });
     
-            fetch(`./views/modulos/ajax/API_cotizaciones.php?action=getInfoVENCAB&IDDocument=${ IDDocument }`)
+            fetch(`././api/index.php?action=getInfoVENCAB&IDDocument=${ IDDocument }`)
                 .then(function(response) {
                     return response.json();
                 })
@@ -948,7 +948,7 @@ $(document).ready(function() {
                     validaCliente();
 
                     // Carga de VEN_MOV
-                    fetch(`./views/modulos/ajax/API_cotizaciones.php?action=getInfoVENMOV&IDDocument=${ IDDocument }`)
+                    fetch(`././api/index.php?action=getInfoVENMOV&IDDocument=${ IDDocument }`)
                     .then(function(response) {
                         return response.json();
                     })
@@ -990,7 +990,7 @@ $(document).ready(function() {
             }
             
             $.ajax({
-                url:'./views/modulos/ajax/API_cotizaciones.php?action=uploadFile',
+                url:'././api/index.php?action=uploadFile',
                 processData:false,
                 contentType:false,
                 type:'POST',
@@ -1004,7 +1004,7 @@ $(document).ready(function() {
                     let extraData = JSON.stringify(resultJSON.resultados);
                   
                         $.ajax({
-                            url:'./views/modulos/ajax/API_cotizaciones.php?action=saveExtraData',
+                            url:'././api/index.php?action=saveExtraData',
                             type:'POST',
                             data: { extraData: extraData },
                             success:function(respuesta){

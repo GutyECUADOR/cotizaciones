@@ -26,7 +26,7 @@ class AjaxModel extends Conexion  {
                 }
             return $resulset;  
 
-        }catch(PDOException $exception){
+        }catch(\PDOException $exception){
             return array('status' => 'error', 'mensaje' => $exception->getMessage() );
         }
    
@@ -59,7 +59,7 @@ class AjaxModel extends Conexion  {
                 }
             return $resulset;  
 
-        }catch(PDOException $exception){
+        }catch(\PDOException $exception){
             return array('status' => 'error', 'mensaje' => $exception->getMessage() );
         }
    
@@ -102,7 +102,7 @@ class AjaxModel extends Conexion  {
                 }
             return $resulset;  
 
-        }catch(PDOException $exception){
+        }catch(\PDOException $exception){
             return array('status' => 'error', 'mensaje' => $exception->getMessage() );
         }
    
@@ -127,7 +127,7 @@ class AjaxModel extends Conexion  {
                 }
             return $resulset;  
 
-        }catch(PDOException $exception){
+        }catch(\PDOException $exception){
             return array('status' => 'error', 'mensaje' => $exception->getMessage() );
         }
    
@@ -163,7 +163,7 @@ class AjaxModel extends Conexion  {
                 }
             return $resulset;  
 
-        }catch(PDOException $exception){
+        }catch(\PDOException $exception){
             return array('status' => 'error', 'mensaje' => $exception->getMessage() );
         }
    
@@ -233,7 +233,7 @@ class AjaxModel extends Conexion  {
                 }
             return $resulset;  
 
-        }catch(PDOException $exception){
+        }catch(\PDOException $exception){
             return array('status' => 'error', 'mensaje' => $exception->getMessage() );
         }
    
@@ -302,7 +302,7 @@ class AjaxModel extends Conexion  {
         WHERE 
             VEN.TIPO = @P1  AND VEN.OFI = @P2  AND Ven.fecha BETWEEN @P3  AND @P4  AND CLI.NOMBRE LIKE @P5
         ORDER BY VEN.TIPO,VEN.NUMERO,VEN.FECHA'
-        ,'PRO','99','$fechaINI','$fechaFIN','$stringBusqueda%'
+        ,'COT','99','$fechaINI','$fechaFIN','$stringBusqueda%'
 
         ";
         $stmt = $this->instancia->prepare($query); 
@@ -373,7 +373,7 @@ class AjaxModel extends Conexion  {
         try{
             $stmt->execute();
             return $stmt->fetch( \PDO::FETCH_ASSOC );
-        }catch(PDOException $exception){
+        }catch(\PDOException $exception){
             return array('status' => 'error', 'mensaje' => $exception->getMessage() );
         }
 
@@ -388,7 +388,7 @@ class AjaxModel extends Conexion  {
         try{
             $stmt->execute();
             return $stmt->fetch( \PDO::FETCH_ASSOC );
-        }catch(PDOException $exception){
+        }catch(\PDOException $exception){
             return array('status' => 'error', 'mensaje' => $exception->getMessage() );
         }
     }
@@ -423,14 +423,13 @@ class AjaxModel extends Conexion  {
             $stmt->bindValue(4, $tipo); 
             $stmt->bindValue(5, $codigo); 
             $stmt->execute();
-            $stmt->nextRowset();
-            
+           
             $newCodLimpio = $stmt->fetch(\PDO::FETCH_ASSOC);
             $newCodLimpio =  $newCodLimpio['NExtID'];
             
             return $newCodLimpio;
 
-        }catch(PDOException $exception){
+        }catch(\PDOException $exception){
             return array('status' => 'error', 'mensaje' => $exception->getMessage() );
         }
 
@@ -459,7 +458,7 @@ class AjaxModel extends Conexion  {
             $rowsAfected = $this->instancia->exec($query);
            return array('status' => 'ok', 'mensaje' => $rowsAfected. ' fila afectada(s)' ); //true;
            
-        }catch(PDOException $exception){
+        }catch(\PDOException $exception){
             return array('status' => 'error', 'mensaje' => $exception->getMessage() );
         }
 
@@ -469,7 +468,7 @@ class AjaxModel extends Conexion  {
     public function insertVEN_CAB($VEN_CAB_obj, $dataBaseName='wssp'){
        
         //$queryExample = "exec dbo.SP_VENGRACAB 'I','ADMINWSSP','TESTOK','99', '2014', 'C02', '00001721','','20181126','00054818','FAL','DOL','1.00','0.00','10','0.00','0.00','0.00','0.00','0.00','10','0.00','2','0.00','12','CON','0','1','0','S','0','1','0','0','','','999',' ',' ','PRUEBAS','001005','00002050','','','','','0.00','0.00','0.00','','','','','','','','','','0','P','','','','','','0','','','','','0','2','0.00','0.00','0.00','0','999999999 ','0','','','','','','EFE','','','','','20181126','',''";
-        $VEN_CAB = new \models\venCabClass();
+        $VEN_CAB = new VenCabClass();
         $VEN_CAB = $VEN_CAB_obj;
         
         $query = "
@@ -482,7 +481,7 @@ class AjaxModel extends Conexion  {
             $rowsAfected = $this->instancia->exec($query);
            return array('status' => 'ok', 'mensaje' => $rowsAfected. ' fila afectada(s)' ); //true;
            
-        }catch(PDOException $exception){
+        }catch(\PDOException $exception){
             return array('status' => 'error', 'mensaje' => $exception->getMessage() );
         }
 
@@ -491,7 +490,7 @@ class AjaxModel extends Conexion  {
 
     public function insertVEN_MOV($VEN_MOV_obj, $dataBaseName='wssp'){
         
-        $VEN_MOV = new \models\venMovClass();
+        $VEN_MOV = new VenMovClass();
         $VEN_MOV = $VEN_MOV_obj;
 
         $query = "
@@ -506,7 +505,7 @@ class AjaxModel extends Conexion  {
             $rowsAfected = $this->instancia->exec($query);
            return array('status' => 'ok', 'mensaje' => $rowsAfected. ' fila afectada(s)' ); //true;
            
-        }catch(PDOException $exception){
+        }catch(\PDOException $exception){
             return array('status' => 'error', 'mensaje' => $exception->getMessage() );
         }
 

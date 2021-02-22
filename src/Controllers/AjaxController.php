@@ -1,6 +1,8 @@
 <?php namespace App\Controllers;
 
 use App\Models\AjaxModel;
+use App\Models\VenCabClass;
+use App\Models\VenMovClass;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use mPDF;
@@ -95,8 +97,8 @@ class AjaxController  {
     /*Envia informacion al modelo para actualizar, ejecuta insert en WINFENIX, VEN_CAB y VEN_MOV */
     public function insertCotizacion($formData){
         date_default_timezone_set('America/Lima');
-        $VEN_CAB = new \models\venCabClass();
-        $tipoDOC = 'PRO';
+        $VEN_CAB = new VenCabClass();
+        $tipoDOC = 'COT';
 
       
         if (!empty($formData)) {
@@ -148,7 +150,7 @@ class AjaxController  {
                 if (!empty($VEN_CAB->getProductos())) {
 
                     foreach ($VEN_CAB->getProductos() as $producto) {
-                        $VEN_MOV = new \models\venMovClass();
+                        $VEN_MOV = new VenMovClass();
                       
                         $VEN_MOV->setCliente($datosCliente['CODIGO']);
                       
