@@ -8,7 +8,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#"><?php echo APP_NAME; ?></a>
+      <a class="navbar-brand" href="#" data-toggle="modal" data-target="#modal_info_sesion"><?php echo APP_NAME; ?></a>
       
     </div>
 
@@ -20,8 +20,8 @@
                 echo '
                 <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Bienvenido, '.$_SESSION["usuarioNOMBRE".APP_UNIQUE_KEY].'<span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li><a href="#">DB: '.$_SESSION["empresaAUTH".APP_UNIQUE_KEY].' </a></li>
+                  <ul class="dropdown-menu">
+                    <li><a href="?action=inventario">Inventario </a></li>
                     <li><a href="?action=logout">Cerrar Sesion </a></li>
                    
                   </ul>

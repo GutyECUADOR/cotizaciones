@@ -10,7 +10,7 @@
     $dotenv = Dotenv::createImmutable(__DIR__);
     $dotenv->load();
     
-    $app = new MainController();
+    $app = new RouteController();
     $app->loadtemplate();
    
 

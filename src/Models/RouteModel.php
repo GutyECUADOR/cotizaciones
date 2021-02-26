@@ -1,11 +1,15 @@
 <?php namespace App\Models;
 
-class MainModel {
+class RouteModel {
     
     public function actionCatcherModel($action){
         switch ($action) {
             case 'inicio':
                 $contenido = "views/modulos/inicio.php";
+                break;
+
+            case 'inventario':
+                $contenido = "views/modulos/inventarioView.php";
                 break;
 
             case 'login':

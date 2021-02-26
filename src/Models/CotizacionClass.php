@@ -47,7 +47,7 @@ class CotizacionClass extends Conexion {
                 }
             return $resulset;  
 
-        }catch(PDOException $exception){
+        }catch(\PDOException $exception){
             return array('status' => 'error', 'mensaje' => $exception->getMessage() );
         }
        
@@ -110,4 +110,126 @@ class CotizacionClass extends Conexion {
            
 
     }
+
+    public function getFormasPagoWF(){
+
+        $query  = "SELECT * From dbo.FORMAPAGO ORDER BY CODIGO";
+      
+        try{
+            $stmt = $this->instancia->prepare($query); 
+    
+             if($stmt->execute()){
+                    $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+                    
+                }else{
+                    $resulset = false;
+                }
+            return $resulset;  
+        
+
+        }catch(\PDOException $exception){
+            return array('status' => 'error', 'mensaje' => $exception->getMessage() );
+        }
+           
+
+    }
+
+    public function getVenTiposDOCWF(){
+
+        $query  = "SELECT * FROM VEN_TIPOS WHERE TIPODOC = 'C'";
+      
+        try{
+            $stmt = $this->instancia->prepare($query); 
+    
+             if($stmt->execute()){
+                    $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+                    
+                }else{
+                    $resulset = false;
+                }
+            return $resulset;  
+        
+
+        }catch(\PDOException $exception){
+            return array('status' => 'error', 'mensaje' => $exception->getMessage() );
+        }
+           
+
+    }
+
+    public function getTiposPagoTarjetaWF(){
+
+        $query  = "SELECT * From dbo.VEN_MANTAR ORDER BY Codigo";
+      
+        try{
+            $stmt = $this->instancia->prepare($query); 
+    
+             if($stmt->execute()){
+                    $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+                    $row = array('CODIGO' => 'CRE', 'NOMBRE' => 'CREDITO');
+                    array_unshift($resulset, $row);
+                    $row = array('CODIGO' => 'EFE', 'NOMBRE' => 'EFECTIVO');
+                    array_unshift($resulset, $row);
+                    $row = array('CODIGO' => 'SIN', 'NOMBRE' => 'SIN DESCUENTOS');
+                    array_unshift($resulset, $row);
+                }else{
+                    $resulset = false;
+                }
+            return $resulset;  
+        
+
+        }catch(\PDOException $exception){
+            return array('status' => 'error', 'mensaje' => $exception->getMessage() );
+        }
+           
+
+    }
+
+    public function getGruposClientesWF(){
+
+        $query  = "SELECT * From dbo.COB_Grupos ORDER BY CODIGO";
+      
+        try{
+            $stmt = $this->instancia->prepare($query); 
+    
+             if($stmt->execute()){
+                    $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+                    
+                }else{
+                    $resulset = false;
+                }
+            return $resulset;  
+        
+
+        }catch(\PDOException $exception){
+            return array('status' => 'error', 'mensaje' => $exception->getMessage() );
+        }
+           
+
+    }
+
+    public function getCantonesWF(){
+
+        $query  = "SELECT * From dbo.TAB_CANTONES ORDER BY Nombre";
+      
+        try{
+            $stmt = $this->instancia->prepare($query); 
+    
+             if($stmt->execute()){
+                    $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+                    
+                }else{
+                    $resulset = false;
+                }
+            return $resulset;  
+        
+
+        }catch(\PDOException $exception){
+            return array('status' => 'error', 'mensaje' => $exception->getMessage() );
+        }
+           
+
+    }
+
+
 }

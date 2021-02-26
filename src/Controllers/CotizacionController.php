@@ -44,4 +44,29 @@ class CotizacionController  {
         $bodegas =  $this->cotizacion->getVendedoresWF();
         return $bodegas;
     }
+
+    public function getFormasPago(){
+        $response =  $this->cotizacion->getFormasPagoWF();
+        return $response;
+    }
+
+    public function getVenTiposDOCWF(){
+        $response =  $this->cotizacion->getVenTiposDOCWF();
+        return $response;
+    }
+
+    public function getTiposPagoTarjeta(){
+        $response =  $this->cotizacion->getTiposPagoTarjetaWF();
+        return $response;
+    }
+
+    public function getGrupos(){
+        $response =  $this->cotizacion->getGruposClientesWF();
+        return $response;
+    }
+
+    public function getCantones(){
+        $response =  $this->cotizacion->getCantonesWF();
+        return $response;
+    }
 }

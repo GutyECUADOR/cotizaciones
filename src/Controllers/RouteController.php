@@ -1,14 +1,14 @@
 <?php namespace App\Controllers;
 
-use App\Models\MainModel;
+use App\Models\RouteModel;
 
-class MainController {
+class RouteController {
     
     public $mainmodel;
     
     public function __construct()
     {
-        $this->mainmodel = new MainModel();
+        $this->mainmodel = new RouteModel();
     }
     
     public function loadtemplate(){

@@ -10,24 +10,23 @@ if (isset($_SESSION["usuarioRUC"])){
     $login = new LoginController();
     
 ?>
-
-<link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\css\signin.css">
-<link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\css\sticky-footer-navbar.css">
-
-    <div class="container">          
-    <?php $login->checkXMLFile();?>
-    
-
-        <form class="form-signin" method="POST" autocomplete="off"  class="formulario" name="formulario_registro">
+    <!-- login CSS - Only for this case here -->
+    <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\css\signin.css">
+    <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\css\sticky-footer-navbar.css">
+   
+    <div class="container">   
+        <div class="div col">
+            <div class="row">
+            <form class="form-signin" method="POST" autocomplete="off"  class="formulario" name="formulario_registro">
             <div class="text-center">
-                <img class="logo" src="<?php echo LOGO_NAME?>" alt="Logo">
+                <img style="max-width: 100%;" src="<?php echo LOGO_NAME?>" alt="Logo">
             </div>
             
-           
+        
             <h2 class="form-signin-heading text-center">Cotizaciones Web</h2>
 
             <div class="alert alert-info text-center">
-               <strong>Recuerde</strong>, siempre borrar datos de navegacion antes de ingresar al aplicativo.
+            <strong>Recuerde</strong>, siempre borrar datos de navegacion antes de ingresar al aplicativo.
             </div>
 
             <?php $login->actionCatcherController(); ?>
@@ -35,7 +34,7 @@ if (isset($_SESSION["usuarioRUC"])){
             <select class="form-control" name="select_empresa" id="select_empresa" required autofocus>
                 <option value=''>Seleccione Empresa</option>
                 <?php
-                   $login->showAllDataBaseList();
+                $login->showAllDataBaseList();
                 ?>
             
             </select>
@@ -51,18 +50,22 @@ if (isset($_SESSION["usuarioRUC"])){
 
                 <div class="btn-group" role="group">
                     <a href="../" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-back"></span> Regresar</a>
-                  
+                
                 </div>
-               
+            
                 </div>
-           
+        
         </form>
+            </div>
+        </div>       
+
+    
 
     </div> <!-- /container -->
 
     <footer class="footer">
-      <div class="container">
+    <div class="container">
         <p class="text-muted">Todos los derechos reservados © 2017 - <?php echo date("Y")?>, Ver <?php echo APP_VERSION ?></p>
-      </div>
+    </div>
     </footer>
-      
+  
