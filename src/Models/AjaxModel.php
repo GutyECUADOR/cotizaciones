@@ -342,25 +342,57 @@ class AjaxModel extends Conexion  {
    
     }
 
-    public function getArrayProducto($codProducto) {
-
-      
+    public function getProducto(string $busqueda) {
         //Query de consulta con parametros para bindear si es necesario.
-        $query = "SELECT TOP 1 * FROM INV_ARTICULOS WHERE Codigo = '$codProducto'";  // Final del Query SQL 
+        $query = "
+            SELECT TOP 1
+                Codigo,
+                Nombre,
+                TipoIva,
+                TipoArticulo,
+                PrecA,
+                Stock,
+                Peso
+            FROM INV_ARTICULOS 
+            WHERE Codigo = :codigo";  // Final del Query SQL 
 
-        $stmt = $this->instancia->prepare($query); 
-    
-        $arrayResultados = array();
-
+        $stmt = $this->instancia->prepare($query);
+        $stmt->bindParam(':codigo', $busqueda); 
+       
             if($stmt->execute()){
                 $resulset = $stmt->fetch( \PDO::FETCH_ASSOC );
-                
             }else{
                 $resulset = false;
             }
         return $resulset;  
+    }
 
-   
+    public function getProductos(string $busqueda) {
+        //Query de consulta con parametros para bindear si es necesario.
+        $busquedafix = $busqueda.'%';
+
+        $query = "
+            SELECT TOP 100 
+                Codigo,
+                Nombre,
+                TipoIva,
+                TipoArticulo,
+                PrecA,
+                Stock,
+                Peso
+            FROM INV_ARTICULOS 
+            ";  // Final del Query SQL 
+
+        $stmt = $this->instancia->prepare($query);
+        /* $stmt->bindParam(':codigo', $busqueda); 
+        $stmt->bindParam(':nombre', $busquedafix);  */
+    
+            if($stmt->execute()){
+                $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+            }else{
+                $resulset = false;
+            }
+        return $resulset;  
     }
     
 

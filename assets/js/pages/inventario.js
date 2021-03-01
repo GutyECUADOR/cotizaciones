@@ -166,8 +166,45 @@ class NuevoCliente {
 const app = new Vue({
     el: '#app',
     data: {
-      title: 'INVENTARIO DE PRODUCTOS'
+      title: 'INVENTARIO DE PRODUCTOS',
+      search_producto: {
+          text: '',
+          isloading: false,
+          results: []
+      },
+      nuevo_producto: null,
+      productos_egreso: [],
+      productos_ingreso: []
+    },
+    methods:{
+        getProducto() {
+            fetch(`./api/index.php?action=getProducto&busqueda=${this.search_producto.text}`)
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+              console.log(data);
+             
+            }).catch( error => {
+                console.error(error);
+            }); 
+                
+        },
+        getProductos() {
+            fetch(`./api/index.php?action=getProductos&busqueda=${this.search_producto.text}`)
+            .then(response => {
+                return response.json();
+            })
+            .then(productos => {
+              console.log(productos);
+              this.search_producto.results = productos.data;
+             
+            }).catch( error => {
+                console.error(error);
+            }); 
+                
+        },
     }
-    
+ 
 })
 

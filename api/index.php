@@ -1,12 +1,15 @@
 <?php
 
 use App\Controllers\AjaxController;
+use Dotenv\Dotenv;
 
 header('Content-Type: application/json');
 date_default_timezone_set('America/Lima');
 session_start();
 
 require_once '../vendor/autoload.php';
+$dotenv = Dotenv::createImmutable('../');
+$dotenv->load();
 
 class ajax{
   private $ajaxController;
@@ -66,7 +69,13 @@ class ajax{
       return $this->ajaxController->sendCotizacionToEmails($arrayEmails, $IDDocument, $customMessage);
     }
 
-    
+    public function getProducto($busqueda) {
+      return $this->ajaxController->getProducto($busqueda);
+    }
+
+    public function getProductos($busqueda) {
+      return $this->ajaxController->getProductos($busqueda);
+    }
 
 }
 
@@ -313,6 +322,34 @@ class ajax{
             
           }else{
             $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha recibido extra data.');
+          }
+        
+          echo json_encode($rawdata);
+
+        break;
+
+        case 'getProducto':
+          if (isset($_GET['busqueda'])) {
+            $busqueda = $_GET['busqueda'];
+            $respuesta = $ajax->getProducto($busqueda);
+            $rawdata = array('status' => 'OK', 'message' => 'Busqueda finalizada', 'data' => $respuesta);
+            
+          }else{
+            $rawdata = array('status' => 'error', 'message' => 'No se ha recibido extra data.');
+          }
+        
+          echo json_encode($rawdata);
+
+        break;
+
+        case 'getProductos':
+          if (isset($_GET['busqueda'])) {
+            $busqueda = $_GET['busqueda'];
+            $respuesta = $ajax->getProductos($busqueda);
+            $rawdata = array('status' => 'OK', 'message' => 'Busqueda finalizada', 'data' => $respuesta);
+            
+          }else{
+            $rawdata = array('status' => 'error', 'message' => 'No se ha recibido extra data.');
           }
         
           echo json_encode($rawdata);

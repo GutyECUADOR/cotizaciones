@@ -813,7 +813,7 @@ class AjaxController  {
 
     }
 
-     /* ATECION LOS DATOS DE CUERPO Y LOGS DEBEN NO DEBEN SER MODIFICADOS ESTAS DIRECCIONADOS PARA AJAX */
+    /* ATECION LOS DATOS DE CUERPO Y LOGS DEBEN NO DEBEN SER MODIFICADOS ESTAS DIRECCIONADOS PARA AJAX */
     public function sendCotizacion($IDDocument){
        
 
@@ -900,7 +900,6 @@ class AjaxController  {
 
     }
 
-    
      /* ATECION LOS DATOS DE CUERPO Y LOGS DEBEN NO DEBEN SER MODIFICADOS ESTAS DIRECCIONADOS PARA AJAX */
     public function sendCotizacionToEmails($arrayEmails, $IDDocument, $customMesagge){
        
@@ -992,6 +991,16 @@ class AjaxController  {
             
         }
 
+    }
+
+    function getProducto(string $busqueda) {
+        $response = $this->ajaxModel->getProducto($busqueda);
+        return $response;
+    }
+
+    function getProductos(string $busqueda) {
+        $response = $this->ajaxModel->getProductos($busqueda);
+        return $response;
     }
 
 
