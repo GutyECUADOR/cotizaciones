@@ -8,11 +8,11 @@
         <div class="modal-body">
             
             <div class="input-group select-group">
-                <input type="text" id="terminoBusquedaModalProducto" placeholder="Codigo o Nombre del producto..." class="form-control"/>
+                <input type="text" v-model="search_producto.text" placeholder="Codigo o Nombre del producto..." class="form-control"/>
                
                 <div class="input-group-btn">
-                    <button id="searchProductoModal" type="button" class="btn btn-primary" aria-label="Help">
-                        <span class="glyphicon glyphicon-search"></span> Buscar
+                    <button @click="getProductos" type="button" class="btn btn-primary" :disabled="search_producto.isloading"  >
+                        <i class="fa" :class="[{'fa-spin fa-refresh': search_producto.isloading}, {  'fa-search' : !search_producto.isloading  }]" ></i> Buscar
                     </button>
                 </div> 
             </div>
@@ -23,7 +23,6 @@
                         <table id="tblResultadosBusquedaProductos" class="table"> 
                             <thead>
                                 <tr> 
-                                    <th>#</th> 
                                     <th>Codigo</th> 
                                     <th>Nombre</th> 
                                     <th>Precio</th>
@@ -33,13 +32,18 @@
                             </thead> 
                             
                             <tbody>
-                                <!-- Los resultados de la busqueda se desplegaran aqui-->
-                                <div id="loaderProductos">
-                                    <div class="loader" id="loader-4">
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>        
-                                </div>
+                            <tr v-for="producto in search_producto.results">
+                                <td>{{producto.Codigo}}</td>
+                                <td>{{producto.Nombre.trim()}}</td>
+                                <td>{{parseFloat(producto.PrecA.trim()).toFixed(2)}}</td>
+                                <td>{{producto.Stock}}</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary btn-sm btn-block" @click="selectProduct(producto.Codigo)">
+                                        <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
+                                    </button>
+                                </td>
+                                
+                            </tr>
                             </tbody>
                         </table>
                     </div>

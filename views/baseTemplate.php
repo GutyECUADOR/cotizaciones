@@ -26,6 +26,7 @@ use App\Controllers\RouteController;
       <!-- Librerias-->
       <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\css\bootstrap-datepicker.css">
       <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\css\font-awesome.min.css">
+      <link rel="stylesheet" type="text/css"  href="<?php echo ROOT_PATH; ?>assets\css\sweetalert.css" />
 
       <!-- CSS Propios -->
       

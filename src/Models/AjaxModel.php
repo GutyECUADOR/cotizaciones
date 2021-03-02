@@ -346,15 +346,17 @@ class AjaxModel extends Conexion  {
         //Query de consulta con parametros para bindear si es necesario.
         $query = "
             SELECT TOP 1
-                Codigo,
-                Nombre,
-                TipoIva,
-                TipoArticulo,
-                PrecA,
-                Stock,
-                Peso
+                INV_ARTICULOS.Codigo,
+                INV_ARTICULOS.Nombre,
+                INV_ARTICULOS.TipoArticulo,
+                INV_ARTICULOS.PrecA,
+                INV_ARTICULOS.Stock,
+                INV_ARTICULOS.Peso,
+                INV_ARTICULOS.TipoIva,
+                RTRIM(IVA.VALOR) as VALORIVA
             FROM INV_ARTICULOS 
-            WHERE Codigo = :codigo";  // Final del Query SQL 
+            INNER JOIN dbo.INV_IVA AS IVA on IVA.CODIGO = INV_ARTICULOS.TipoIva
+            WHERE INV_ARTICULOS.Codigo = :codigo";  // Final del Query SQL 
 
         $stmt = $this->instancia->prepare($query);
         $stmt->bindParam(':codigo', $busqueda); 
@@ -381,11 +383,12 @@ class AjaxModel extends Conexion  {
                 Stock,
                 Peso
             FROM INV_ARTICULOS 
+            WHERE Codigo = :codigo OR Nombre LIKE :nombre
             ";  // Final del Query SQL 
 
         $stmt = $this->instancia->prepare($query);
-        /* $stmt->bindParam(':codigo', $busqueda); 
-        $stmt->bindParam(':nombre', $busquedafix);  */
+        $stmt->bindParam(':codigo', $busqueda); 
+        $stmt->bindParam(':nombre', $busquedafix); 
     
             if($stmt->execute()){
                 $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );

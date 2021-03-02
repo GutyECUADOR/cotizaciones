@@ -111,20 +111,19 @@ class Cliente {
 
 class Producto {
     constructor(codigo, nombre, tipoArticulo, cantidad, precio, peso, descuento, stock, tipoIVA, valorIVA) {
-      this.codigo = codigo;
-      this.nombre = nombre;
-      this.tipoArticulo = tipoArticulo
-      this.cantidad = cantidad;
-      this.precio = precio;
-      this.peso = parseFloat(peso);
-      this.descuento = descuento;
-      this.stock = stock;
-      this.tipoIVA = tipoIVA;
+      this.codigo = codigo || '';
+      this.nombre = nombre || '';
+      this.tipoArticulo = tipoArticulo || ''
+      this.cantidad = parseInt(cantidad) || 1;
+      this.precio = parseFloat(precio) || 0;
+      this.peso = parseFloat(peso) || 0;
+      this.descuento = parseInt(descuento) || 0 ;
+      this.stock = stock || 0;
+      this.tipoIVA = tipoIVA || 'T12';
       this.valorIVA = parseFloat(valorIVA);
       this.vendedor = null;
       this.descripcion = null;
       this.archivos = null;
-     
     }
 
     getIVA(){
@@ -140,7 +139,7 @@ class Producto {
     }
 
     getSubtotal(){
-        return (this.cantidad * this.precio) - this.getDescuento(this.descuento);
+        return ((this.cantidad * this.precio) - this.getDescuento(this.descuento)).toFixed(2);
     }
 
     setDescripcion(descripcion){
@@ -172,7 +171,7 @@ const app = new Vue({
           isloading: false,
           results: []
       },
-      nuevo_producto: null,
+      nuevo_producto: new Producto(),
       productos_egreso: [],
       productos_ingreso: []
     },
@@ -182,8 +181,21 @@ const app = new Vue({
             .then(response => {
                 return response.json();
             })
-            .then(data => {
-              console.log(data);
+            .then(productoDB => {
+              console.log(productoDB);
+                if (productoDB.data) {
+                    const producto = productoDB.data;
+                    this.nuevo_producto = new Producto(producto.Codigo.trim(), producto.Nombre.trim(), producto.TipoArticulo, 1, producto.PrecA, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA)
+                }else{
+                    new PNotify({
+                        title: 'Item no disponible',
+                        text: `No se ha encontrado el producto con el codigo: ' ${this.search_producto.text}`,
+                        delay: 3000,
+                        type: 'warn',
+                        styling: 'bootstrap3'
+                    });
+                }
+
              
             }).catch( error => {
                 console.error(error);
@@ -191,19 +203,78 @@ const app = new Vue({
                 
         },
         getProductos() {
+            this.search_producto.isloading = true;
+           
             fetch(`./api/index.php?action=getProductos&busqueda=${this.search_producto.text}`)
             .then(response => {
                 return response.json();
             })
             .then(productos => {
               console.log(productos);
+              this.search_producto.isloading = false;
               this.search_producto.results = productos.data;
              
             }).catch( error => {
                 console.error(error);
             }); 
-                
+            
         },
+        selectProduct(codigo){
+            this.search_producto.text = codigo.trim();
+            this.getProducto();
+            $('#modalBuscarProducto').modal('hide');
+        },
+        addToEgresoList(){
+         
+            let existeInArray = this.productos_egreso.findIndex((productoEnArray) => {
+                return productoEnArray.codigo === this.nuevo_producto.codigo;
+            });
+
+            if (existeInArray === -1 && this.nuevo_producto.codigo.length > 0) {
+                this.productos_egreso.push(this.nuevo_producto);
+                this.nuevo_producto = new Producto();
+                this.search_producto.text = '';
+            }else{
+                swal({
+                    title: "Ops!",
+                    text: `El item ${this.nuevo_producto.codigo} ya existe en la lista de egresos o no es un producto válido.`,
+                    type: "warning",
+                    showCancelButton: false,
+                    confirmButtonClass: "btn-success",
+                    confirmButtonText: "Aceptar",
+                    closeOnConfirm: false
+                    });
+            }
+
+            
+        },
+        addToIngresoList(){
+           
+            let existeInArray = this.productos_ingreso.findIndex((productoEnArray) => {
+                return productoEnArray.codigo === this.nuevo_producto.codigo;
+            });
+
+            if (existeInArray === -1  && this.nuevo_producto.codigo.length > 0) {
+                this.productos_ingreso.push(this.nuevo_producto);
+                this.nuevo_producto = new Producto();
+                this.search_producto.text = '';
+            }else{
+                swal({
+                    title: "Ops!",
+                    text: `El item ${this.nuevo_producto.codigo} ya existe en la lista de ingresos o es un producto no válido.`,
+                    type: "warning",
+                    showCancelButton: false,
+                    confirmButtonClass: "btn-success",
+                    confirmButtonText: "Aceptar",
+                    closeOnConfirm: false
+                    });
+            }
+
+            
+        },
+    },
+    mounted(){
+
     }
  
 })
