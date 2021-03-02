@@ -138,7 +138,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                     </tr>
                                 </thead>
                                 <tbody id="tablaProductosEgreso">
-                                    <tr v-for="producto in productos_egreso">
+                                    <tr v-for="producto in documento.productos_egreso.items">
                                         <td><input type="text" class="form-control text-center input-sm" v-model="producto.codigo" disabled></td>
                                         <td><input type="text" class="form-control text-center input-sm"  v-model="producto.nombre" readonly></td>
                                         <td><input type="number" class="form-control text-center input-sm rowcantidad" data-codigo="producto.codigo" v-model="producto.cantidad" min="1" oninput="validity.valid||(value='1');"></td>
@@ -152,30 +152,37 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                         <td><input type="text" class="form-control text-center input-sm" v-model="producto.descuento" disabled></td>
                                         <td><input type="text" class="form-control text-center input-sm" v-model="producto.getSubtotal()" readonly></td>
                                         <td><input type="text" class="form-control text-center input-sm" v-model="producto.getIVA()" readonly></td>
-                                        <td><button type="button" class="btn btn-danger btn-sm btn-block"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                                        <td><button type="button" @click="removeEgresoItem(producto.codigo)" class="btn btn-danger btn-sm btn-block"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
                                         </td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="8"></td>
+                                        <td colspan="7"></td>
                                         <td class="text-center" style="vertical-align: middle;"><b>Subtotal Productos</b></td>
                                         <td colspan="2">
-                                        <input type="text" class="form-control text-center" readonly></td>
+                                        <input type="text" v-model="documento.getSubTotal_Egresos()" class="form-control text-center" readonly></td>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="8"></td>
+                                        <td colspan="7"></td>
+                                        <td class="text-center" style="vertical-align: middle;"><b>Peso Egresos</b></td>
+                                        <td colspan="2">
+                                        <input type="text" v-model="documento.getPeso_Egresos()" class="form-control text-center" readonly></td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="7"></td>
                                         <td class="text-center" style="vertical-align: middle;"><b>IVA Productos</b></td>
                                         <td colspan="2">
-                                        <input type="text" class="form-control text-center" readonly></td>
+                                        <input type="text"  v-model="documento.getIVA_Egresos()" class="form-control text-center" readonly></td>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="8"></td>
+                                        <td colspan="7"></td>
                                         <td class="text-center" style="vertical-align: middle;"><b>Total Productos</b></td>
                                         <td colspan="2">
-                                        <input type="text" class="form-control text-center" readonly></td>
+                                        <input type="text" v-model="documento.getTotal_Egresos()" class="form-control text-center" readonly></td>
                                         </td>
                                     </tr>
 
@@ -194,7 +201,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                     <!-- Default panel contents -->
                 
                     <div class="panel-heading clearfix">
-                    <h4 class="panel-title pull-left" style="padding-top: 7.5px;"><i class="fa fa-list" aria-hidden="true"></i> Lista de items a egresar</h4>
+                    <h4 class="panel-title pull-left" style="padding-top: 7.5px;"><i class="fa fa-list" aria-hidden="true"></i> Lista de items a ingresar</h4>
                     <div class="btn-group pull-right">
                     </div>
                     </div>
@@ -207,7 +214,6 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                         <th style="width: 10%; min-width: 110px;" class="text-center headerTablaProducto">Codigo</th>
                                         <th style="width: 20%; min-width: 250px;" class="text-center headerTablaProducto">Nombre del Articulo</th>
                                         <th style="width: 3%"  class="text-center headerTablaProducto">Cantidad</th>
-                                        <th style="width: 3%"  class="text-center headerTablaProducto">Vendedor</th>
                                         <th style="width: 5%; min-width: 70px;" class="text-center headerTablaProducto">Precio</th>
                                         <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Peso (Kg)</th>
                                         <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Stock</th>
@@ -218,11 +224,10 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                     </tr>
                                 </thead>
                                 <tbody id="tablaProductosIngreso">
-                                    <tr v-for="producto in productos_ingreso">
+                                    <tr v-for="producto in documento.productos_ingreso.items">
                                         <td><input type="text" class="form-control text-center input-sm" v-model="producto.codigo" disabled></td>
                                         <td><input type="text" class="form-control text-center input-sm"  v-model="producto.nombre" readonly></td>
                                         <td><input type="number" class="form-control text-center input-sm rowcantidad" data-codigo="producto.codigo" v-model="producto.cantidad" min="1" oninput="validity.valid||(value='1');"></td>
-                                        <td><input type="text" class="form-control text-center input-sm rowvendedor" data-codigo="producto.codigo" v-model="producto.vendedor" min="1"></td>
                                         <td>
                                             <input type="text" class="form-control text-center input-sm" v-model="producto.precio" readonly>
                                         </td>
@@ -233,30 +238,38 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                         <td><input type="text" class="form-control text-center input-sm" v-model="producto.descuento" disabled></td>
                                         <td><input type="text" class="form-control text-center input-sm" v-model="producto.getSubtotal()" readonly></td>
                                         <td><input type="text" class="form-control text-center input-sm" v-model="producto.getIVA()" readonly></td>
-                                        <td><button type="button" class="btn btn-danger btn-sm btn-block"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                                        <td><button type="button" @click="removeIngresoItem(producto.codigo)" class="btn btn-danger btn-sm btn-block"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
                                         </td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="8"></td>
+                                        <td colspan="7"></td>
                                         <td class="text-center" style="vertical-align: middle;"><b>Subtotal Productos</b></td>
                                         <td colspan="2">
-                                        <input type="text" class="form-control text-center" readonly></td>
+                                        <input type="number" v-model="documento.getSubTotal_Ingresos()" class="form-control text-center" readonly></td>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="8"></td>
+                                        <td colspan="7"></td>
+                                        <td class="text-center" style="vertical-align: middle;"><b>Total Peso Egreso</b></td>
+                                        <td colspan="2">
+                                        <input type="text" v-model="documento.getPeso_Ingresos()" class="form-control text-center" readonly></td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="7"></td>
                                         <td class="text-center" style="vertical-align: middle;"><b>IVA Productos</b></td>
                                         <td colspan="2">
-                                        <input type="text" class="form-control text-center" readonly></td>
+                                        <input type="number" v-model="documento.getIVA_Ingresos()" class="form-control text-center" readonly></td>
                                         </td>
                                     </tr>
+                                    
                                     <tr>
-                                        <td colspan="8"></td>
+                                        <td colspan="7"></td>
                                         <td class="text-center" style="vertical-align: middle;"><b>Total Productos</b></td>
                                         <td colspan="2">
-                                        <input type="text" class="form-control text-center" readonly></td>
+                                        <input type="number" v-model="documento.getTotal_Ingresos()" class="form-control text-center" readonly></td>
                                         </td>
                                     </tr>
 
@@ -285,19 +298,17 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                         <thead>
                             <th style="width: 5%; min-width: 80px;" class="text-center headerTablaProducto">Unidades</th>
                             <th style="width: 10%; min-width: 100px;" class="text-center headerTablaProducto">Peso</th>
-                            <th style="width: 10%; min-width: 100px;" class="text-center headerTablaProducto">Valor Seguro de Envio</th>
                             <th style="width: 20%; min-width: 100px;" class="text-center headerTablaProducto">Subtotal</th>
                             <th style="width: 10%; min-width: 100px;" class="text-center headerTablaProducto">IVA</th>
                             <th style="width: 20%; min-width: 150px;" class="text-center headerTablaProducto">Total</th>
                         </thead>
                         <tbody>
                         <tr>
-                            <td><input type="text" class="form-control text-center" readonly></td>
-                            <td><input type="text" class="form-control text-center" readonly></td>
-                            <td><input type="text" class="form-control text-center" readonly></td>
-                            <td><input type="text" class="form-control text-center" readonly></td>
-                            <td><input type="text" class="form-control text-center" readonly></td>
-                            <td><input type="text" class="form-control text-center" readonly></td>
+                            <td><input type="text" v-model="documento.cantidad" class="form-control text-center" readonly></td>
+                            <td><input type="text" v-model="documento.peso" class="form-control text-center" readonly></td>
+                            <td><input type="text" v-model="documento.subtotal" class="form-control text-center" readonly></td>
+                            <td><input type="text" v-model="documento.IVA" class="form-control text-center" readonly></td>
+                            <td><input type="text" v-model="documento.total" class="form-control text-center" readonly></td>
                         
                         </tr>
                        

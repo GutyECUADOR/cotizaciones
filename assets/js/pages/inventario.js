@@ -1,92 +1,95 @@
-class Cotizacion {
+class Documento {
     constructor() {
-        this.cliente = null,
-        this.bodega = null,
-        this.localidadEnvio = null,
-        this.productos = [],
-        this.formaPago = 'CON',
-        this.codDestinoEnvio = null,
-        this.requiereEnvio = false,
-        this.precioEnvio = 0,
-        this.pesoEnvio = 0,
-        this.comentario = 'proforma'
+        this.productos_egreso = {
+            items: [],
+            cantidad: 0,
+            peso: 0,
+            subtotal: 0,
+            IVA: 0,
+            total: 0
+        },
+        this.productos_ingreso = {
+            items: [],
+            cantidad: 0,
+            peso: 0,
+            subtotal: 0,
+            IVA: 0,
+            total: 0
+        },
+        this.cantidad = 0;
+        this.peso = 0;
+        this.subtotal = 0;
+        this.IVA = 0;
+        this.total = 0
     }
 
-    
     sumarKey(propiedad) {
-        return this.productos.filter(({tipoArticulo}) => tipoArticulo == '1')
+        return this.productos_egreso.items.filter(({tipoArticulo}) => tipoArticulo == '1')
             .reduce( (total, producto) => {
             return total + producto[propiedad];
         }, 0);
     }
 
-    
-    /* Subtotal General*/
+    /* Total PESO */
 
-    getTotalFactura(){
-        return this.productos.reduce( (total, producto) => { 
-            return total + producto.getSubtotal(); 
-        }, 0); 
-    }
-
-    getIVAFactura(){
-        return this.productos.reduce( (total, producto) => { 
-            return total + producto.getIVA(); 
-        }, 0); 
-    }
-
-    getDescuentoProductos(){
-        return this.productos.reduce( (total, producto) => { 
-            return total + producto.getDescuento(); 
-        }, 0); 
-    }
-
-    getPesoProductos(){
-        return this.productos.reduce( (total, producto) => { 
+    getPeso_Egresos(){
+        this.productos_egreso.peso = this.productos_egreso.items.reduce( (total, producto) => { 
             return total + producto.getPeso(); 
         }, 0); 
+
+        return this.productos_egreso.peso;
     }
 
-  /* Subtotal de productos */
-    getSubTotalProductos(){
-        return this.productos.filter(({tipoArticulo}) => tipoArticulo == '1')
-        .reduce( (total, producto) => { 
-        return total + producto.getSubtotal(); 
+    getPeso_Ingresos(){
+        this.productos_ingreso.peso = this.productos_ingreso.items.reduce( (total, producto) => { 
+            return total + producto.getPeso(); 
         }, 0); 
+
+        return  this.productos_ingreso.peso
     }
 
-    getIVAProductos(){
-        return this.productos.filter(({tipoArticulo}) => tipoArticulo == '1')
-        .reduce( (total, producto) => { 
-        return total + producto.getIVA(); 
+    /* Subtotales  */
+
+    getSubTotal_Egresos(){
+        this.productos_egreso.subtotal = this.productos_egreso.items.reduce( (total, producto) => { 
+            return total + producto.getSubtotal(); 
+        }, 0);
+        return this.productos_egreso.subtotal;
+    }
+
+    getSubTotal_Ingresos(){
+        this.productos_ingreso.subtotal = this.productos_ingreso.items.reduce( (total, producto) => { 
+            return total + producto.getSubtotal(); 
         }, 0); 
+        return this.productos_ingreso.subtotal;
     }
 
-    getTotalProductos(){
-        return this.getSubTotalProductos() + this.getIVAProductos();
-    }
+    /* Total IVA */
 
-    /* Subtotal de envio */
-    getSubTotalEnvio(){
-        return this.productos.filter(({tipoArticulo}) => tipoArticulo == '5')
-        .reduce( (total, producto) => { 
-        return total + producto.getSubtotal(); 
+    getIVA_Ingresos(){
+        this.productos_ingreso.IVA = this.productos_ingreso.items.reduce( (total, producto) => { 
+            return total + producto.getIVA(); 
         }, 0); 
+
+        return this.productos_ingreso.IVA;
     }
 
-    getIVAEnvio(){
-        return this.productos.filter(({tipoArticulo}) => tipoArticulo == '5')
-        .reduce( (total, producto) => { 
-        return total + producto.getIVA(); 
+    getIVA_Egresos(){
+        this.productos_egreso.IVA = this.productos_egreso.items.reduce( (total, producto) => { 
+            return total + producto.getIVA(); 
         }, 0); 
+
+        return this.productos_egreso.IVA;
     }
 
-    getTotalEnvio(){
-        return this.getSubTotalEnvio() + this.getIVAEnvio();
+    /* Totales  */
+
+    getTotal_Ingresos(){
+        return this.productos_ingreso.total = this.getSubTotal_Ingresos() + this.getIVA_Ingresos();
     }
 
-    getTotalSeguroEnvio(){
-        return (this.getSubTotalProductos() + this.getIVAProductos() ) * 0.01;
+    getTotal_Egresos(){
+        return this.productos_egreso.total = this.getSubTotal_Egresos() + this.getIVA_Egresos();
     }
 
 }
@@ -127,11 +130,11 @@ class Producto {
     }
 
     getIVA(){
-        return (this.getSubtotal() * this.valorIVA) / 100;
+        return parseFloat(((this.getSubtotal() * this.valorIVA) / 100).toFixed(2));
     }
 
     getDescuento(){
-        return ((this.cantidad * this.precio)* this.descuento)/100;
+        return parseFloat((((this.cantidad * this.precio)* this.descuento)/100).toFixed(2));
     }
 
     getPeso(){
@@ -139,7 +142,7 @@ class Producto {
     }
 
     getSubtotal(){
-        return ((this.cantidad * this.precio) - this.getDescuento(this.descuento)).toFixed(2);
+        return parseFloat(((this.cantidad * this.precio) - this.getDescuento(this.descuento)).toFixed(2));
     }
 
     setDescripcion(descripcion){
@@ -172,8 +175,7 @@ const app = new Vue({
           results: []
       },
       nuevo_producto: new Producto(),
-      productos_egreso: [],
-      productos_ingreso: []
+      documento : new Documento()
     },
     methods:{
         getProducto() {
@@ -225,13 +227,12 @@ const app = new Vue({
             $('#modalBuscarProducto').modal('hide');
         },
         addToEgresoList(){
-         
-            let existeInArray = this.productos_egreso.findIndex((productoEnArray) => {
+            let existeInArray = this.documento.productos_egreso.items.findIndex((productoEnArray) => {
                 return productoEnArray.codigo === this.nuevo_producto.codigo;
             });
 
             if (existeInArray === -1 && this.nuevo_producto.codigo.length > 0) {
-                this.productos_egreso.push(this.nuevo_producto);
+                this.documento.productos_egreso.items.push(this.nuevo_producto);
                 this.nuevo_producto = new Producto();
                 this.search_producto.text = '';
             }else{
@@ -249,13 +250,12 @@ const app = new Vue({
             
         },
         addToIngresoList(){
-           
-            let existeInArray = this.productos_ingreso.findIndex((productoEnArray) => {
+            let existeInArray = this.documento.productos_ingreso.items.findIndex((productoEnArray) => {
                 return productoEnArray.codigo === this.nuevo_producto.codigo;
             });
 
             if (existeInArray === -1  && this.nuevo_producto.codigo.length > 0) {
-                this.productos_ingreso.push(this.nuevo_producto);
+                this.documento.productos_ingreso.items.push(this.nuevo_producto);
                 this.nuevo_producto = new Producto();
                 this.search_producto.text = '';
             }else{
@@ -272,6 +272,18 @@ const app = new Vue({
 
             
         },
+        removeEgresoItem(id){
+            let index = this.documento.productos_egreso.items.findIndex( productoEnArray => {
+                return productoEnArray.codigo === id;
+            });
+            this.documento.productos_egreso.items.splice(index, 1);
+        },
+        removeIngresoItem(id){
+            let index = this.documento.productos_ingreso.items.findIndex( productoEnArray => {
+                return productoEnArray.codigo === id;
+            });
+            this.documento.productos_ingreso.items.splice(index, 1);
+        }
     },
     mounted(){
 
