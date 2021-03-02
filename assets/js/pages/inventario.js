@@ -23,11 +23,19 @@ class Documento {
         this.total = 0
     }
 
-    sumarKey(propiedad) {
-        return this.productos_egreso.items.filter(({tipoArticulo}) => tipoArticulo == '1')
-            .reduce( (total, producto) => {
-            return total + producto[propiedad];
+    /* CANTIDAD DE ITEMS */
+    getCantidadItems_Egresos() {
+        this.productos_egreso.cantidad = this.productos_egreso.items.reduce( (total, producto) => {
+            return total + producto.cantidad;
         }, 0);
+        return this.productos_egreso.cantidad;
+    }
+
+    getCantidadItems_Ingresos() {
+        this.productos_ingreso.cantidad = this.productos_ingreso.items.reduce( (total, producto) => {
+            return total + producto.cantidad;
+        }, 0);
+        return this.productos_ingreso.cantidad;
     }
 
     /* Total PESO */
@@ -66,31 +74,31 @@ class Documento {
 
     /* Total IVA */
 
-    getIVA_Ingresos(){
-        this.productos_ingreso.IVA = this.productos_ingreso.items.reduce( (total, producto) => { 
-            return total + producto.getIVA(); 
-        }, 0); 
-
-        return this.productos_ingreso.IVA;
-    }
-
     getIVA_Egresos(){
         this.productos_egreso.IVA = this.productos_egreso.items.reduce( (total, producto) => { 
             return total + producto.getIVA(); 
         }, 0); 
 
         return this.productos_egreso.IVA;
-    }
+    };
+
+    getIVA_Ingresos(){
+        this.productos_ingreso.IVA = this.productos_ingreso.items.reduce( (total, producto) => { 
+            return total + producto.getIVA(); 
+        }, 0); 
+
+        return this.productos_ingreso.IVA;
+    };
 
     /* Totales  */
 
-    getTotal_Ingresos(){
-        return this.productos_ingreso.total = this.getSubTotal_Ingresos() + this.getIVA_Ingresos();
-    }
-
     getTotal_Egresos(){
-        return this.productos_egreso.total = this.getSubTotal_Egresos() + this.getIVA_Egresos();
-    }
+        return this.productos_egreso.total = parseFloat((this.getSubTotal_Egresos() + this.getIVA_Egresos()).toFixed(2));
+    };
+
+    getTotal_Ingresos(){
+        return this.productos_ingreso.total = parseFloat((this.getSubTotal_Ingresos() + this.getIVA_Ingresos()).toFixed(2));
+    };
 
 }
 
@@ -138,7 +146,7 @@ class Producto {
     }
 
     getPeso(){
-        return this.peso *this.cantidad;
+        return parseFloat((this.peso *this.cantidad).toFixed(2));
     }
 
     getSubtotal(){
@@ -147,6 +155,14 @@ class Producto {
 
     setDescripcion(descripcion){
         this.descripcion = descripcion;
+    }
+
+    setPeso(peso){
+        this.peso = parseFloat(peso);
+    }
+
+    setCantidad(cantidad){
+        this.cantidad = parseInt(cantidad);
     }
 }
 
