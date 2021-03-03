@@ -16,6 +16,8 @@ class Documento {
             IVA: 0,
             total: 0
         },
+        this.cliente = null,
+        this.proveedor = null,
         this.cantidad = 0;
         this.peso = 0;
         this.subtotal = 0;
@@ -120,6 +122,24 @@ class Cliente {
     }
 }
 
+class Proveedor {
+    constructor(codigo, nombre, ruc, diaspago, fpago, direccion, telefono, divisa) {
+      this.codigo = codigo;
+      this.nombre = nombre;
+      this.ruc = ruc;
+      this.diaspago = diaspago;
+      this.fpago = fpago;
+      this.direccion = direccion;
+      this.telefono = telefono;
+      this.divisa = divisa;
+      
+    }
+
+    getTipoPrecio() {
+        return + this.tipoPrecio;
+    }
+}
+
 class Producto {
     constructor(codigo, nombre, tipoArticulo, cantidad, precio, peso, descuento, stock, tipoIVA, valorIVA) {
       this.codigo = codigo || '';
@@ -185,15 +205,68 @@ const app = new Vue({
     el: '#app',
     data: {
       title: 'INVENTARIO DE PRODUCTOS',
+      search_proveedor: {
+        text: '',
+        campo: 'NOMBRE',
+        isloading: false,
+        results: []
+    },
       search_producto: {
           text: '',
           isloading: false,
           results: []
       },
+      nuevo_proveedor: new Proveedor(),
       nuevo_producto: new Producto(),
       documento : new Documento()
     },
     methods:{
+        getProveedor() {
+            fetch(`./api/index.php?action=getProveedor&busqueda=${this.search_proveedor.text}`)
+            .then(response => {
+                return response.json();
+            })
+            .then(proveedorDB => {
+              console.log(proveedorDB);
+                if (proveedorDB.data) {
+                    const cliente = proveedorDB.data;
+                    this.nuevo_proveedor = new Proveedor();
+                    this.documento.proveedor = this.nuevo_proveedor;
+                }else{
+                    new PNotify({
+                        title: 'Item no disponible',
+                        text: `No se ha encontrado el proveedor con el RUC: ' ${this.search_proveedor.text}`,
+                        delay: 3000,
+                        type: 'warn',
+                        styling: 'bootstrap3'
+                    });
+                }
+
+            }).catch( error => {
+                console.error(error);
+            }); 
+                
+        },
+        getProveedores() {
+            this.search_proveedor.isloading = true;
+            let termino = this.search_proveedor.text;
+            let campo = this.search_proveedor.campo;
+            let busqueda = JSON.stringify({termino, campo});
+            console.log(busqueda);
+            fetch(`./api/index.php?action=getProveedores&busqueda=${busqueda}`)
+            .then(response => {
+                return response.json();
+            })
+            .then(clientes => {
+              console.log(clientes);
+              this.search_proveedor.isloading = false;
+              this.search_proveedor.results = clientes.data;
+             
+            }).catch( error => {
+                console.error(error);
+            }); 
+            
+        },
         getProducto() {
             fetch(`./api/index.php?action=getProducto&busqueda=${this.search_producto.text}`)
             .then(response => {
@@ -241,6 +314,11 @@ const app = new Vue({
             this.search_producto.text = codigo.trim();
             this.getProducto();
             $('#modalBuscarProducto').modal('hide');
+        },
+        selectProveedor(codigo){
+            this.search_proveedor.text = codigo.trim();
+            this.getProveedor();
+            $('#modal_proveedor').modal('hide');
         },
         addToEgresoList(){
             let existeInArray = this.documento.productos_egreso.items.findIndex((productoEnArray) => {
@@ -299,7 +377,28 @@ const app = new Vue({
                 return productoEnArray.codigo === id;
             });
             this.documento.productos_ingreso.items.splice(index, 1);
-        }
+        },
+        async saveDocumento(){
+            let formData = new FormData();
+            formData.append('documento', JSON.stringify(this.documento));  
+            
+            fetch(`./api/index.php?action=saveDocumento`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+                
+            })  
+            .catch(function(error) {
+                console.error(error);
+            });  
+
+            
+        },
     },
     mounted(){
 

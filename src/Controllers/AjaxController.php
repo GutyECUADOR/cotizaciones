@@ -993,6 +993,17 @@ class AjaxController  {
 
     }
 
+    function getProveedor(string $busqueda) {
+        $response = $this->ajaxModel->getProveedor($busqueda);
+        return $response;
+    }
+
+    function getProveedores(object $busqueda) {
+        $response = $this->ajaxModel->getProveedores($busqueda);
+        return $response;
+    }
+
+
     function getProducto(string $busqueda) {
         $response = $this->ajaxModel->getProducto($busqueda);
         return $response;

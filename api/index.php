@@ -69,11 +69,19 @@ class ajax{
       return $this->ajaxController->sendCotizacionToEmails($arrayEmails, $IDDocument, $customMessage);
     }
 
-    public function getProducto($busqueda) {
+    public function getProveedor(string $busqueda) {
+      return $this->ajaxController->getProveedor($busqueda);
+    }
+
+    public function getProveedores(object $busqueda) {
+      return $this->ajaxController->getProveedores($busqueda);
+    }
+
+    public function getProducto(string $busqueda) {
       return $this->ajaxController->getProducto($busqueda);
     }
 
-    public function getProductos($busqueda) {
+    public function getProductos(string $busqueda) {
       return $this->ajaxController->getProductos($busqueda);
     }
 
@@ -322,6 +330,34 @@ class ajax{
             
           }else{
             $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha recibido extra data.');
+          }
+        
+          echo json_encode($rawdata);
+
+        break;
+
+        case 'getProveedor':
+          if (isset($_GET['busqueda'])) {
+            $busqueda = $_GET['busqueda'];
+            $respuesta = $ajax->getProveedor($busqueda);
+            $rawdata = array('status' => 'OK', 'message' => 'Busqueda finalizada', 'data' => $respuesta);
+            
+          }else{
+            $rawdata = array('status' => 'error', 'message' => 'No se ha recibido extra data.');
+          }
+        
+          echo json_encode($rawdata);
+
+        break;
+
+        case 'getProveedores':
+          if (isset($_GET['busqueda'])) {
+            $busqueda = json_decode($_GET['busqueda']);
+            $respuesta = $ajax->getProveedores($busqueda);
+            $rawdata = array('status' => 'OK', 'message' => 'Busqueda finalizada', 'data' => $respuesta);
+            
+          }else{
+            $rawdata = array('status' => 'error', 'message' => 'No se ha recibido objeto de busqueda.');
           }
         
           echo json_encode($rawdata);

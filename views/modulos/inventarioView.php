@@ -38,8 +38,98 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
             </div>
         </div>
 
-        <!-- Egreso de items-->
         
+
+        <!-- Row datos de cliente-->
+        <div class="row">
+
+            <div class="col-lg-6 col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Datos del Proveedor</div>
+                    <div class="panel-body">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon">RUC</span>
+                            <input type="text" @change="getProveedor" v-model="search_proveedor.text" class="form-control" placeholder="Cédula o RUC">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" data-toggle="modal" data-target="#modal_proveedor">
+                                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                </button>
+                            </span>
+                            
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" data-toggle="modal" data-target="#modalClienteNuevo">
+                                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                                </button>
+                            </span>
+                            <input type="text" class="form-control" id="inputCodigo" readonly>
+                            
+                        </div>
+
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon" id="sizing-addon3">Nombre</span>
+                            <input type="text" class="form-control" placeholder="Nombre Cliente" id="inputNombre" readonly>
+                        </div>
+
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon" id="sizing-addon3">Razon Social</span>
+                            <input type="text" class="form-control" placeholder="Razon Social" id="inputRSocial" readonly>
+                        </div>
+
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon" id="sizing-addon3"><span class="fa fa-envelope" aria-hidden="true"></span> Correo</span>
+                            <input type="mail" class="form-control" placeholder="Correo" id="inputCorreo" readonly>
+                        </div>
+
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon"><span class="fa fa-phone" aria-hidden="true"></span> Telf.</span>
+                            <input type="text" class="form-control text-center" placeholder="Telefono" id="inputTelefono" readonly>
+                            <span class="input-group-addon"><span class="fa fa-calendar" aria-hidden="true"></span> Dias Pago</span>
+                            <input type="text" class="form-control" placeholder="DiasPago" id="inputDiasPago" readonly>
+                        </div>
+
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon" id="sizing-addon3">Vendedor</span>
+                            <input type="text" class="form-control" placeholder="Vendedor" id="inputVendedor" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-md-12">
+                <div class="panel panel-default">
+                <div class="panel-heading">Datos de Pago</div>
+                    <div class="panel-body">
+                        
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon">Forma Pago</span>
+                            <select id='formaPago' class="form-control input-sm">
+                                    <?php
+                                    foreach ($formasPago as $grupo => $row) {
+
+                                        $codigo = trim($row['CODIGO']);
+                                        $texto= $row['NOMBRE']; 
+                                        
+                                        echo "<option value='$codigo'>$texto</option>";
+                                    }
+                                    
+                                    ?>
+                            </select>
+                        </div>
+
+
+                        <div class="form-group">
+                            <textarea class="form-control" rows="2" id="comment" name="comment" maxlength="100" placeholder="Comentario de hasta maximo 100 caracteres..."></textarea>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+            </div>
+            
+            
+        </div>
+
+        <!-- Egreso de items-->
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
@@ -352,8 +442,8 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
         <!-- Modal Info sesion -->
         <?php require_once 'sis_modules/modal_info_session.php'?>
 
-        <!-- Modal Cliente -->
-       <?php require_once 'sis_modules/modal_cliente.php'?>
+        <!-- Modal Proveedor -->
+       <?php require_once 'sis_modules/modal_proveedor.php'?>
 
         <!-- Modal Cliente Nuevo -->
        <?php require_once 'sis_modules/modal_cliente_nuevo.php'?>

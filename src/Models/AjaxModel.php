@@ -326,14 +326,8 @@ class AjaxModel extends Conexion  {
 
         $stmt = $this->instancia->prepare($query); 
     
-        $arrayResultados = array();
-
             if($stmt->execute()){
-                while ($row = $stmt->fetch( \PDO::FETCH_ASSOC )) {
-                    array_push($arrayResultados, $row);
-                }
-                return $arrayResultados;
-                
+                return $stmt->fetchAll( \PDO::FETCH_ASSOC );
             }else{
                 $resulset = false;
             }
@@ -341,63 +335,6 @@ class AjaxModel extends Conexion  {
 
    
     }
-
-    public function getProducto(string $busqueda) {
-        //Query de consulta con parametros para bindear si es necesario.
-        $query = "
-            SELECT TOP 1
-                INV_ARTICULOS.Codigo,
-                INV_ARTICULOS.Nombre,
-                INV_ARTICULOS.TipoArticulo,
-                INV_ARTICULOS.PrecA,
-                INV_ARTICULOS.Stock,
-                INV_ARTICULOS.Peso,
-                INV_ARTICULOS.TipoIva,
-                RTRIM(IVA.VALOR) as VALORIVA
-            FROM INV_ARTICULOS 
-            INNER JOIN dbo.INV_IVA AS IVA on IVA.CODIGO = INV_ARTICULOS.TipoIva
-            WHERE INV_ARTICULOS.Codigo = :codigo";  // Final del Query SQL 
-
-        $stmt = $this->instancia->prepare($query);
-        $stmt->bindParam(':codigo', $busqueda); 
-       
-            if($stmt->execute()){
-                $resulset = $stmt->fetch( \PDO::FETCH_ASSOC );
-            }else{
-                $resulset = false;
-            }
-        return $resulset;  
-    }
-
-    public function getProductos(string $busqueda) {
-        //Query de consulta con parametros para bindear si es necesario.
-        $busquedafix = $busqueda.'%';
-
-        $query = "
-            SELECT TOP 100 
-                Codigo,
-                Nombre,
-                TipoIva,
-                TipoArticulo,
-                PrecA,
-                Stock,
-                Peso
-            FROM INV_ARTICULOS 
-            WHERE Codigo = :codigo OR Nombre LIKE :nombre
-            ";  // Final del Query SQL 
-
-        $stmt = $this->instancia->prepare($query);
-        $stmt->bindParam(':codigo', $busqueda); 
-        $stmt->bindParam(':nombre', $busquedafix); 
-    
-            if($stmt->execute()){
-                $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
-            }else{
-                $resulset = false;
-            }
-        return $resulset;  
-    }
-    
 
     /*Retorna array con informacion de la empresa que se indique*/
     public function getDatosEmpresaFromWINFENIX ($dataBaseName='wssp'){
@@ -547,25 +484,112 @@ class AjaxModel extends Conexion  {
 
     }
 
+    public function getProveedor(string $busqueda) {
+      
+        $query = "
+            SELECT 
+                Codigo,
+                Nombre,
+                Contacto,
+                Cuenta,
+                Ruc,
+                Direccion1,
+                telefono1,
+                Fpago = ISNULL(fpago,''), 
+                DiasPago = ISNULL(diaspago,'0'), 
+                divisa,
+                TIPOCONT,
+                porc_compensa=ISNULL(porc_compensa,0)
+            FROM PAG_Proveedores 
+            WHERE codigo= :codigo
 
-    private function getFiltroTiposDoc($tipoDOC){
-        switch ($tipoDOC) {
-            case 'ALL':
-                return 'AND Mant.estado IN(0,1,2,3)';
-                break;
-            case 'PND':
-                return 'AND Mant.estado IN(0)';
-                break;
+           ";  
 
-            case 'ANUL':
-                return 'AND Mant.estado IN(2,3)';
-                break;    
-            
-            default:
-                return 'AND Mant.estado IN(0,1,2,3)';
-                break;
-        }
+        $stmt = $this->instancia->prepare($query);
+        $stmt->bindParam(':codigo', $busqueda); 
+       
+            if($stmt->execute()){
+                $resulset = $stmt->fetch( \PDO::FETCH_ASSOC );
+            }else{
+                $resulset = false;
+            }
+        return $resulset;  
     }
+
+    public function getProveedores(object $busqueda){
+
+        $query = "exec Sp_PAGCONPRO ?,'',?";
+        $stmt = $this->instancia->prepare($query);
+        $stmt->bindValue(1, $busqueda->termino); 
+        $stmt->bindValue(2, $busqueda->campo); 
+      
+            if($stmt->execute()){
+                $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+            }else{
+                $resulset = false;
+            }
+        return $resulset;  
+    }
+    
+    public function getProducto(string $busqueda) {
+        //Query de consulta con parametros para bindear si es necesario.
+        $query = "
+            SELECT TOP 1
+                INV_ARTICULOS.Codigo,
+                INV_ARTICULOS.Nombre,
+                INV_ARTICULOS.TipoArticulo,
+                INV_ARTICULOS.PrecA,
+                INV_ARTICULOS.Stock,
+                INV_ARTICULOS.Peso,
+                INV_ARTICULOS.TipoIva,
+                RTRIM(IVA.VALOR) as VALORIVA
+            FROM INV_ARTICULOS 
+            INNER JOIN dbo.INV_IVA AS IVA on IVA.CODIGO = INV_ARTICULOS.TipoIva
+            WHERE INV_ARTICULOS.Codigo = :codigo";  // Final del Query SQL 
+
+        $stmt = $this->instancia->prepare($query);
+        $stmt->bindParam(':codigo', $busqueda); 
+       
+            if($stmt->execute()){
+                $resulset = $stmt->fetch( \PDO::FETCH_ASSOC );
+            }else{
+                $resulset = false;
+            }
+        return $resulset;  
+    }
+
+    public function getProductos(string $busqueda) {
+        //Query de consulta con parametros para bindear si es necesario.
+        $busquedafix = $busqueda.'%';
+
+        $query = "
+            SELECT TOP 100 
+                Codigo,
+                Nombre,
+                TipoIva,
+                TipoArticulo,
+                PrecA,
+                Stock,
+                Peso
+            FROM INV_ARTICULOS 
+            WHERE Codigo = :codigo OR Nombre LIKE :nombre
+            ";  // Final del Query SQL 
+
+        $stmt = $this->instancia->prepare($query);
+        $stmt->bindParam(':codigo', $busqueda); 
+        $stmt->bindParam(':nombre', $busquedafix); 
+    
+            if($stmt->execute()){
+                $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+            }else{
+                $resulset = false;
+            }
+        return $resulset;  
+    }
+    
+    
+
+    
 }
 
 
