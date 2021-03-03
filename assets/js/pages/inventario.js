@@ -1,3 +1,102 @@
+
+class Cliente {
+    constructor(RUC, nombre, email, telefono, vendedor, tipoPrecio, diasPago, formaPago) {
+      this.RUC = RUC;
+      this.nombre = nombre;
+      this.email = email;
+      this.telefono = telefono;
+      this.vendedor = vendedor;
+      this.tipoPrecio = tipoPrecio;
+      this.diasPago = diasPago;
+      this.formaPago = formaPago;
+      
+    }
+
+    getTipoPrecio() {
+        return + this.tipoPrecio;
+    }
+}
+
+class Proveedor {
+    constructor(codigo, nombre, ruc, diaspago, fpago, direccion, telefono, email, divisa) {
+      this.codigo = codigo.trim() || '';
+      this.nombre = nombre.trim() || '';
+      this.ruc = ruc.trim() || '';
+      this.diaspago = diaspago || 0;
+      this.fpago = fpago || 'CON';;
+      this.direccion = direccion || '';
+      this.telefono = telefono || '';
+      this.email = email || '';
+      this.divisa = divisa || '';
+      
+    }
+
+    getTipoPrecio() {
+        return + this.tipoPrecio;
+    }
+}
+
+class Producto {
+    constructor(codigo, nombre, tipoArticulo, cantidad, precio, peso, descuento, stock, tipoIVA, valorIVA) {
+      this.codigo = codigo || '';
+      this.nombre = nombre || '';
+      this.tipoArticulo = tipoArticulo || ''
+      this.cantidad = parseInt(cantidad) || 1;
+      this.precio = parseFloat(precio) || 0;
+      this.peso = parseFloat(peso) || 0;
+      this.descuento = parseInt(descuento) || 0 ;
+      this.stock = stock || 0;
+      this.tipoIVA = tipoIVA || 'T12';
+      this.valorIVA = parseFloat(valorIVA);
+      this.vendedor = null;
+      this.descripcion = null;
+      this.archivos = null;
+    }
+
+    getIVA(){
+        return parseFloat(((this.getSubtotal() * this.valorIVA) / 100).toFixed(2));
+    }
+
+    getDescuento(){
+        return parseFloat((((this.cantidad * this.precio)* this.descuento)/100).toFixed(2));
+    }
+
+    getPeso(){
+        return parseFloat((this.peso *this.cantidad).toFixed(2));
+    }
+
+    getSubtotal(){
+        return parseFloat(((this.cantidad * this.precio) - this.getDescuento(this.descuento)).toFixed(2));
+    }
+
+    setDescripcion(descripcion){
+        this.descripcion = descripcion;
+    }
+
+    setPeso(peso){
+        this.peso = parseFloat(peso);
+    }
+
+    setCantidad(cantidad){
+        this.cantidad = parseInt(cantidad);
+    }
+}
+
+class NuevoCliente {
+    constructor(RUC, tipoIdentificacion, nombre, grupo, tipo, email, canton, direccion, telefono, vendedor) {
+        this.RUC = RUC;
+        this.tipoIdentificacion = tipoIdentificacion
+        this.nombre = nombre;
+        this.grupo = grupo;
+        this.tipo = tipo;
+        this.email = email;
+        this.canton = canton;
+        this.direccion = direccion;
+        this.telefono = telefono;
+        this.vendedor = vendedor;
+    }
+}
+
 class Documento {
     constructor() {
         this.productos_egreso = {
@@ -17,7 +116,7 @@ class Documento {
             total: 0
         },
         this.cliente = null,
-        this.proveedor = null,
+        this.proveedor = new Proveedor('','',''),
         this.cantidad = 0;
         this.peso = 0;
         this.subtotal = 0;
@@ -104,103 +203,6 @@ class Documento {
 
 }
 
-class Cliente {
-    constructor(RUC, nombre, email, telefono, vendedor, tipoPrecio, diasPago, formaPago) {
-      this.RUC = RUC;
-      this.nombre = nombre;
-      this.email = email;
-      this.telefono = telefono;
-      this.vendedor = vendedor;
-      this.tipoPrecio = tipoPrecio;
-      this.diasPago = diasPago;
-      this.formaPago = formaPago;
-      
-    }
-
-    getTipoPrecio() {
-        return + this.tipoPrecio;
-    }
-}
-
-class Proveedor {
-    constructor(codigo, nombre, ruc, diaspago, fpago, direccion, telefono, divisa) {
-      this.codigo = codigo;
-      this.nombre = nombre;
-      this.ruc = ruc;
-      this.diaspago = diaspago;
-      this.fpago = fpago;
-      this.direccion = direccion;
-      this.telefono = telefono;
-      this.divisa = divisa;
-      
-    }
-
-    getTipoPrecio() {
-        return + this.tipoPrecio;
-    }
-}
-
-class Producto {
-    constructor(codigo, nombre, tipoArticulo, cantidad, precio, peso, descuento, stock, tipoIVA, valorIVA) {
-      this.codigo = codigo || '';
-      this.nombre = nombre || '';
-      this.tipoArticulo = tipoArticulo || ''
-      this.cantidad = parseInt(cantidad) || 1;
-      this.precio = parseFloat(precio) || 0;
-      this.peso = parseFloat(peso) || 0;
-      this.descuento = parseInt(descuento) || 0 ;
-      this.stock = stock || 0;
-      this.tipoIVA = tipoIVA || 'T12';
-      this.valorIVA = parseFloat(valorIVA);
-      this.vendedor = null;
-      this.descripcion = null;
-      this.archivos = null;
-    }
-
-    getIVA(){
-        return parseFloat(((this.getSubtotal() * this.valorIVA) / 100).toFixed(2));
-    }
-
-    getDescuento(){
-        return parseFloat((((this.cantidad * this.precio)* this.descuento)/100).toFixed(2));
-    }
-
-    getPeso(){
-        return parseFloat((this.peso *this.cantidad).toFixed(2));
-    }
-
-    getSubtotal(){
-        return parseFloat(((this.cantidad * this.precio) - this.getDescuento(this.descuento)).toFixed(2));
-    }
-
-    setDescripcion(descripcion){
-        this.descripcion = descripcion;
-    }
-
-    setPeso(peso){
-        this.peso = parseFloat(peso);
-    }
-
-    setCantidad(cantidad){
-        this.cantidad = parseInt(cantidad);
-    }
-}
-
-class NuevoCliente {
-    constructor(RUC, tipoIdentificacion, nombre, grupo, tipo, email, canton, direccion, telefono, vendedor) {
-        this.RUC = RUC;
-        this.tipoIdentificacion = tipoIdentificacion
-        this.nombre = nombre;
-        this.grupo = grupo;
-        this.tipo = tipo;
-        this.email = email;
-        this.canton = canton;
-        this.direccion = direccion;
-        this.telefono = telefono;
-        this.vendedor = vendedor;
-    }
-}
-
 const app = new Vue({
     el: '#app',
     data: {
@@ -216,7 +218,7 @@ const app = new Vue({
           isloading: false,
           results: []
       },
-      nuevo_proveedor: new Proveedor(),
+      nuevo_proveedor: new Proveedor('','',''),
       nuevo_producto: new Producto(),
       documento : new Documento()
     },
@@ -229,8 +231,8 @@ const app = new Vue({
             .then(proveedorDB => {
               console.log(proveedorDB);
                 if (proveedorDB.data) {
-                    const cliente = proveedorDB.data;
-                    this.nuevo_proveedor = new Proveedor();
+                    const proveedor = proveedorDB.data;
+                    this.nuevo_proveedor = new Proveedor(proveedor.Codigo, proveedor.Nombre, proveedor.Ruc, proveedor.DiasPago, proveedor.Fpago, proveedor.Direccion1, proveedor.telefono1, proveedor.email, proveedor.divisa);
                     this.documento.proveedor = this.nuevo_proveedor;
                 }else{
                     new PNotify({

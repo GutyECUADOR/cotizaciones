@@ -48,8 +48,8 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                     <div class="panel-heading">Datos del Proveedor</div>
                     <div class="panel-body">
                         <div class="input-group input-group-sm">
-                            <span class="input-group-addon">RUC</span>
-                            <input type="text" @change="getProveedor" v-model="search_proveedor.text" class="form-control" placeholder="Cédula o RUC">
+                            <span class="input-group-addon">Cédula o RUC</span>
+                            <input type="text" @change="getProveedor" @keyup="getProveedor" v-model="search_proveedor.text" class="form-control" placeholder="Cédula o RUC">
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="button" data-toggle="modal" data-target="#modal_proveedor">
                                     <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
@@ -61,36 +61,27 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                     <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
                                 </button>
                             </span>
-                            <input type="text" class="form-control" id="inputCodigo" readonly>
+                            <input type="text" class="form-control" :value="documento.proveedor.codigo" readonly>
                             
                         </div>
 
                         <div class="input-group input-group-sm">
                             <span class="input-group-addon" id="sizing-addon3">Nombre</span>
-                            <input type="text" class="form-control" placeholder="Nombre Cliente" id="inputNombre" readonly>
+                            <input type="text" class="form-control" :value="documento.proveedor.nombre" placeholder="Nombre Cliente" readonly>
                         </div>
-
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-addon" id="sizing-addon3">Razon Social</span>
-                            <input type="text" class="form-control" placeholder="Razon Social" id="inputRSocial" readonly>
-                        </div>
-
+      
                         <div class="input-group input-group-sm">
                             <span class="input-group-addon" id="sizing-addon3"><span class="fa fa-envelope" aria-hidden="true"></span> Correo</span>
-                            <input type="mail" class="form-control" placeholder="Correo" id="inputCorreo" readonly>
+                            <input type="mail" class="form-control" :value="documento.proveedor.email" placeholder="Correo" readonly>
                         </div>
 
                         <div class="input-group input-group-sm">
                             <span class="input-group-addon"><span class="fa fa-phone" aria-hidden="true"></span> Telf.</span>
-                            <input type="text" class="form-control text-center" placeholder="Telefono" id="inputTelefono" readonly>
+                            <input type="text" class="form-control text-center" :value="documento.proveedor.telefono" placeholder="Telefono" readonly>
                             <span class="input-group-addon"><span class="fa fa-calendar" aria-hidden="true"></span> Dias Pago</span>
-                            <input type="text" class="form-control" placeholder="DiasPago" id="inputDiasPago" readonly>
+                            <input type="text" class="form-control" :value="documento.proveedor.diaspago + ',' + documento.proveedor.fpago" placeholder="DiasPago" readonly>
                         </div>
 
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-addon" id="sizing-addon3">Vendedor</span>
-                            <input type="text" class="form-control" placeholder="Vendedor" id="inputVendedor" readonly>
-                        </div>
                     </div>
                 </div>
             </div>

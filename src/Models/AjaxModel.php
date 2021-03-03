@@ -499,9 +499,10 @@ class AjaxModel extends Conexion  {
                 DiasPago = ISNULL(diaspago,'0'), 
                 divisa,
                 TIPOCONT,
+                email,
                 porc_compensa=ISNULL(porc_compensa,0)
             FROM PAG_Proveedores 
-            WHERE codigo= :codigo
+            WHERE RUC= :codigo
 
            ";  
 

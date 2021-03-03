@@ -40,7 +40,7 @@
                                     <td>{{cliente.Nombre.trim()}}</td>
                                     <td>{{cliente.Ruc}}</td>
                                     <td>
-                                        <button type="button" class="btn btn-primary btn-sm btn-block" @click="selectProveedor(cliente.Codigo)">
+                                        <button type="button" class="btn btn-primary btn-sm btn-block" @click="selectProveedor(cliente.Ruc)">
                                             <i class="fa fa-check" aria-hidden="true"></i>
                                         </button>
                                     </td>
