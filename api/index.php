@@ -85,6 +85,12 @@ class ajax{
       return $this->ajaxController->getProductos($busqueda);
     }
 
+    public function saveInventario(object $documento) {
+      return $this->ajaxController->saveInventario($documento);
+    }
+
+    
+
 }
 
   /* Cuerpo del API */
@@ -386,6 +392,20 @@ class ajax{
             
           }else{
             $rawdata = array('status' => 'error', 'message' => 'No se ha recibido extra data.');
+          }
+        
+          echo json_encode($rawdata);
+
+        break;
+
+        case 'saveInventario':
+          if (isset($_POST['documento'])) {
+            $extraData = json_decode($_POST['documento']);
+            $respuesta = $ajax->saveInventario($extraData);
+            $rawdata = array('status' => 'OK', 'transaction' => $respuesta);
+            
+          }else{
+            $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha recibido objeto de inventario requerido, revise estructura de JS.');
           }
         
           echo json_encode($rawdata);

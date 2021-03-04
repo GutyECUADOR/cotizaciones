@@ -381,14 +381,16 @@ const app = new Vue({
             this.documento.productos_ingreso.items.splice(index, 1);
         },
         async saveDocumento(){
-            if (!this.validateSaveDocument()) {
+            /* if (!this.validateSaveDocument()) {
                 return;
-            }
+            } */
+
+            console.log(this.documento);
 
             let formData = new FormData();
             formData.append('documento', JSON.stringify(this.documento));  
             
-            fetch(`./api/index.php?action=saveDocumento`, {
+            fetch(`./api/index.php?action=saveInventario`, {
                 method: 'POST',
                 body: formData
             })

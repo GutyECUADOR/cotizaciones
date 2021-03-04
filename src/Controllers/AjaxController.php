@@ -1014,5 +1014,11 @@ class AjaxController  {
         return $response;
     }
 
+    function saveInventario(object $documento) {
+        $ingreso = $this->ajaxModel->Winfenix_SaveIngreso($documento);
+        $egreso = null; //$this->ajaxModel->Winfenix_SaveEgreso($documento);
+        return  array('ingreso' => $ingreso, 'egreso'=> $egreso );
+    }
+
 
 }

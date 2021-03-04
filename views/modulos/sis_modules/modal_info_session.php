@@ -12,6 +12,7 @@
             <div class="panel-heading">Conexion por defecto</div>
             <div class="panel-body">
             <?php echo $_SESSION["empresaAUTH".APP_UNIQUE_KEY] ?>
+            <?php echo $_SESSION["usuarioRUC".APP_UNIQUE_KEY] ?>
             </div>
         </div>
 
