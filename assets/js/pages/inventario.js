@@ -37,17 +37,18 @@ class Proveedor {
 }
 
 class Producto {
-    constructor(codigo, nombre, tipoArticulo, cantidad, precio, peso, descuento, stock, tipoIVA, valorIVA) {
+    constructor(codigo, nombre, unidad, tipoArticulo, cantidad, precio, peso, descuento, stock, tipoIVA, valorIVA) {
       this.codigo = codigo || '';
       this.nombre = nombre || '';
+      this.unidad = unidad || '';
       this.tipoArticulo = tipoArticulo || ''
       this.cantidad = parseInt(cantidad) || 1;
       this.precio = parseFloat(precio) || 0;
       this.peso = parseFloat(peso) || 0;
       this.descuento = parseInt(descuento) || 0 ;
       this.stock = stock || 0;
-      this.tipoIVA = tipoIVA || 'T12';
-      this.valorIVA = parseFloat(valorIVA);
+      this.tipoIVA = tipoIVA || 'T00';
+      this.valorIVA = parseFloat(0); // IVA al 0 en inventario
       this.vendedor = null;
       this.descripcion = null;
       this.archivos = null;
@@ -100,6 +101,7 @@ class NuevoCliente {
 class Documento {
     constructor() {
         this.productos_egreso = {
+            bodega: 'B01',
             items: [],
             cantidad: 0,
             peso: 0,
@@ -108,6 +110,7 @@ class Documento {
             total: 0
         },
         this.productos_ingreso = {
+            bodega: 'B02',
             items: [],
             cantidad: 0,
             peso: 0,
@@ -218,6 +221,7 @@ const app = new Vue({
           isloading: false,
           results: []
       },
+      unidades_medida : [],
       nuevo_proveedor: new Proveedor('','',''),
       nuevo_producto: new Producto(),
       documento : new Documento()
@@ -277,14 +281,47 @@ const app = new Vue({
             .then(productoDB => {
               console.log(productoDB);
                 if (productoDB.data) {
-                    const producto = productoDB.data;
-                    this.nuevo_producto = new Producto(producto.Codigo.trim(), producto.Nombre.trim(), producto.TipoArticulo, 1, producto.PrecA, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA)
+                    const producto = productoDB.data.producto;
+                    this.unidades_medida = productoDB.data.unidades_medida;
+                    this.nuevo_producto = new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, 1, producto.PrecA, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA)
+                    this.getCostoProducto();
                 }else{
                     new PNotify({
                         title: 'Item no disponible',
                         text: `No se ha encontrado el producto con el codigo: ' ${this.search_producto.text}`,
                         delay: 3000,
                         type: 'warn',
+                        styling: 'bootstrap3'
+                    });
+                }
+
+             
+            }).catch( error => {
+                console.error(error);
+            }); 
+                
+        },
+        getCostoProducto() {
+            let codigo = this.nuevo_producto.codigo;
+            let unidad = this.nuevo_producto.unidad;
+            let busqueda = JSON.stringify({codigo, unidad});
+            console.log(busqueda);
+            fetch(`./api/index.php?action=getCostoProducto&busqueda=${busqueda}`)
+            .then(response => {
+                return response.json();
+            })
+            .then(response => {
+              console.log(response);
+                if (response.data) {
+                   
+                    this.nuevo_producto.factor = response.data.factor;
+                    this.nuevo_producto.precio = response.data.CostoProducto;
+                }else{
+                    new PNotify({
+                        title: 'Costo no calculado',
+                        text: `No se ha podido calcular el costo para el con el codigo: ' ${codigo}`,
+                        delay: 3000,
+                        type: 'error',
                         styling: 'bootstrap3'
                     });
                 }

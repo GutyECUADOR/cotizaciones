@@ -38,87 +38,6 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
             </div>
         </div>
 
-        
-
-        <!-- Row datos de cliente-->
-        <div class="row">
-
-            <div class="col-lg-6 col-md-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Datos del Proveedor</div>
-                    <div class="panel-body">
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-addon">Cédula o RUC</span>
-                            <input type="text" @change="getProveedor" @keyup="getProveedor" v-model="search_proveedor.text" class="form-control" placeholder="Cédula o RUC">
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" type="button" data-toggle="modal" data-target="#modal_proveedor">
-                                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                                </button>
-                            </span>
-                            
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" type="button" data-toggle="modal" data-target="#modalClienteNuevo">
-                                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                                </button>
-                            </span>
-                            <input type="text" class="form-control" :value="documento.proveedor.codigo" readonly>
-                            
-                        </div>
-
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-addon" id="sizing-addon3">Nombre</span>
-                            <input type="text" class="form-control" :value="documento.proveedor.nombre" placeholder="Nombre Cliente" readonly>
-                        </div>
-      
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-addon" id="sizing-addon3"><span class="fa fa-envelope" aria-hidden="true"></span> Correo</span>
-                            <input type="mail" class="form-control" :value="documento.proveedor.email" placeholder="Correo" readonly>
-                        </div>
-
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-addon"><span class="fa fa-phone" aria-hidden="true"></span> Telf.</span>
-                            <input type="text" class="form-control text-center" :value="documento.proveedor.telefono" placeholder="Telefono" readonly>
-                            <span class="input-group-addon"><span class="fa fa-calendar" aria-hidden="true"></span> Dias Pago</span>
-                            <input type="text" class="form-control" :value="documento.proveedor.diaspago + ',' + documento.proveedor.fpago" placeholder="DiasPago" readonly>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-6 col-md-12">
-                <div class="panel panel-default">
-                <div class="panel-heading">Datos de Pago</div>
-                    <div class="panel-body">
-                        
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-addon">Forma Pago</span>
-                            <select id='formaPago' class="form-control input-sm">
-                                    <?php
-                                    foreach ($formasPago as $grupo => $row) {
-
-                                        $codigo = trim($row['CODIGO']);
-                                        $texto= $row['NOMBRE']; 
-                                        
-                                        echo "<option value='$codigo'>$texto</option>";
-                                    }
-                                    
-                                    ?>
-                            </select>
-                        </div>
-
-
-                        <div class="form-group">
-                            <textarea class="form-control" rows="2" id="comment" name="comment" maxlength="100" placeholder="Comentario de hasta maximo 100 caracteres..."></textarea>
-                        </div>
-                        
-                    </div>
-                </div>
-                
-            </div>
-            
-            
-        </div>
 
         <!-- Egreso de items-->
         <div class="row">
@@ -127,7 +46,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                 <!-- Default panel contents -->
             
                 <div class="panel-heading clearfix">
-                    <h4 class="panel-title pull-left" style="padding-top: 7.5px;"><i class="fa fa-address-book" aria-hidden="true"></i></i> Egreso de items</h4>
+                    <h4 class="panel-title pull-left" style="padding-top: 7.5px;"><i class="fa fa-address-book" aria-hidden="true"></i></i> Búsqueda de nuevo item</h4>
                     
                 </div>
                                      
@@ -136,12 +55,13 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                         <table id="tablaAgregaNuevo" class="table table-bordered tableExtras">
                             <thead>
                             <tr>
-                                <th style="width: 5%; min-width: 170px;" class="text-center headerTablaProducto">Codigo</th>
+                                <th style="width: 5%; min-width: 150px;" class="text-center headerTablaProducto">Codigo</th>
                                 <th style="width: 10%; min-width: 200px;" class="text-center headerTablaProducto">Nombre del Articulo</th>
+                                <th style="width: 2%; min-width: 80px;"  class="text-center headerTablaProducto">Unidad</th>
+                                <th style="width: 5%; min-width: 100px;" class="text-center headerTablaProducto">Stock</th>
                                 <th style="width: 2%; min-width: 80px;"  class="text-center headerTablaProducto">Cantidad</th>
-                                <th style="width: 5%; min-width: 80px;" class="text-center headerTablaProducto">Precio</th>
-                                <th style="width: 5%; min-width: 80px;" class="text-center headerTablaProducto">Peso (Kg)</th>
-                                <th style="width: 5%; min-width: 80px;" class="text-center headerTablaProducto">Stock local</th>
+                                <th style="width: 5%; min-width: 120px;" class="text-center headerTablaProducto">Costo</th>
+                                <th style="width: 5%; min-width: 100px;" class="text-center headerTablaProducto">Peso ({{ nuevo_producto.unidad }})</th>
                                 <th style="width: 5%; min-width: 120px;" class="text-center headerTablaProducto">Subtotal</th>
                             </tr>
                             </thead>
@@ -161,15 +81,22 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                         <input type="text" v-model="nuevo_producto.nombre" class="form-control text-center input-sm" readonly>
                                     </td>
                                     <td>
+                                        <select v-model='nuevo_producto.unidad' @change="getCostoProducto()" class="form-control input-sm">
+                                            <option v-for="unidad in unidades_medida" :value="unidad.Unidad.trim()">
+                                            {{unidad.Unidad}}
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" v-model="nuevo_producto.stock" class="form-control text-center input-sm" readonly>
+                                    </td>
+                                    <td>
                                         <input type="number" @change="nuevo_producto.setCantidad($event.target.value)" :value="nuevo_producto.cantidad" class="form-control text-center input-sm" min="1" oninput="validity.valid||(value=1);"></td>
                                     </td>
                                     <td>
                                         <input type="number" v-model="nuevo_producto.precio" class="form-control text-center input-sm" min="0" value="0" readonly></td>
                                     <td>
-                                        <input type="text" v-model="nuevo_producto.peso" class="form-control text-center input-sm" readonly>
-                                    </td>
-                                    <td>
-                                        <input type="text" v-model="nuevo_producto.stock" class="form-control text-center input-sm" readonly>
+                                        <input type="text" v-model="nuevo_producto.peso" class="form-control text-center input-sm">
                                     </td>
                                     <td>
                                         <input type="text" v-model="nuevo_producto.getSubtotal()" class="form-control text-center input-sm importe_linea" readonly>
@@ -196,9 +123,24 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                     <!-- Default panel contents -->
                 
                     <div class="panel-heading clearfix">
-                    <h4 class="panel-title pull-left" style="padding-top: 7.5px;"><i class="fa fa-list" aria-hidden="true"></i> Lista de items a egresar</h4>
-                    <div class="btn-group pull-right">
-                    </div>
+                    <h4 class="panel-title pull-left" style="padding-top: 7.5px; padding-bottom: 7.5px;"><i class="fa fa-list" aria-hidden="true"></i> Lista de items a egresar</h4>
+                        <div class="btn-group pull-right">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon">Bodega egreso</span>
+                                <select id='bodegaEgreso' v-model="documento.productos_egreso.bodega" class="form-control input-sm">
+                                        <?php
+                                        foreach ($bodegas as $bodega => $row) {
+
+                                            $codigo = trim($row['CODIGO']);
+                                            $texto= $row['NOMBRE']; 
+                                            
+                                            echo "<option value='$codigo'>$texto</option>";
+                                        }
+                                        
+                                        ?>
+                                </select>
+                            </div>   
+                        </div>
                     </div>
 
                     <div class="panel-body">
@@ -210,9 +152,8 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                         <th style="width: 20%; min-width: 250px;" class="text-center headerTablaProducto">Nombre del Articulo</th>
                                         <th style="width: 3%"  class="text-center headerTablaProducto">Cantidad</th>
                                         <th style="width: 5%; min-width: 70px;" class="text-center headerTablaProducto">Precio</th>
-                                        <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Peso (Kg)</th>
+                                        <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Peso</th>
                                         <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Stock</th>
-                                        <th style="width: 5%; min-width: 70px;" class="text-center headerTablaProducto">% Desc</th>
                                         <th style="width: 10%; min-width: 70px;" class="text-center headerTablaProducto">Subtotal</th>
                                         <th style="width: 5%; min-width: 70px;" class="text-center headerTablaProducto">IVA</th>
                                         <th style="width: 5%" class="text-center headerTablaProducto">Eliminar</th>
@@ -230,10 +171,9 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                             <input type="number" class="form-control text-center input-sm rowpeso" step="0.01" v-model="producto.peso" min="0.1" oninput="validity.valid||(value='0.1');" readonly>
                                         </td>
                                         <td><input type="text" class="form-control text-center input-sm" v-model="producto.stock" disabled></td>
-                                        <td><input type="text" class="form-control text-center input-sm" v-model="producto.descuento" disabled></td>
                                         <td><input type="text" class="form-control text-center input-sm" v-model="producto.getSubtotal()" readonly></td>
                                         <td><input type="text" class="form-control text-center input-sm" v-model="producto.getIVA()" readonly></td>
-                                        <td><button type="button" @click="removeEgresoItem(producto.codigo)" class="btn btn-danger btn-sm btn-block"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                                        <td><button type="button" @click="removeEgresoItem(producto.codigo)" class="btn btn-danger btn-sm btn-block"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Eliminar</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -282,9 +222,24 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                     <!-- Default panel contents -->
                 
                     <div class="panel-heading clearfix">
-                    <h4 class="panel-title pull-left" style="padding-top: 7.5px;"><i class="fa fa-list" aria-hidden="true"></i> Lista de items a ingresar</h4>
-                    <div class="btn-group pull-right">
-                    </div>
+                    <h4 class="panel-title pull-left" style="padding-top: 7.5px; padding-bottom: 7.5px"><i class="fa fa-list" aria-hidden="true"></i> Lista de items a ingresar</h4>
+                        <div class="btn-group pull-right">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon">Bodega egreso</span>
+                                <select id='bodegaIngreso' v-model="documento.productos_ingreso.bodega" class="form-control input-sm">
+                                        <?php
+                                        foreach ($bodegas as $bodega => $row) {
+
+                                            $codigo = trim($row['CODIGO']);
+                                            $texto= $row['NOMBRE']; 
+                                            
+                                            echo "<option value='$codigo'>$texto</option>";
+                                        }
+                                        
+                                        ?>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="panel-body">
@@ -296,9 +251,8 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                         <th style="width: 20%; min-width: 250px;" class="text-center headerTablaProducto">Nombre del Articulo</th>
                                         <th style="width: 3%"  class="text-center headerTablaProducto">Cantidad</th>
                                         <th style="width: 5%; min-width: 70px;" class="text-center headerTablaProducto">Precio</th>
-                                        <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Peso (Kg)</th>
+                                        <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Peso</th>
                                         <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Stock</th>
-                                        <th style="width: 5%; min-width: 70px;" class="text-center headerTablaProducto">% Desc</th>
                                         <th style="width: 10%; min-width: 70px;" class="text-center headerTablaProducto">Subtotal</th>
                                         <th style="width: 5%; min-width: 70px;" class="text-center headerTablaProducto">IVA</th>
                                         <th style="width: 5%" class="text-center headerTablaProducto">Eliminar</th>
@@ -316,10 +270,9 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                             <input type="number" class="form-control text-center input-sm" @change="producto.setPeso($event.target.value)" :value="producto.peso" step="0.01" min="0.1" oninput="validity.valid||(value=0.1);">
                                         </td>
                                         <td><input type="text" class="form-control text-center input-sm" v-model="producto.stock" disabled></td>
-                                        <td><input type="text" class="form-control text-center input-sm" v-model="producto.descuento" disabled></td>
                                         <td><input type="text" class="form-control text-center input-sm" v-model="producto.getSubtotal()" readonly></td>
                                         <td><input type="text" class="form-control text-center input-sm" v-model="producto.getIVA()" readonly></td>
-                                        <td><button type="button" @click="removeIngresoItem(producto.codigo)" class="btn btn-danger btn-sm btn-block"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                                        <td><button type="button" @click="removeIngresoItem(producto.codigo)" class="btn btn-danger btn-sm btn-block"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Eliminar</button>
                                         </td>
                                     </tr>
                                 </tbody>

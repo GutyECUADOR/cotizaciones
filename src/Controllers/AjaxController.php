@@ -1005,7 +1005,13 @@ class AjaxController  {
 
 
     function getProducto(string $busqueda) {
-        $response = $this->ajaxModel->getProducto($busqueda);
+        $producto = $this->ajaxModel->getProducto($busqueda);
+        $unidades_medida = $this->ajaxModel->getUnidadesMedida($busqueda);
+        return array('producto' => $producto, 'unidades_medida' => $unidades_medida);
+    }
+
+    function getCostoProducto(object $busqueda) {
+        $response = $this->ajaxModel->getCostoProducto($busqueda);
         return $response;
     }
 

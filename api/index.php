@@ -85,6 +85,10 @@ class ajax{
       return $this->ajaxController->getProductos($busqueda);
     }
 
+    public function getCostoProducto(object $busqueda) {
+      return $this->ajaxController->getCostoProducto($busqueda);
+    }
+
     public function saveInventario(object $documento) {
       return $this->ajaxController->saveInventario($documento);
     }
@@ -388,6 +392,20 @@ class ajax{
           if (isset($_GET['busqueda'])) {
             $busqueda = $_GET['busqueda'];
             $respuesta = $ajax->getProductos($busqueda);
+            $rawdata = array('status' => 'OK', 'message' => 'Busqueda finalizada', 'data' => $respuesta);
+            
+          }else{
+            $rawdata = array('status' => 'error', 'message' => 'No se ha recibido extra data.');
+          }
+        
+          echo json_encode($rawdata);
+
+        break;
+
+        case 'getCostoProducto':
+          if (isset($_GET['busqueda'])) {
+            $busqueda = json_decode($_GET['busqueda']);
+            $respuesta = $ajax->getCostoProducto($busqueda);
             $rawdata = array('status' => 'OK', 'message' => 'Busqueda finalizada', 'data' => $respuesta);
             
           }else{
