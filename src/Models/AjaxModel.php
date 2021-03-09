@@ -649,7 +649,6 @@ class AjaxModel extends Conexion  {
                 $stmt->execute();
                 $stmt->nextRowset();
                 $nextID = $stmt->fetchColumn();
-            
                 $NextIDWithFormat = str_pad($nextID, 8, '0', STR_PAD_LEFT);
                 $stmt->nextRowset();
 
@@ -697,7 +696,7 @@ class AjaxModel extends Conexion  {
                 }
                 
             $commit = $this->instancia->commit();
-            return array('status' => 'error', 'commit' => $commit, 'newcod' => $NextIDWithFormat);
+            return array('status' => 'ok', 'commit' => $commit, 'newcod' => $NextIDWithFormat);
             
         }catch(\PDOException $exception){
             $this->instancia->rollBack();
@@ -716,13 +715,12 @@ class AjaxModel extends Conexion  {
                 $stmt->execute();
                 $stmt->nextRowset();
                 $nextID = $stmt->fetchColumn();
-            
                 $NextIDWithFormat = str_pad($nextID, 8, '0', STR_PAD_LEFT);
                 $stmt->nextRowset();
 
                 // Ejecuta Sp_comgracab para Ingreso de Inventario
                 $query = "
-                    SP_COMGRACAB 'I', :usuario, :pcid,'99','2020','EPC', :secuencia, :fecha, :proveedor,'B01','DOL','1.00','CON', :diaspago,'0','0','E','0','0','0','Generado por WSSP','', :fechaprom, :subtotal,'0.00', :iva,'0.00', :total,'0.00','','','','','', :subtotalbienes,'0.00','0.00','0.00','0.00','0.00','0.00','0.00','0.00','','','','','','','  ', :fecha2,'0','0.00','N', :ivabienes,'0.00','0.00','','00:00:00','','C02', :fecha3,'        ','','','','','0','0','0','','','','','0','','','','','','','','0','0','','','','','','0.00', :subtotal3,'0.00','0.00','0.00','0.00'
+                    SP_COMGRACAB 'I', :usuario, :pcid,'99','2020','EPC', :secuencia, :fecha, :proveedor, :bodega,'DOL','1.00','CON', :diaspago,'0','0','E','0','0','0','Generado por WSSP','', :fechaprom, :subtotal,'0.00', :iva,'0.00', :total,'0.00','','','','','', :subtotalbienes,'0.00','0.00','0.00','0.00','0.00','0.00','0.00','0.00','','','','','','','  ', :fecha2,'0','0.00','N', :ivabienes,'0.00','0.00','','00:00:00','','C02', :fecha3,'        ','','','','','0','0','0','','','','','0','','','','','','','','0','0','','','','','','0.00', :subtotal3,'0.00','0.00','0.00','0.00'
                 ";  
 
                     $stmt = $this->instancia->prepare($query); 
@@ -731,27 +729,29 @@ class AjaxModel extends Conexion  {
                     $stmt->bindValue(':secuencia', $NextIDWithFormat);
                     $stmt->bindValue(':fecha', date('Ymd'));
                     $stmt->bindValue(':proveedor', $documento->proveedor->codigo);
+                    $stmt->bindValue(':bodega', $documento->productos_egreso->bodega);
                     $stmt->bindValue(':diaspago', $documento->proveedor->diaspago);
                     $stmt->bindValue(':fechaprom', date('Ymd'));
-                    $stmt->bindValue(':subtotal', $documento->productos_ingreso->subtotal);
-                    $stmt->bindValue(':iva', $documento->productos_ingreso->IVA);
-                    $stmt->bindValue(':total', $documento->productos_ingreso->total);
-                    $stmt->bindValue(':subtotalbienes', $documento->productos_ingreso->subtotal);
+                    $stmt->bindValue(':subtotal', $documento->productos_egreso->subtotal);
+                    $stmt->bindValue(':iva', $documento->productos_egreso->IVA);
+                    $stmt->bindValue(':total', $documento->productos_egreso->total);
+                    $stmt->bindValue(':subtotalbienes', $documento->productos_egreso->subtotal);
                     $stmt->bindValue(':fecha2', date('Ymd'));
-                    $stmt->bindValue(':ivabienes', $documento->productos_ingreso->IVA);
+                    $stmt->bindValue(':ivabienes', $documento->productos_egreso->IVA);
                     $stmt->bindValue(':fecha3', date('Ymd'));
-                    $stmt->bindValue(':subtotal3', $documento->productos_ingreso->subtotal);
+                    $stmt->bindValue(':subtotal3', $documento->productos_egreso->subtotal);
                 
                 $stmt->execute();
 
-                foreach ($documento->productos_ingreso->items as $producto) {
+                foreach ($documento->productos_egreso->items as $producto) {
                     $query = "
-                        exec SP_COMGRAMOV 'I','99','2020','EPC', :secuencia, :fecha, :proveedor,'B01','E','0', :codproducto,'KG ', :cantidadproducto,'0.00', :costoproducto,'0.0000000', :costoproducto2, :ivaproducto,'', :fechacaducidad,'0','2','1.2000','0.0000','0.0000','0','0','0','','0','0','0','0','0','0.00','0.00','0.00','0.00','0.00','0.00','0.00','','','','0.00','0','0','','0','','0','0','0','0','','0','0','0','0','','','','0.000000','1','0','','','', :tipoiva
+                        exec SP_COMGRAMOV 'I','99','2020','EPC', :secuencia, :fecha, :proveedor, :bodega,'E','0', :codproducto,'KG ', :cantidadproducto,'0.00', :costoproducto,'0.0000000', :costoproducto2, :ivaproducto,'', :fechacaducidad,'0','2','1.2000','0.0000','0.0000','0','0','0','','0','0','0','0','0','0.00','0.00','0.00','0.00','0.00','0.00','0.00','','','','0.00','0','0','','0','','0','0','0','0','','0','0','0','0','','','','0.000000','1','0','','','', :tipoiva
                     ";  
                         $stmt = $this->instancia->prepare($query);
                         $stmt->bindValue(':secuencia', $NextIDWithFormat);
                         $stmt->bindValue(':fecha', date('Ymd'));
                         $stmt->bindValue(':proveedor', $documento->proveedor->codigo);
+                        $stmt->bindValue(':bodega', $documento->productos_egreso->bodega);
                         $stmt->bindValue(':codproducto', $producto->codigo);
                         $stmt->bindValue(':cantidadproducto', $producto->cantidad);
                         $stmt->bindValue(':costoproducto', $producto->precio);
@@ -764,7 +764,7 @@ class AjaxModel extends Conexion  {
                 }
                 
             $commit = $this->instancia->commit();
-            return array('status' => 'error', 'commit' => $commit, 'newcod' => $NextIDWithFormat);
+            return array('status' => 'ok', 'commit' => $commit, 'newcod' => $NextIDWithFormat);
             
         }catch(\PDOException $exception){
             $this->instancia->rollBack();

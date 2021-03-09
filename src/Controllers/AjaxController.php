@@ -55,8 +55,6 @@ class AjaxController  {
         return $response;
     }
 
-    
-
     /* Retorna la respuesta del modelo ajax*/
     public function getAllClientesController($terminoBusqueda, $tipoBusqueda){
         $response = $this->ajaxModel->getAllClientesModel($terminoBusqueda, $tipoBusqueda);
@@ -1021,9 +1019,9 @@ class AjaxController  {
     }
 
     function saveInventario(object $documento) {
-        $ingreso = $this->ajaxModel->Winfenix_SaveIngreso($documento);
-        $egreso = null; //$this->ajaxModel->Winfenix_SaveEgreso($documento);
-        return  array('ingreso' => $ingreso, 'egreso'=> $egreso );
+        $egreso = $this->ajaxModel->Winfenix_SaveEgreso($documento);
+      
+        return  array('egreso'=> $egreso);
     }
 
 
