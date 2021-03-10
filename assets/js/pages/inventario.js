@@ -418,9 +418,9 @@ const app = new Vue({
             this.documento.productos_ingreso.items.splice(index, 1);
         },
         async saveDocumento(){
-            /* if (!this.validateSaveDocument()) {
+            if (!this.validateSaveDocument()) {
                 return;
-            } */
+            }
 
             console.log(this.documento);
 
@@ -436,6 +436,18 @@ const app = new Vue({
             })
             .then(data => {
                 console.log(data);
+                swal({
+                    title: "Realizado",
+                    text: `Se ha generado exitosamente el ingreso #${data.transaction.ingreso.newcod}, y el egreso #${data.transaction.egreso.newcod}`,
+                    type: "success",
+                    showCancelButton: false,
+                    confirmButtonClass: "btn-success",
+                    confirmButtonText: "Aceptar",
+                    closeOnConfirm: false
+                    },
+                    function(){
+                        window.location = './index.php?action=inventario'
+                    });
                 
             })  
             .catch(function(error) {

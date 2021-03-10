@@ -206,7 +206,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                         <div class="btn-group pull-right">
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon">Bodega egreso</span>
-                                <select id='bodegaEgreso' v-model="documento.productos_egreso.bodega" class="form-control input-sm">
+                                <select id='bodegaEgreso' v-model="documento.productos_egreso.bodega" class="form-control input-sm" style="background-color: #ffe7e7;">
                                         <?php
                                         foreach ($bodegas as $bodega => $row) {
 
@@ -305,7 +305,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                         <div class="btn-group pull-right">
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon">Bodega egreso</span>
-                                <select id='bodegaIngreso' v-model="documento.productos_ingreso.bodega" class="form-control input-sm">
+                                <select id='bodegaIngreso' v-model="documento.productos_ingreso.bodega" class="form-control input-sm" style="background-color: #d9f7d9;">
                                         <?php
                                         foreach ($bodegas as $bodega => $row) {
 
@@ -343,7 +343,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                         <td><input type="text" class="form-control text-center input-sm"  v-model="producto.nombre" readonly></td>
                                         <td><input type="number" class="form-control text-center input-sm" @change="producto.setCantidad($event.target.value)" :value="producto.cantidad" min="1" oninput="validity.valid||(value='1');"></td>
                                         <td>
-                                            <input type="text" class="form-control text-center input-sm" v-model="producto.precio" readonly>
+                                            <input type="text" class="form-control text-center input-sm" v-model="producto.precio">
                                         </td>
                                         <td>
                                             <input type="number" class="form-control text-center input-sm" @change="producto.setPeso($event.target.value)" :value="producto.peso" step="0.01" min="0.1" oninput="validity.valid||(value=0.1);">
