@@ -616,7 +616,7 @@ class AjaxModel extends Conexion  {
                 TipoArticulo,
                 Unidad,
                 PrecA,
-                Stock,
+                DBO.DimeStockFis('99', Codigo ,'' ,'B01') AS Stock,
                 Peso
             FROM INV_ARTICULOS 
             WHERE Codigo = :codigo OR Nombre LIKE :nombre 

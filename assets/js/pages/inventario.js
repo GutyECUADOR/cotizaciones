@@ -46,7 +46,7 @@ class Producto {
       this.precio = parseFloat(precio) || 0;
       this.peso = parseFloat(peso) || 0;
       this.descuento = parseInt(descuento) || 0 ;
-      this.stock = stock || 0;
+      this.stock = parseFloat(stock) || 0 ;
       this.tipoIVA = tipoIVA || 'T00';
       this.valorIVA = parseFloat(0); // IVA al 0 en inventario
       this.vendedor = null;

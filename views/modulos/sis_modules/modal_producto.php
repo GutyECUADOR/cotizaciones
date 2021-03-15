@@ -36,7 +36,7 @@
                                 <td>{{producto.Codigo}}</td>
                                 <td>{{producto.Nombre.trim()}}</td>
                                 <td>{{parseFloat(producto.PrecA.trim()).toFixed(2)}}</td>
-                                <td>{{producto.Stock}}</td>
+                                <td>{{parseFloat(producto.Stock.trim())}}</td>
                                 <td>
                                     <button type="button" class="btn btn-primary btn-sm btn-block" @click="selectProduct(producto.Codigo)">
                                         <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
