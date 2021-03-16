@@ -8,12 +8,19 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#" data-toggle="modal" data-target="#modal_info_sesion"><?php echo APP_NAME; ?></a>
+      <a class="navbar-brand" href="#" data-toggle="modal" data-target="#modal_info_sesion">
+        <span><img alt="Brand" height="25" src="<?php echo LOGO_NAME?>"></span>
+        <span style="margin-left:5px"><?php echo APP_NAME; ?></span>
+      </a>
       
     </div>
 
     
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">  
+        <li><a href="?action=inicio">Inicio</a></li>
+      </ul>
+
       <ul class="nav navbar-nav navbar-right">
         <?php
               if (isset($_SESSION["usuarioRUC".APP_UNIQUE_KEY])){
@@ -22,12 +29,16 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Bienvenido, '.$_SESSION["usuarioNOMBRE".APP_UNIQUE_KEY].'<span class="caret"></span></a>
                   <ul class="dropdown-menu">
                     <li><a href="?action=inventario">Inventario </a></li>
-                    <li><a href="?action=logout">Cerrar Sesion </a></li>
+                    <li><a href="?action=logout">Cerrar Sesión </a></li>
                    
                   </ul>
                 </li>
                 ';
                 
+            }else{
+              echo '
+                <li><a href="?action=logout">Iniciar Sesión</a></li>
+              ';
             }
         ?>
 

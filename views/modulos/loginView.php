@@ -23,7 +23,7 @@ if (isset($_SESSION["usuarioRUC"])){
             </div>
             
         
-            <h2 class="form-signin-heading text-center">Cotizaciones Web</h2>
+            <h2 class="form-signin-heading text-center"><?php echo APP_NAME?></h2>
 
             <div class="alert alert-info text-center">
             <strong>Recuerde</strong>, siempre borrar datos de navegacion antes de ingresar al aplicativo.
@@ -49,7 +49,7 @@ if (isset($_SESSION["usuarioRUC"])){
                 </div>
 
                 <div class="btn-group" role="group">
-                    <a href="../" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-back"></span> Regresar</a>
+                    <a href="?action=inicio" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-back"></span> Regresar</a>
                 
                 </div>
             

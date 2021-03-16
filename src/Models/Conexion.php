@@ -24,11 +24,11 @@ class conexion {
         
         /*CONEXION PARA DESAROLLO*/
         $this->driver = 'sqlsrv';
-        $this->host = "SRV-IMPERIUM";
+        $this->host = "S01";
         $this->dbname = "";
         $this->port = "1433";
-        $this->user = "sfb";
-        $this->pass = "sfb123";
+        $this->user = "programacion";
+        $this->pass = "Progra2021$$";
         $this->charset = "utf8";
 
         

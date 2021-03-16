@@ -1,6 +1,6 @@
 <?php
 /* Configurar aqui todas las variables globales a utilizar*/
-define("APP_NAME", "WebForms - Imperium");
+define("APP_NAME", "WebForms Imperium");
 define("EMPRESA_NAME", "Imperium Restaurante");
 define("APP_UNIQUE_KEY", "Imperium2021$");
 define("LOGO_NAME", "./assets/img/logo.png");

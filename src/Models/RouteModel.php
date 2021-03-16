@@ -8,6 +8,10 @@ class RouteModel {
                 $contenido = "views/modulos/inicio.php";
                 break;
 
+            case 'cotizaciones':
+                $contenido = "views/modulos/cotizacionesView.php";
+                break;
+
             case 'inventario':
                 $contenido = "views/modulos/inventarioView.php";
                 break;
