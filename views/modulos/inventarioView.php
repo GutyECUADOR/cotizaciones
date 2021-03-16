@@ -228,7 +228,6 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                         <th style="width: 20%; min-width: 200px;" class="text-center headerTablaProducto">Nombre del Articulo</th>
                                         <th style="width: 3%" class="text-center headerTablaProducto">Cantidad</th>
                                         <th style="width: 5%; min-width: 100px;" class="text-center headerTablaProducto">Precio</th>
-                                        <th style="width: 5%; min-width: 100px;" class="text-center headerTablaProducto">Peso</th>
                                         <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Stock</th>
                                         <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Subtotal</th>
                                         <th style="width: 5%" class="text-center headerTablaProducto">Eliminar</th>
@@ -242,9 +241,6 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                         <td>
                                             <input type="text" class="form-control text-center input-sm" v-model="producto.precio" readonly>
                                         </td>
-                                        <td>
-                                            <input type="number" class="form-control text-center input-sm rowpeso" step="0.01" v-model="producto.peso" min="0.1" oninput="validity.valid||(value='0.1');" readonly>
-                                        </td>
                                         <td><input type="text" class="form-control text-center input-sm" v-model="producto.stock" disabled></td>
                                         <td><input type="text" class="form-control text-center input-sm" v-model="producto.getSubtotal()" readonly></td>
                                         <td><button type="button" @click="removeEgresoItem(producto.codigo)" class="btn btn-danger btn-sm btn-block"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Eliminar</button>
@@ -253,21 +249,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="6"></td>
-                                        <td class="text-center" style="vertical-align: middle;"><b>Subtotal Productos</b></td>
-                                        <td colspan="2">
-                                        <input type="text" v-model="documento.getSubTotal_Egresos()" class="form-control text-center" readonly></td>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="6"></td>
-                                        <td class="text-center" style="vertical-align: middle;"><b>Peso Egresos</b></td>
-                                        <td colspan="2">
-                                        <input type="text" v-model="documento.getPeso_Egresos()" class="form-control text-center" readonly></td>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="6"></td>
+                                        <td colspan="4"></td>
                                         <td class="text-center" style="vertical-align: middle;"><b>Total Productos</b></td>
                                         <td colspan="2">
                                         <input type="text" v-model="documento.getTotal_Egresos()" class="form-control text-center" readonly></td>
@@ -318,7 +300,6 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                         <th style="width: 20%; min-width: 250px;" class="text-center headerTablaProducto">Nombre del Articulo</th>
                                         <th style="width: 3%"  class="text-center headerTablaProducto">Cantidad</th>
                                         <th style="width: 5%; min-width: 70px;" class="text-center headerTablaProducto">Precio</th>
-                                        <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Peso</th>
                                         <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Stock</th>
                                         <th style="width: 10%; min-width: 70px;" class="text-center headerTablaProducto">Subtotal</th>
                                         <th style="width: 5%" class="text-center headerTablaProducto">Eliminar</th>
@@ -332,9 +313,6 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                         <td>
                                             <input type="text" class="form-control text-center input-sm" v-model="producto.precio">
                                         </td>
-                                        <td>
-                                            <input type="number" class="form-control text-center input-sm" @change="producto.setPeso($event.target.value)" :value="producto.peso" step="0.01" min="0.1" oninput="validity.valid||(value=0.1);">
-                                        </td>
                                         <td><input type="text" class="form-control text-center input-sm" v-model="producto.stock" disabled></td>
                                         <td><input type="text" class="form-control text-center input-sm" v-model="producto.getSubtotal()" readonly></td>
                                         <td><button type="button" @click="removeIngresoItem(producto.codigo)" class="btn btn-danger btn-sm btn-block"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Eliminar</button>
@@ -343,22 +321,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="6"></td>
-                                        <td class="text-center" style="vertical-align: middle;"><b>Subtotal Productos</b></td>
-                                        <td colspan="2">
-                                        <input type="number" v-model="documento.getSubTotal_Ingresos()" class="form-control text-center" readonly></td>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="6"></td>
-                                        <td class="text-center" style="vertical-align: middle;"><b>Total Peso Egreso</b></td>
-                                        <td colspan="2">
-                                        <input type="text" v-model="documento.getPeso_Ingresos()" class="form-control text-center" readonly></td>
-                                        </td>
-                                    </tr>
-                                    
-                                    <tr>
-                                        <td colspan="6"></td>
+                                        <td colspan="4"></td>
                                         <td class="text-center" style="vertical-align: middle;"><b>Total Productos</b></td>
                                         <td colspan="2">
                                         <input type="number" v-model="documento.getTotal_Ingresos()" class="form-control text-center" readonly></td>
@@ -390,23 +353,17 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                         <thead>
                             <th style="width: 5%; min-width: 80px;" class="text-center headerTablaProducto"></th>
                             <th style="width: 5%; min-width: 80px;" class="text-center headerTablaProducto">Unidades</th>
-                            <th style="width: 10%; min-width: 100px;" class="text-center headerTablaProducto">Peso</th>
-                            <th style="width: 20%; min-width: 100px;" class="text-center headerTablaProducto">Subtotal</th>
                             <th style="width: 20%; min-width: 150px;" class="text-center headerTablaProducto">Total</th>
                         </thead>
                         <tbody>
                         <tr>
                             <td><p>Egresos</p></td>
                             <td><input type="text" v-model="documento.getCantidadItems_Egresos()" class="form-control text-center" readonly></td>
-                            <td><input type="text" v-model="documento.getPeso_Egresos()" class="form-control text-center" readonly></td>
-                            <td><input type="text" v-model="documento.getSubTotal_Egresos()" class="form-control text-center" readonly></td>
                             <td><input type="text" v-model="documento.getTotal_Egresos()" class="form-control text-center" readonly></td>
                         </tr>
                         <tr>
                             <td><p>Ingresos</p></td>
                             <td><input type="text" v-model="documento.getCantidadItems_Ingresos()" class="form-control text-center" readonly></td>
-                            <td><input type="text" v-model="documento.getPeso_Ingresos()" class="form-control text-center" readonly></td>
-                            <td><input type="text" v-model="documento.getSubTotal_Ingresos()" class="form-control text-center" readonly></td>
                             <td><input type="text" v-model="documento.getTotal_Ingresos()" class="form-control text-center" readonly></td>
                         </tr>
                        

@@ -565,7 +565,8 @@ class AjaxModel extends Conexion  {
         //Query de consulta con parametros para bindear si es necesario.
         $query = "
             
-            SELECT 
+            SELECT
+            DBO.DimeStockFis('99', :codigostock,'' ,'B01') AS Stock,
             ISNULL(factor,1) as factor,
             CostoProducto =  CAST(factor * dbo.DimecostoProm('99', :codigocosto,'') as varchar)
             FROM inv_unifactor WITH(NOLOCK) 
@@ -573,6 +574,7 @@ class AjaxModel extends Conexion  {
         ";
 
         $stmt = $this->instancia->prepare($query);
+        $stmt->bindParam(':codigostock', $busqueda->codigo); 
         $stmt->bindParam(':codigocosto', $busqueda->codigo); 
         $stmt->bindParam(':codigo', $busqueda->codigo); 
         $stmt->bindParam(':unidad', $busqueda->unidad); 

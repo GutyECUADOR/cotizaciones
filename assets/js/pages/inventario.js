@@ -209,7 +209,7 @@ class Documento {
 const app = new Vue({
     el: '#app',
     data: {
-      title: 'INVENTARIO DE PRODUCTOS',
+      title: 'Ingreso & Egreso de Productos',
       search_proveedor: {
         text: '',
         campo: 'NOMBRE',
@@ -313,7 +313,7 @@ const app = new Vue({
             .then(response => {
               console.log(response);
                 if (response.data) {
-                   
+                    this.nuevo_producto.stock = parseFloat(response.data.Stock);
                     this.nuevo_producto.factor = response.data.factor;
                     this.nuevo_producto.precio = response.data.CostoProducto;
                 }else{
@@ -462,28 +462,6 @@ const app = new Vue({
                 swal({
                     title: "Lista en blanco.",
                     text: `La lista de ingresos o egresos está vacía.`,
-                    type: "warning",
-                    showCancelButton: false,
-                    confirmButtonClass: "btn-success",
-                    confirmButtonText: "Aceptar",
-                    closeOnConfirm: false
-                    });
-                return false;
-            }else if (this.documento.proveedor.ruc.length === 0){
-                swal({
-                    title: "Sin Proveedor.",
-                    text: `No se ha indicado un proveedor válido`,
-                    type: "warning",
-                    showCancelButton: false,
-                    confirmButtonClass: "btn-success",
-                    confirmButtonText: "Aceptar",
-                    closeOnConfirm: false
-                    });
-                return false;
-            }else if (this.documento.getPeso_Egresos() != this.documento.getPeso_Ingresos()){
-                swal({
-                    title: "Diferencia entre Ingresos y Egresos.",
-                    text: `El Peso de los ingresos es de: ${this.documento.getPeso_Egresos()}. Y el de egresos: ${this.documento.getPeso_Ingresos()}`,
                     type: "warning",
                     showCancelButton: false,
                     confirmButtonClass: "btn-success",
