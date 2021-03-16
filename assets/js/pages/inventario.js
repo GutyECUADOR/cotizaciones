@@ -438,7 +438,7 @@ const app = new Vue({
                 console.log(data);
                 swal({
                     title: "Realizado",
-                    text: `Se ha generado exitosamente el ingreso #${data.transaction.ingreso.newcod}, y el egreso #${data.transaction.egreso.newcod}`,
+                    text: `Se ha generado exitosamente el ingreso #IPC ${data.transaction.ingreso.newcod}, y el egreso #EPC ${data.transaction.egreso.newcod}`,
                     type: "success",
                     showCancelButton: false,
                     confirmButtonClass: "btn-success",
