@@ -20,8 +20,8 @@ use App\Controllers\RouteController;
      
       <link rel="shortcut icon" href="<?php echo ROOT_PATH; ?>assets\css\img\favicon.ico">
 
-      <!-- CSS Bootstrap 3.3.7 -->
-      <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\css\bootstrap.min.css">
+      <!-- CSS Bootstrap -->
+      <link rel="stylesheet" href="assets\css\bootstrap.min.css">
      
       <!-- Librerias-->
       <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\css\bootstrap-datepicker.css">
