@@ -24,7 +24,7 @@ class conexion {
         
         /*CONEXION PARA DESAROLLO*/
         $this->driver = 'sqlsrv';
-        $this->host = "S01";
+        $this->host = "SRV-IMPERIUM";
         $this->dbname = "";
         $this->port = "1433";
         $this->user = "programacion";
