@@ -37,6 +37,8 @@
                 
             }else{
               echo '
+              
+                <li><a id="liveclock"></a></li>
                 <li><a href="?action=logout">Iniciar Sesión</a></li>
               ';
             }
