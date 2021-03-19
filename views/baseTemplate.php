@@ -18,23 +18,23 @@ use App\Controllers\RouteController;
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1">
      
-      <link rel="shortcut icon" href="<?php echo ROOT_PATH; ?>assets\css\img\favicon.ico">
+      <link rel="shortcut icon" href="assets\css\img\favicon.ico">
 
       <!-- CSS Bootstrap -->
       <link rel="stylesheet" href="assets\css\bootstrap.min.css">
      
       <!-- Librerias-->
-      <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\css\bootstrap-datepicker.css">
-      <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\css\font-awesome.min.css">
-      <link rel="stylesheet" type="text/css"  href="<?php echo ROOT_PATH; ?>assets\css\sweetalert.css" />
+      <link rel="stylesheet" href="assets\css\bootstrap-datepicker.css">
+      <link rel="stylesheet" href="assets\css\font-awesome.min.css">
+      <link rel="stylesheet" type="text/css"  href="assets\css\sweetalert.css" />
 
       <!-- CSS Propios -->
       
-      <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\css\loaders.css">
-      <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\css\pnotify.custom.min.css">
+      <link rel="stylesheet" href="assets\css\loaders.css">
+      <link rel="stylesheet" href="assets\css\pnotify.custom.min.css">
 
       <!-- Custom CSS -->
-      <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\css\custom.css">
+      <link rel="stylesheet" href="assets\css\custom.css?<?php echo date('Ymdhiiss')?>">
        
       <!-- CSS Paginas -->
 

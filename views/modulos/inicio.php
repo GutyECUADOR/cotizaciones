@@ -7,17 +7,13 @@
     <div id="menu_circle">
       <div class='selector'>
           <ul>
-            <li onclick="location.href='/wssp/ws-evalua/';">
-              <input id='c1' type='checkbox'/>
-              <label id='menu1' for='c1' title='Evaluación de Empleados'></label>   
+            <li onclick="location.href='?action=inventario';">
+                <input id='c1' type='checkbox' title='Inventario'/>
+                <label id='menu1' for='c1'><i class="fa fa-book fa-3x" aria-hidden="true"></i></i> Inventario</label>   
+              </a>
             </li>
           
-            <li onclick="location.href='/wssp/ws-valep/';">
-              <input id='c2' type='checkbox'/>
-              <label id='menu2' for='c2' title='Vales por pérdida'></label>
-            </li>
-
-            <li onclick="location.href='/wssp/ws-chlocales/';">
+            <!-- <li onclick="location.href='/wssp/ws-chlocales/';">
               <input id='c3' type='checkbox'/>
               <label id='menu3' for='c3' title='CheckList Locales'></label>
             </li>
@@ -61,8 +57,9 @@
               <input id='c11' type='checkbox'/>
               <label id='menu11' for='c11' title='Cotizaciones Web'></label>   
             </li>
+ -->
 
-          
+           
           </ul>
           <button id='center_logo'></button>
           
@@ -73,4 +70,4 @@
     <script src="assets\js\jquery.min.js"></script>
     <script src="assets\js\bootstrap.min.js"></script>
     <script src="assets\js\moment.min.js"></script>
-    <script src="assets\js\inicio.js"></script>
+    <script src="assets\js\inicio.js?<?php echo date('Ymdhiiss')?>"></script>

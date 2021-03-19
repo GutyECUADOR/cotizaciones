@@ -18,7 +18,7 @@
     
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">  
-        <li><a href="?action=inicio">Inicio</a></li>
+        <li><a href="?action=inicio"><i class="fa fa-home" aria-hidden="true"></i></i> Inicio</a></li>
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
@@ -26,11 +26,10 @@
               if (isset($_SESSION["usuarioRUC".APP_UNIQUE_KEY])){
                 echo '
                 <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Bienvenido, '.$_SESSION["usuarioNOMBRE".APP_UNIQUE_KEY].'<span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i></i> Bienvenido, '.$_SESSION["usuarioNOMBRE".APP_UNIQUE_KEY].'<span class="caret"></span></a>
                   <ul class="dropdown-menu">
-                    <li><a href="?action=inventario">Inventario </a></li>
-                    <li><a href="?action=logout">Cerrar Sesión </a></li>
-                   
+                    <li><a href="?action=logout"><span class="glyphicon glyphicon-log-in" ></span> Cerrar Sesión </a></li>
+                    
                   </ul>
                 </li>
                 ';
