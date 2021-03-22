@@ -25,6 +25,7 @@
         <?php
               if (isset($_SESSION["usuarioRUC".APP_UNIQUE_KEY])){
                 echo '
+                <li><a id="liveclock"></a></li>
                 <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i></i> Bienvenido, '.$_SESSION["usuarioNOMBRE".APP_UNIQUE_KEY].'<span class="caret"></span></a>
                   <ul class="dropdown-menu">

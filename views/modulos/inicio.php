@@ -12,6 +12,12 @@
                 <label id='menu1' for='c1'><i class="fa fa-book fa-3x" aria-hidden="true"></i></i> Inventario</label>   
               </a>
             </li>
+
+            <li onclick="location.href='?action=creacionReceta';">
+                <input id='c2' type='checkbox' title='Creacion de receta'/>
+                <label id='menu1' for='c2'><i class="fa fa-cutlery fa-3x" aria-hidden="true"></i></i> Creacion de receta</label>   
+              </a>
+            </li>
           
             <!-- <li onclick="location.href='/wssp/ws-chlocales/';">
               <input id='c3' type='checkbox'/>

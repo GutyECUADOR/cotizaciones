@@ -22,9 +22,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
  <?php include 'sis_modules/header_main.php'?>
 
     <div id="app" class="container card">
-        <!-- Hidden Inputs-->
-        <input id="hiddenBodegaDefault" type="hidden" value="<?php echo $_SESSION["bodegaDefault"]?>">
-
+        
         <!-- Row de cabecera-->
         <div class="row">
             <div class="form-group formextra col-lg-offset-3 col-lg-6">
@@ -37,6 +35,104 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                 <h4>{{ title }}</h4>
             </div>
         </div>
+
+        <!-- Row datos de proveedor-->
+        <div class="row">
+
+            <div class="col-lg-6 col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Egresa Componentes & Ingresa KITs</div>
+                    <div class="panel-body">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon">Número</span>
+                            <input type="text" v-model="search_proveedor.text" class="form-control" placeholder="Codigo">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" data-toggle="modal" data-target="#modal_proveedor">
+                                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                </button>
+                            </span>
+                            
+                            
+                        </div>
+
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon">Bodega egreso</span>
+                            <select id='bodegaEgreso' v-model="documento.productos_egreso.bodega" class="form-control input-sm" style="background-color: #ffe7e7;">
+                                    <?php
+                                    foreach ($bodegas as $bodega => $row) {
+
+                                        $codigo = trim($row['CODIGO']);
+                                        $texto= $row['NOMBRE']; 
+                                        
+                                        echo "<option value='$codigo'>$texto</option>";
+                                    }
+                                    
+                                    ?>
+                            </select>
+                        </div>   
+
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon">Bodega ingreso</span>
+                            <select id='bodegaIngreso' v-model="documento.productos_ingreso.bodega" class="form-control input-sm" style="background-color: #d9f7d9;">
+                                    <?php
+                                    foreach ($bodegas as $bodega => $row) {
+
+                                        $codigo = trim($row['CODIGO']);
+                                        $texto= $row['NOMBRE']; 
+                                        
+                                        echo "<option value='$codigo'>$texto</option>";
+                                    }
+                                    
+                                    ?>
+                            </select>
+                        </div>
+
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon"> # Contable Egreso.</span>
+                            <input type="text" class="form-control text-center" :value="documento.proveedor.telefono" placeholder="Telefono">
+                        </div>
+
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon"> # Contable Egreso.</span>
+                            <input type="text" class="form-control text-center" :value="documento.proveedor.telefono" placeholder="Telefono">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-md-12">
+                <div class="panel panel-default">
+                <div class="panel-heading">Información de Bodegas</div>
+                    <div class="panel-body">
+                        
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon">Forma Pago</span>
+                            <select id='formaPago' class="form-control input-sm">
+                                    <?php
+                                    foreach ($formasPago as $grupo => $row) {
+
+                                        $codigo = trim($row['CODIGO']);
+                                        $texto= $row['NOMBRE']; 
+                                        
+                                        echo "<option value='$codigo'>$texto</option>";
+                                    }
+                                    
+                                    ?>
+                            </select>
+                        </div>
+
+
+                        <div class="form-group">
+                            <textarea class="form-control" rows="2" id="comment" name="comment" maxlength="100" placeholder="Comentario de hasta maximo 100 caracteres..."></textarea>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
 
         <!-- Egreso de items-->
         <div class="row">
@@ -103,8 +199,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                 
                             </tbody>
                         </table>
-                            <button type="button" @click="addToEgresoList" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-arrow-up"></span> Agregar item a Egreso </button>
-                            <button type="button" @click="addToIngresoList" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-arrow-down"></span> Agregar item a Ingreso</button>
+                            <button type="button" @click="addToIngresoList" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-arrow-down"></span> Agregar</button>
                         </div>
                     </div>
                 </div>
@@ -119,23 +214,9 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                     <!-- Default panel contents -->
                 
                     <div class="panel-heading clearfix">
-                    <h4 class="panel-title pull-left" style="padding-top: 7.5px; padding-bottom: 7.5px;"><i class="fa fa-list" aria-hidden="true"></i> Lista de items a egresar</h4>
+                    <h4 class="panel-title pull-left" style="padding-top: 7.5px; padding-bottom: 7.5px;"><i class="fa fa-list" aria-hidden="true"></i> Transformación de KITs</h4>
                         <div class="btn-group pull-right">
-                            <div class="input-group input-group-sm">
-                                <span class="input-group-addon">Bodega egreso</span>
-                                <select id='bodegaEgreso' v-model="documento.productos_egreso.bodega" class="form-control input-sm" style="background-color: #ffe7e7;">
-                                        <?php
-                                        foreach ($bodegas as $bodega => $row) {
-
-                                            $codigo = trim($row['CODIGO']);
-                                            $texto= $row['NOMBRE']; 
-                                            
-                                            echo "<option value='$codigo'>$texto</option>";
-                                        }
-                                        
-                                        ?>
-                                </select>
-                            </div>   
+                            
                         </div>
                     </div>
 
@@ -191,24 +272,8 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                     <!-- Default panel contents -->
                 
                     <div class="panel-heading clearfix">
-                    <h4 class="panel-title pull-left" style="padding-top: 7.5px; padding-bottom: 7.5px"><i class="fa fa-list" aria-hidden="true"></i> Lista de items a ingresar</h4>
-                        <div class="btn-group pull-right">
-                            <div class="input-group input-group-sm">
-                                <span class="input-group-addon">Bodega ingreso</span>
-                                <select id='bodegaIngreso' v-model="documento.productos_ingreso.bodega" class="form-control input-sm" style="background-color: #d9f7d9;">
-                                        <?php
-                                        foreach ($bodegas as $bodega => $row) {
-
-                                            $codigo = trim($row['CODIGO']);
-                                            $texto= $row['NOMBRE']; 
-                                            
-                                            echo "<option value='$codigo'>$texto</option>";
-                                        }
-                                        
-                                        ?>
-                                </select>
-                            </div>
-                        </div>
+                    <h4 class="panel-title pull-left" style="padding-top: 7.5px; padding-bottom: 7.5px"><i class="fa fa-list" aria-hidden="true"></i> Detalle del KIT</h4>
+                        
                     </div>
 
                     <div class="panel-body">
@@ -221,8 +286,8 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                         <th style="width: 3%"  class="text-center headerTablaProducto">Cantidad</th>
                                         <th style="width: 5%; min-width: 70px;" class="text-center headerTablaProducto">Precio</th>
                                         <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Stock</th>
-                                        <th style="width: 10%; min-width: 70px;" class="text-center headerTablaProducto">Subtotal</th>
-                                        <th style="width: 5%" class="text-center headerTablaProducto">Eliminar</th>
+                                        <th style="width: 10%; min-width: 70px;" class="text-center headerTablaProducto">Costo</th>
+                                       
                                     </tr>
                                 </thead>
                                 <tbody id="tablaProductosIngreso">
@@ -256,46 +321,6 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
             </div>
         </div>
        
-
-        <!-- fila de resumen-->
-        <div class="row">
-            <div class="col-md-12">
-            <div class="panel panel-default">
-                <!-- Default panel contents -->
-               
-                <div class="panel-heading clearfix">
-                <h4 class="panel-title pull-left">Resumen</h4>
-                </div>
-
-                <div class="panel-body">
-                    <div class="responsibetable">        
-                        <table class="table table-bordered tableExtras">
-                        <thead>
-                            <th style="width: 5%; min-width: 80px;" class="text-center headerTablaProducto"></th>
-                            <th style="width: 5%; min-width: 80px;" class="text-center headerTablaProducto">Unidades</th>
-                            <th style="width: 20%; min-width: 150px;" class="text-center headerTablaProducto">Total</th>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td><p>Egresos</p></td>
-                            <td><input type="text" v-model="documento.getCantidadItems_Egresos()" class="form-control text-center" readonly></td>
-                            <td><input type="text" v-model="documento.getTotal_Egresos()" class="form-control text-center" readonly></td>
-                        </tr>
-                        <tr>
-                            <td><p>Ingresos</p></td>
-                            <td><input type="text" v-model="documento.getCantidadItems_Ingresos()" class="form-control text-center" readonly></td>
-                            <td><input type="text" v-model="documento.getTotal_Ingresos()" class="form-control text-center" readonly></td>
-                        </tr>
-                       
-                        </tbody>
-                        </table>
-
-                    </div>
-                </div>
-
-            </div>
-            </div>
-        </div>    
 
  
         <div class="row extraButton">
@@ -361,4 +386,4 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\xlsx.full.min.js"></script>
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets/js/sweetalert.min.js"></script>
     
-    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\pages\inventario.js?<?php echo date('Ymdhiiss')?>"></script>
+    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\pages\creacionReceta.js?<?php echo date('Ymdhiiss')?>"></script>
