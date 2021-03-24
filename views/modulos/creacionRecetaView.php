@@ -47,7 +47,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                             <span class="input-group-addon">Número</span>
                             <input type="text" v-model="search_proveedor.text" class="form-control" placeholder="Codigo">
                             <span class="input-group-btn">
-                                <button class="btn btn-default" type="button" data-toggle="modal" data-target="#modal_proveedor">
+                                <button class="btn btn-default" type="button" data-toggle="modal" data-target="#modal_buscardocumento">
                                     <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                                 </button>
                             </span>
@@ -88,13 +88,13 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                         </div>
 
                         <div class="input-group input-group-sm">
-                            <span class="input-group-addon"> # Contable Egreso.</span>
-                            <input type="text" class="form-control text-center" :value="documento.proveedor.telefono" placeholder="Telefono">
+                            <span class="input-group-addon"> # Contable Egreso</span>
+                            <input type="text" class="form-control text-center" :value="documento.proveedor.telefono">
                         </div>
 
                         <div class="input-group input-group-sm">
-                            <span class="input-group-addon"> # Contable Egreso.</span>
-                            <input type="text" class="form-control text-center" :value="documento.proveedor.telefono" placeholder="Telefono">
+                            <span class="input-group-addon"> # Contable Egreso</span>
+                            <input type="text" class="form-control text-center" :value="documento.proveedor.telefono">
                         </div>
 
                     </div>
@@ -163,7 +163,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                 <tr>
                                     <td>
                                         <div class="input-group">
-                                        <input type="text" @change="getProducto" v-model="search_producto.text" class="form-control text-center input-sm" placeholder="Codigo de Producto">
+                                        <input type="text" @change="getProducto" v-model="search_producto.busqueda.texto" class="form-control text-center input-sm" placeholder="Codigo de Producto">
                                         <span class="input-group-btn">
                                             <button id="btnSeachProductos" class="btn btn-default input-sm" type="button" data-toggle="modal" data-target="#modalBuscarProducto">
                                                 <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
@@ -343,26 +343,10 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
         <!-- Modal Info sesion -->
         <?php require_once 'sis_modules/modal_info_session.php'?>
 
-        <!-- Modal Proveedor -->
-       <?php require_once 'sis_modules/modal_proveedor.php'?>
-
-        <!-- Modal Cliente Nuevo -->
-       <?php require_once 'sis_modules/modal_cliente_nuevo.php'?>
-
         <!-- Modal Producto -->
         <?php require_once 'sis_modules/modal_producto.php'?>
 
-        <!-- Modal Producto -->
-        <?php require_once 'sis_modules/modal_detalle_promo.php'?>
-
-        <!-- Modal Buscar Documento -->
-        <?php require_once 'sis_modules/modal_buscardoc.php'?>
-
-        <!-- Modal Enviar Email Personalizado -->
-        <?php require_once 'sis_modules/modal_SendEmail.php'?>
-
-        <!-- Modal agregar fotos y detalles extra -->
-        <?php require_once 'sis_modules/modal_addExtraDetailProduct.php'?>
+       
      
     </div>
 

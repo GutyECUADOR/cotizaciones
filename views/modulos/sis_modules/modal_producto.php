@@ -3,12 +3,12 @@
         <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Busqueda de Producto</h4>
+            <h4 class="modal-title">Búsqueda de Producto</h4>
         </div>
         <div class="modal-body">
             
             <div class="input-group select-group">
-                <input type="text" v-model="search_producto.text" placeholder="Codigo o Nombre del producto..." class="form-control"/>
+                <input type="text" v-model="search_producto.busqueda.texto" placeholder="Codigo o Nombre del producto..." class="form-control"/>
                
                 <div class="input-group-btn">
                     <button @click="getProductos" type="button" class="btn btn-primary" :disabled="search_producto.isloading"  >
@@ -35,7 +35,7 @@
                             <tr v-for="producto in search_producto.results">
                                 <td>{{producto.Codigo}}</td>
                                 <td>{{producto.Nombre.trim()}}</td>
-                                <td>{{parseFloat(producto.PrecA.trim()).toFixed(2)}}</td>
+                                <td>{{parseFloat(producto.PreaA.trim()).toFixed(2)}}</td>
                                 <td>{{parseFloat(producto.Stock.trim())}}</td>
                                 <td>
                                     <button type="button" class="btn btn-primary btn-sm btn-block" @click="selectProduct(producto.Codigo)">

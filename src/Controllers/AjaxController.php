@@ -63,7 +63,7 @@ class AjaxController  {
 
     /* Retorna la respuesta del modelo ajax*/
     public function getAllProductosController($terminoBusqueda, $tipoBusqueda){
-        $response = $this->ajaxModel->getAllProductosModel($terminoBusqueda, $tipoBusqueda);
+        $response = $this->ajaxModel->Sp_INVCONARTWAN($terminoBusqueda, $tipoBusqueda);
         return $response;
     }
 
@@ -991,6 +991,9 @@ class AjaxController  {
 
     }
 
+
+    /* INVENTARIO */
+
     function getProveedor(string $busqueda) {
         $response = $this->ajaxModel->getProveedor($busqueda);
         return $response;
@@ -1000,7 +1003,6 @@ class AjaxController  {
         $response = $this->ajaxModel->getProveedores($busqueda);
         return $response;
     }
-
 
     function getProducto(string $busqueda) {
         $producto = $this->ajaxModel->getProducto($busqueda);

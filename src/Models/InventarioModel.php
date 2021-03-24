@@ -2,7 +2,7 @@
 
 /* LOS MODELOS del MVC retornaran unicamente arrays PHP sin serializar*/
 
-class AjaxModel extends Conexion  {
+class InventarioModel extends Conexion  {
     
     public function __construct() {
         parent::__construct();
@@ -252,29 +252,8 @@ class AjaxModel extends Conexion  {
                 $resulset = false;
             }
         return $resulset;  
-
-   
     }
 
-    public function Sp_INVCONARTWAN($terminoBusqueda, $tipoBusqueda='NOMBRE') {
-
-        //Query de consulta con parametros para bindear si es necesario.
-        $query = "exec Sp_INVCONARTWAN ?,'','VEN','N','B01','','100','0','0','1','99','','','','','','','','','','1'";
-        //$query = "SELECT top 10 Codigo, Nombre FROM INV_ARTICULOS WHERE $tipoBusqueda LIKE '$terminoBusqueda%'";  // Final del Query SQL 
-
-        $stmt = $this->instancia->prepare($query); 
-        $stmt->bindValue(1, $terminoBusqueda); 
-        $stmt->execute();
-
-            if($stmt->execute()){
-               return $stmt->fetchAll( \PDO::FETCH_ASSOC);
-            }else{
-                $resulset = false;
-            }
-        return $resulset;  
-
-   
-    }
 
     public function getAllDocumentosModel($fechaINI, $fechaFIN, $stringBusqueda) {
 

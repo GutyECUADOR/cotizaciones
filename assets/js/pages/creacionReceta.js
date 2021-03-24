@@ -217,7 +217,12 @@ const app = new Vue({
         results: []
     },
       search_producto: {
-          text: '',
+          busqueda: {
+            texto: '',
+            gestion: 'INV',
+            bodega: 'B01',
+            cantidad: 25
+          },
           isloading: false,
           results: []
       },
@@ -228,7 +233,7 @@ const app = new Vue({
     },
     methods:{
         getProveedor() {
-            fetch(`./api/index.php?action=getProveedor&busqueda=${this.search_proveedor.text}`)
+            fetch(`./api/inventario/index.php?action=getProveedor&busqueda=${this.search_proveedor.text}`)
             .then(response => {
                 return response.json();
             })
@@ -259,7 +264,7 @@ const app = new Vue({
             let campo = this.search_proveedor.campo;
             let busqueda = JSON.stringify({termino, campo});
             console.log(busqueda);
-            fetch(`./api/index.php?action=getProveedores&busqueda=${busqueda}`)
+            fetch(`./api/inventario/index.php?action=getProveedores&busqueda=${busqueda}`)
             .then(response => {
                 return response.json();
             })
@@ -274,7 +279,7 @@ const app = new Vue({
             
         },
         getProducto() {
-            fetch(`./api/index.php?action=getProducto&busqueda=${this.search_producto.text}`)
+            fetch(`./api/inventario/index.php?action=getProducto&busqueda=${this.search_producto.text}`)
             .then(response => {
                 return response.json();
             })
@@ -306,7 +311,7 @@ const app = new Vue({
             let unidad = this.nuevo_producto.unidad;
             let busqueda = JSON.stringify({codigo, unidad});
             console.log(busqueda);
-            fetch(`./api/index.php?action=getCostoProducto&busqueda=${busqueda}`)
+            fetch(`./api/inventario/index.php?action=getCostoProducto&busqueda=${busqueda}`)
             .then(response => {
                 return response.json();
             })
@@ -334,8 +339,8 @@ const app = new Vue({
         },
         getProductos() {
             this.search_producto.isloading = true;
-           
-            fetch(`./api/index.php?action=getProductos&busqueda=${this.search_producto.text}`)
+            let busqueda = JSON.stringify(this.search_producto.busqueda);
+            fetch(`./api/inventario/index.php?action=searchProductos&busqueda=${busqueda}`)
             .then(response => {
                 return response.json();
             })
@@ -427,7 +432,7 @@ const app = new Vue({
             let formData = new FormData();
             formData.append('documento', JSON.stringify(this.documento));  
             
-            fetch(`./api/index.php?action=saveInventario`, {
+            fetch(`./api/inventario/index.php?action=saveInventario`, {
                 method: 'POST',
                 body: formData
             })
