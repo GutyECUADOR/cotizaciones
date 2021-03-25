@@ -267,6 +267,7 @@ const app = new Vue({
                 return productoEnArray.codigo === id;
             });
             this.documento.productos.items.splice(index, 1);
+            this.documento.productos_detalle = [];
         },
         async saveDocumento(){
             if (!this.validateSaveDocument()) {
