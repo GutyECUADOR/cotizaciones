@@ -34,6 +34,11 @@ class InventarioController  {
         return array('producto' => $producto, 'unidades_medida' => $unidades_medida);
     }
 
+    function getComposicionProducto(string $codigo) {
+        $response = $this->inventarioModel->getComposicionProducto($codigo);
+        return $response;
+    }
+
     function getCostoProducto(object $busqueda) {
         $response = $this->inventarioModel->getCostoProducto($busqueda);
         return $response;

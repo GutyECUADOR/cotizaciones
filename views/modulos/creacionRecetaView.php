@@ -57,7 +57,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
 
                         <div class="input-group input-group-sm">
                             <span class="input-group-addon">Bodega egreso</span>
-                            <select id='bodegaEgreso' v-model="documento.productos_egreso.bodega" class="form-control input-sm" style="background-color: #ffe7e7;">
+                            <select id='bodegaEgreso' v-model="documento.productos.bodega_egreso" class="form-control input-sm" style="background-color: #ffe7e7;">
                                     <?php
                                     foreach ($bodegas as $bodega => $row) {
 
@@ -73,7 +73,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
 
                         <div class="input-group input-group-sm">
                             <span class="input-group-addon">Bodega ingreso</span>
-                            <select id='bodegaIngreso' v-model="documento.productos_ingreso.bodega" class="form-control input-sm" style="background-color: #d9f7d9;">
+                            <select id='bodegaIngreso' v-model="documento.productos.bodega_ingreso" class="form-control input-sm" style="background-color: #d9f7d9;">
                                     <?php
                                     foreach ($bodegas as $bodega => $row) {
 
@@ -89,12 +89,12 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
 
                         <div class="input-group input-group-sm">
                             <span class="input-group-addon"> # Contable Egreso</span>
-                            <input type="text" class="form-control text-center" :value="documento.proveedor.telefono">
+                            <input type="text" class="form-control text-center">
                         </div>
 
                         <div class="input-group input-group-sm">
                             <span class="input-group-addon"> # Contable Egreso</span>
-                            <input type="text" class="form-control text-center" :value="documento.proveedor.telefono">
+                            <input type="text" class="form-control text-center">
                         </div>
 
                     </div>
@@ -103,26 +103,9 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
 
             <div class="col-lg-6 col-md-12">
                 <div class="panel panel-default">
-                <div class="panel-heading">Información de Bodegas</div>
+                <div class="panel-heading">Detalle</div>
                     <div class="panel-body">
                         
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-addon">Forma Pago</span>
-                            <select id='formaPago' class="form-control input-sm">
-                                    <?php
-                                    foreach ($formasPago as $grupo => $row) {
-
-                                        $codigo = trim($row['CODIGO']);
-                                        $texto= $row['NOMBRE']; 
-                                        
-                                        echo "<option value='$codigo'>$texto</option>";
-                                    }
-                                    
-                                    ?>
-                            </select>
-                        </div>
-
-
                         <div class="form-group">
                             <textarea class="form-control" rows="2" id="comment" name="comment" maxlength="100" placeholder="Comentario de hasta maximo 100 caracteres..."></textarea>
                         </div>
@@ -134,7 +117,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
         </div>
 
 
-        <!-- Egreso de items-->
+        <!--  items-->
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
@@ -199,14 +182,14 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                 
                             </tbody>
                         </table>
-                            <button type="button" @click="addToIngresoList" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-arrow-down"></span> Agregar</button>
+                            <button type="button" @click="addToList" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-arrow-down"></span> Agregar</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- items en lista egreso-->
+        <!-- items en lista KIT -->
 
         <div class="row">
             <div class="col-md-12">
@@ -214,7 +197,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                     <!-- Default panel contents -->
                 
                     <div class="panel-heading clearfix">
-                    <h4 class="panel-title pull-left" style="padding-top: 7.5px; padding-bottom: 7.5px;"><i class="fa fa-list" aria-hidden="true"></i> Transformación de KITs</h4>
+                    <h4 class="panel-title pull-left" style="padding-top: 7.5px; padding-bottom: 7.5px;"><i class="fa fa-list" aria-hidden="true"></i> Lista de KITs</h4>
                         <div class="btn-group pull-right">
                             
                         </div>
@@ -225,8 +208,9 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                             <table class="table table-bordered tableExtras">
                                 <thead>
                                     <tr>
-                                        <th style="width: 10%; min-width: 100px;" class="text-center headerTablaProducto">Codigo</th>
+                                        <th style="width: 5%; min-width: 50px;" class="text-center headerTablaProducto">Codigo</th>
                                         <th style="width: 20%; min-width: 200px;" class="text-center headerTablaProducto">Nombre del Articulo</th>
+                                        <th style="width: 3%" class="text-center headerTablaProducto">Unidad</th>
                                         <th style="width: 3%" class="text-center headerTablaProducto">Cantidad</th>
                                         <th style="width: 5%; min-width: 100px;" class="text-center headerTablaProducto">Precio</th>
                                         <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Stock</th>
@@ -234,29 +218,29 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                         <th style="width: 5%" class="text-center headerTablaProducto">Eliminar</th>
                                     </tr>
                                 </thead>
-                                <tbody id="tablaProductosEgreso">
-                                    <tr v-for="producto in documento.productos_egreso.items">
-                                        <td><input type="text" class="form-control text-center input-sm" v-model="producto.codigo" disabled></td>
+                                <tbody id="tablaProductos">
+                                    <tr v-for="producto in documento.productos.items">
+                                        <td><button type="button" @click="getComposicionProducto(producto.codigo)" class="btn btn-primary btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> {{ producto.codigo }}</button></td>
                                         <td><input type="text" class="form-control text-center input-sm"  v-model="producto.nombre" readonly></td>
+                                        <td><input type="text" class="form-control text-center input-sm" v-model="producto.unidad" readonly></td>
                                         <td><input type="number" class="form-control text-center input-sm" @change="producto.setCantidad($event.target.value)" :value="producto.cantidad" min="1" oninput="validity.valid||(value=1);"></td>
                                         <td>
                                             <input type="text" class="form-control text-center input-sm" v-model="producto.precio" readonly>
                                         </td>
                                         <td><input type="text" class="form-control text-center input-sm" v-model="producto.stock" disabled></td>
                                         <td><input type="text" class="form-control text-center input-sm" v-model="producto.getSubtotal()" readonly></td>
-                                        <td><button type="button" @click="removeEgresoItem(producto.codigo)" class="btn btn-danger btn-sm btn-block"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Eliminar</button>
+                                        <td><button type="button" @click="removeItem(producto.codigo)" class="btn btn-danger btn-sm btn-block"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Eliminar</button>
                                         </td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="4"></td>
+                                        <td colspan="5"></td>
                                         <td class="text-center" style="vertical-align: middle;"><b>Total Productos</b></td>
                                         <td colspan="2">
-                                        <input type="text" v-model="documento.getTotal_Egresos()" class="form-control text-center" readonly></td>
+                                        <input type="text" v-model="documento.getTotal()" class="form-control text-center" readonly></td>
                                         </td>
                                     </tr>
-
                                 </tfoot>
                             </table>
                         </div>
@@ -265,15 +249,16 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
             </div>
         </div>
 
-        <!-- items en lista ingreso-->
+        <!-- items en lista detalle del KIT -->
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
                     <!-- Default panel contents -->
                 
                     <div class="panel-heading clearfix">
-                    <h4 class="panel-title pull-left" style="padding-top: 7.5px; padding-bottom: 7.5px"><i class="fa fa-list" aria-hidden="true"></i> Detalle del KIT</h4>
-                        
+                    <h4 class="panel-title pull-left" style="padding-top: 7.5px; padding-bottom: 7.5px;"><i class="fa fa-list" aria-hidden="true"></i> Detalle del KIT (Composición)</h4>
+                        <div class="btn-group pull-right">
+                        </div>
                     </div>
 
                     <div class="panel-body">
@@ -281,48 +266,36 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                             <table class="table table-bordered tableExtras">
                                 <thead>
                                     <tr>
-                                        <th style="width: 10%; min-width: 110px;" class="text-center headerTablaProducto">Codigo</th>
-                                        <th style="width: 20%; min-width: 250px;" class="text-center headerTablaProducto">Nombre del Articulo</th>
-                                        <th style="width: 3%"  class="text-center headerTablaProducto">Cantidad</th>
-                                        <th style="width: 5%; min-width: 70px;" class="text-center headerTablaProducto">Precio</th>
+                                        <th style="width: 5%; min-width: 80px;" class="text-center headerTablaProducto">Codigo</th>
+                                        <th style="width: 10%; min-width: 170px;" class="text-center headerTablaProducto">Nombre del Articulo</th>
+                                        <th style="width: 2%" class="text-center headerTablaProducto">Unidad</th>
+                                        <th style="width: 3%; min-width: 90px;" class="text-center headerTablaProducto">Cantidad</th>
                                         <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Stock</th>
-                                        <th style="width: 10%; min-width: 70px;" class="text-center headerTablaProducto">Costo</th>
-                                       
+                                        <th style="width: 5%; min-width: 100px;" class="text-center headerTablaProducto">Costo</th>
+                                        <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Costo Total</th>
                                     </tr>
                                 </thead>
-                                <tbody id="tablaProductosIngreso">
-                                    <tr v-for="producto in documento.productos_ingreso.items">
-                                        <td><input type="text" class="form-control text-center input-sm" v-model="producto.codigo" disabled></td>
-                                        <td><input type="text" class="form-control text-center input-sm"  v-model="producto.nombre" readonly></td>
-                                        <td><input type="number" class="form-control text-center input-sm" @change="producto.setCantidad($event.target.value)" :value="producto.cantidad" min="1" oninput="validity.valid||(value='1');"></td>
+                                <tbody id="tablaProductos">
+                                    <tr v-for="producto in documento.productos_detalle">
+                                        <td><input type="text" class="form-control text-center input-sm" v-model="producto.Codigo.trim()" readonly></td>
+                                        <td><input type="text" class="form-control text-center input-sm"  v-model="producto.Nombre.trim()" readonly></td>
+                                        <td><input type="text" class="form-control text-center input-sm" v-model="producto.Unidad" readonly></td>
+                                        <td><input type="number" class="form-control text-center input-sm" v-model="producto.Cantidad" readonly></td>
+                                        <td><input type="text" class="form-control text-center input-sm" v-model="producto.Stock" readonly></td>
                                         <td>
-                                            <input type="text" class="form-control text-center input-sm" v-model="producto.precio">
+                                            <input type="text" class="form-control text-center input-sm" v-model="producto.Costo" readonly>
                                         </td>
-                                        <td><input type="text" class="form-control text-center input-sm" v-model="producto.stock" disabled></td>
-                                        <td><input type="text" class="form-control text-center input-sm" v-model="producto.getSubtotal()" readonly></td>
-                                        <td><button type="button" @click="removeIngresoItem(producto.codigo)" class="btn btn-danger btn-sm btn-block"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Eliminar</button>
+                                        <td><input type="text" class="form-control text-center input-sm" v-model="producto.Costotot" readonly></td>
                                         </td>
                                     </tr>
                                 </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="4"></td>
-                                        <td class="text-center" style="vertical-align: middle;"><b>Total Productos</b></td>
-                                        <td colspan="2">
-                                        <input type="number" v-model="documento.getTotal_Ingresos()" class="form-control text-center" readonly></td>
-                                        </td>
-                                    </tr>
-
-                                </tfoot>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-       
 
- 
         <div class="row extraButton">
             <div class="col-md-12">
                 <div class="btn-group btn-group-justified" role="group" aria-label="...">

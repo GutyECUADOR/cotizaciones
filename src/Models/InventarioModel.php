@@ -596,6 +596,40 @@ class InventarioModel extends Conexion  {
         return $resulset;  
     }
 
+    public function getComposicionProducto(string $codigo){
+        $query = "
+        SELECT 
+            Mov.Codigo,
+            Art.Nombre,
+            Mov.Unidad,
+            Mov.Cantidad,
+            Costo = (CAST((SELECT dbo.DimecostoProm('99',Mov.Codigo, '')) AS varchar)),
+            Stock = (SELECT dbo.DIMESTOCKFIS('99', Mov.Codigo,'','B01') AS STOCK),
+            Costotot=0,
+            art.tipoarticulo,
+            Mov.NameKitUno,
+            Mov.NameKitVar,
+            mov.Tipo,
+            Mov.PrecioUno,
+            Mov.PrecioVar,
+            Mov.Preparacion
+        FROM INV_KIT MOV WITH (NOLOCK) LEFT OUTER JOIN INV_ARTICULOS ART WITH (NOLOCK) ON MOV.CODIGO = ART.CODIGO
+        WHERE MOV.CODIGOKIT = :codigo
+            ";  // Final del Query SQL 
+
+        $stmt = $this->instancia->prepare($query);
+        $stmt->bindParam(':codigo', $codigo); 
+      
+            if($stmt->execute()){
+                $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+            }else{
+                $resulset = false;
+            }
+        return $resulset;  
+    }
+
+   
+
     public function Winfenix_SaveIngreso (object $documento) {
         try{
             $this->instancia->beginTransaction();

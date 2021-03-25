@@ -43,6 +43,20 @@ $InventarioController = new InventarioController();
 
         break;
 
+        case 'getComposicionProducto':
+          if (isset($_GET['busqueda'])) {
+            $busqueda = $_GET['busqueda'];
+            $respuesta = $InventarioController->getComposicionProducto($busqueda);
+            $rawdata = array('status' => 'OK', 'message' => 'Busqueda finalizada', 'data' => $respuesta);
+            
+          }else{
+            $rawdata = array('status' => 'error', 'message' => 'No se ha recibido extra data.');
+          }
+        
+          echo json_encode($rawdata);
+
+        break;
+
         case 'getProductos':
           if (isset($_GET['busqueda'])) {
             $busqueda = $_GET['busqueda'];
