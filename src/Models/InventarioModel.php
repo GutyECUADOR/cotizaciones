@@ -605,7 +605,7 @@ class InventarioModel extends Conexion  {
             Mov.Cantidad,
             Costo = (CAST((SELECT dbo.DimecostoProm('99',Mov.Codigo, '')) AS varchar)),
             Stock = (SELECT dbo.DIMESTOCKFIS('99', Mov.Codigo,'','B01') AS STOCK),
-            Costotot=0,
+            Costotot= CAST((Mov.Cantidad * Costo) AS DECIMAL(6,4)),
             art.tipoarticulo,
             Mov.NameKitUno,
             Mov.NameKitVar,
@@ -720,14 +720,14 @@ class InventarioModel extends Conexion  {
                 $nextID = $stmt->fetchColumn();
                 $NextIDWithFormat = str_pad($nextID, 8, '0', STR_PAD_LEFT);
 
-                 // Ejecuta Sp_Contador Documento
-                 $query = "Sp_Contador 'CNT','99','','DIN',''";
-                
-                 $stmt = $this->instancia->prepare($query); 
-                 $stmt->execute();
-                 $stmt->nextRowset();
-                 $nextIDAsiento = $stmt->fetchColumn();
-                 $NextIDAsientoWithFormat = '992020DIN'.str_pad($nextIDAsiento, 8, '0', STR_PAD_LEFT);
+                // Ejecuta Sp_Contador Documento
+                $query = "Sp_Contador 'CNT','99','','DIN',''";
+            
+                $stmt = $this->instancia->prepare($query); 
+                $stmt->execute();
+                $stmt->nextRowset();
+                $nextIDAsiento = $stmt->fetchColumn();
+                $NextIDAsientoWithFormat = '992020DIN'.str_pad($nextIDAsiento, 8, '0', STR_PAD_LEFT);
               
                 // Ejecuta Sp_comgracab para Ingreso de Inventario
                 $query = "
@@ -791,6 +791,53 @@ class InventarioModel extends Conexion  {
    
     }
     
+    public function Winfenix_SaveCreacionReceta (object $documento) {
+        try{
+            $this->instancia->beginTransaction();
+            // Ejecuta Sp_Contador Documento
+            $query = "Sp_Contador 'INV','99','','STK',''";
+            
+            $stmt = $this->instancia->prepare($query); 
+            $stmt->execute();
+            $stmt->nextRowset();
+            $nextID = $stmt->fetchColumn();
+            $NextIDWithFormat = str_pad($nextID, 8, '0', STR_PAD_LEFT);
+
+            // Ejecuta Sp_Contador Documento
+            $query = "Sp_Contador 'CNT','99','','DSK',''";
+            
+            $stmt = $this->instancia->prepare($query); 
+            $stmt->execute();
+            $stmt->nextRowset();
+            $nextIDAsiento = $stmt->fetchColumn();
+            $NextIDCNT = '992020DSK'.str_pad($nextIDAsiento, 8, '0', STR_PAD_LEFT);
+            
+            // Ejecuta Sp_comgracab para Ingreso de Inventario
+            $query = "
+            Sp_INVgracab 'I', :usuario, :pcid,'99','2020','STK', ::secuencia, :fecha,'SSTK', :bodega_egreso, :bodega_ingreso,'DOL','1.00','S','0','', :total, :num_cnt,'INV','',' ',' ',' ',' '";
+
+            $stmt = $this->instancia->prepare($query); 
+            $stmt->bindValue(':usuario', $_SESSION["usuarioRUC".APP_UNIQUE_KEY]);
+            $stmt->bindValue(':pcid', php_uname('n'));
+            $stmt->bindValue(':secuencia', $NextIDWithFormat);
+            $stmt->bindValue(':fecha', date('Ymd'));
+            $stmt->bindValue(':bodega_egreso', $documento->productos->bodega_egreso);
+            $stmt->bindValue(':bodega_ingreso', $documento->productos->bodega_ingreso);
+            $stmt->bindValue(':num_cnt', $NextIDCNT);
+            $stmt->bindValue(':total', $documento->productos_egreso->total);
+           
+        
+        $stmt->execute();
+                
+            $commit = $this->instancia->commit();
+            return array('status' => 'ok', 'commit' => $commit, 'newcod' => $NextIDWithFormat);
+            
+        }catch(\PDOException $exception){
+            $this->instancia->rollBack();
+            return array('status' => 'error', 'message' => $exception->getMessage(), 'newcod' => $NextIDWithFormat );
+        }
+   
+    }
     
 
     

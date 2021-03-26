@@ -48,8 +48,8 @@ class Producto {
 class Documento {
     constructor() {
         this.productos = {
-            bodega_ingreso: 'B01',
-            bodega_egreso: 'B02',
+            bodega_egreso: 'B01',
+            bodega_ingreso: 'B02',
             items: [],
             cantidad: 0,
             peso: 0,
@@ -214,14 +214,17 @@ const app = new Vue({
             this.getProducto();
             $('#modalBuscarProducto').modal('hide');
         },
-        addToList(){
+        async addToList(){
             let existeInArray = this.documento.productos.items.findIndex((productoEnArray) => {
                 return productoEnArray.codigo === this.nuevo_producto.codigo;
             });
 
             if (existeInArray === -1 && this.nuevo_producto.codigo.length > 0) {
+                let composicion = await this.getComposicionProducto(this.nuevo_producto.codigo);
+                console.log(composicion);
+                this.nuevo_producto.composicion = composicion;
                 this.documento.productos.items.push(this.nuevo_producto);
-                this.getComposicionProducto(this.nuevo_producto.codigo);
+                
                 this.nuevo_producto = new Producto();
                 this.search_producto.text = '';
             }else{
@@ -238,8 +241,8 @@ const app = new Vue({
 
             
         },
-        getComposicionProducto(codigo){
-            fetch(`./api/inventario/index.php?action=getComposicionProducto&busqueda=${codigo}`)
+        async getComposicionProducto(codigo){
+            return fetch(`./api/inventario/index.php?action=getComposicionProducto&busqueda=${codigo}`)
             .then(response => {
                 return response.json();
             })
@@ -247,10 +250,11 @@ const app = new Vue({
               console.log(productosDB);
                 if (productosDB.data) {
                    this.documento.productos_detalle = productosDB.data;
+                return productosDB.data;
                 }else{
                     new PNotify({
                         title: 'Item no disponible',
-                        text: `No se ha encontrado la composicion de esta item`,
+                        text: `No se ha encontrado la composicion de esta item ${codigo}`,
                         delay: 3000,
                         type: 'warn',
                         styling: 'bootstrap3'
@@ -278,8 +282,8 @@ const app = new Vue({
 
             let formData = new FormData();
             formData.append('documento', JSON.stringify(this.documento));  
-            
-            fetch(`./api/inventario/index.php?action=saveInventario`, {
+            return;
+            fetch(`./api/inventario/index.php?action=saveCreacionReceta`, {
                 method: 'POST',
                 body: formData
             })
@@ -290,7 +294,7 @@ const app = new Vue({
                 console.log(data);
                 swal({
                     title: "Realizado",
-                    text: `Se ha generado exitosamente el ingreso #IPC ${data.transaction.ingreso.newcod}, y el egreso #EPC ${data.transaction.egreso.newcod}`,
+                    text: `Se ha generado exitosamente el ingreso #IPC ${data.transaction.newcod}`,
                     type: "success",
                     showCancelButton: false,
                     confirmButtonClass: "btn-success",
@@ -309,7 +313,7 @@ const app = new Vue({
             
         },
         validateSaveDocument(){
-           
+           return true;
         }
     },
     mounted(){

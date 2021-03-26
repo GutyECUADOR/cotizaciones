@@ -87,8 +87,22 @@ $InventarioController = new InventarioController();
 
         case 'saveInventario':
           if (isset($_POST['documento'])) {
-            $extraData = json_decode($_POST['documento']);
-            $respuesta = $InventarioController->saveInventario($extraData);
+            $documento = json_decode($_POST['documento']);
+            $respuesta = $InventarioController->saveInventario($documento);
+            $rawdata = array('status' => 'OK', 'transaction' => $respuesta);
+            
+          }else{
+            $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha recibido objeto de inventario requerido, revise estructura de JS.');
+          }
+        
+          echo json_encode($rawdata);
+
+        break;
+
+        case 'saveCreacionReceta':
+          if (isset($_POST['documento'])) {
+            $documento = json_decode($_POST['documento']);
+            $respuesta = $InventarioController->saveCreacionReceta($documento);
             $rawdata = array('status' => 'OK', 'transaction' => $respuesta);
             
           }else{

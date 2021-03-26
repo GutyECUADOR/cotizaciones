@@ -56,5 +56,10 @@ class InventarioController  {
         return  array('egreso'=> $egreso, 'ingreso'=> $ingreso);
     }
 
+    function saveCreacionReceta(object $documento) {
+        $response = $this->inventarioModel->Winfenix_SaveCreacionReceta($documento);
+        return $response;
+    }
+
 
 }
