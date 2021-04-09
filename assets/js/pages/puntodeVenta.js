@@ -486,15 +486,12 @@ $(document).ready(function() {
         let tipoBusqueda = document.getElementById("tipoBusquedaModalProducto").value;
         console.log(terminoBusqueda);
         
-        if (terminoBusqueda.length > 0) {
-            buscarProductos(terminoBusqueda, tipoBusqueda).done(function (response) {
-                let productos = response.data;
-                printBusquedaProductos(productos);
-            });
+        buscarProductos(terminoBusqueda, tipoBusqueda).done(function (response) {
+            let productos = response.data;
+            printBusquedaProductos(productos);
+        });
 
-        }else{
-            alert('Indique un termino de busqueda');
-        }
+        
         
     });
 
@@ -546,37 +543,9 @@ $(document).ready(function() {
         event.preventDefault();
        
         if (cotizacion.cliente != null && cotizacion.productos.length > 0) {
-            
-            let existeInArray = cotizacion.productos.findIndex(function(productoEnArray) {
-                return productoEnArray.codigo == 'TTR-01';
-            });
-                
-            
-            if (existeInArray === -1){  // Verificamos si ya se agrego TTR de envio
-                Swal.fire({
-                    title: 'Desea enviar por tramaco?',
-                    text: 'No se ha indicado costo de envio (TTR-01). Los productos serán enviados por Tramaco?',
-                    type: 'info',
-                    allowOutsideClick: false,
-                    showCancelButton: true,
-                    confirmButtonText: 'Si',
-                    cancelButtonText: 'No'
-                  }).then((result) => {
-                    if (result.value) {
-                        $('#modalBuscarDestino').modal('show');
-                       
-                    } else if (result.dismiss === Swal.DismissReason.cancel) {
-                        validaGuardado();
-                    }
-                  })
-               
-            }else{
-                validaGuardado();
-            }
-    
-
-
-            
+           
+        validaGuardado();
+        
         }else{
             Swal.fire({
                 type: 'error',
@@ -1261,7 +1230,7 @@ $(document).ready(function() {
                 <th scope="row">${cont}</th> 
                 <td>${producto.Codigo}</td>
                 <td>${producto.Nombre.trim()}</td>
-                <td>${parseFloat(producto.PrecA.trim()).toFixed(2)}</td>
+                <td>${parseFloat(producto.PreaA.trim()).toFixed(2)}</td>
                 <td>${producto.Stock}</td>
                 <td><button type="button" class="btn btn-primary btn-sm btn-block btnSeleccionaProducto" data-codigo="${producto.Codigo.trim()}"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></button></td>
                 
@@ -1456,6 +1425,8 @@ $(document).ready(function() {
                     if (response.status == 'OK' &&  response.data.producto) {
                     let producto = response.data.producto;
                     promocion = response.data.promocion;
+
+                    console.log('ProductoDB', producto);
                    
                         validaDescuento(codPromo, formaPago).done(function (response) {
                             newProducto = new Producto(producto.CODIGO, producto.NOMBRE, producto.TIPOARTICULO, 1, producto.PRECIO, producto.PESO, 0, producto.STOCKLOCAL, producto.TIPOIVA || 0, producto.VALORIVA);

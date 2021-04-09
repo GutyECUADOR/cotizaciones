@@ -9,6 +9,8 @@ $ajax = new AjaxModel();
 $ajax->setDbname('MODELO1');
 $ajax->conectarDB();
 
-$response = $ajax->getVENCABByID('992020COT00000003');
+$NextID = $ajax->getNextNumDocWINFENIX('COT');
+
+$response = $ajax->formatoNextNumDocWINFENIX('MODELO1', $NextID);
 
 var_dump($response);

@@ -75,11 +75,32 @@ class AjaxController  {
 
     /* Retorna la respuesta del modelo ajax*/
     public function getInfoProductoController($codigoProducto, $clienteRUC){
-        $tipoPrecio = $this->ajaxModel->getInfoClienteModel($clienteRUC)['TIPOPRECIO'];
-        $response = $this->ajaxModel->getInfoProductoModel($codigoProducto, $tipoPrecio);
+        $bodega = $_SESSION["bodegaDefault".APP_UNIQUE_KEY];
+        $producto = $this->ajaxModel->getInfoProductoModel($codigoProducto, 'A', $bodega);
+        $promocion = false;
+        $response = array('producto' => $producto, 'promocion' => $promocion);
         return $response;
     }
 
+    public function getInfoPromocionController($codPromo){
+        $response = $this->ajaxModel->getInfoPromoModel($codPromo);
+        return $response;
+    }
+
+    public function getInfoPromocionByCodController($codPromo, $formaPago){
+        $response = $this->ajaxModel->getInfoPromoModelByFormaPago($codPromo, $formaPago);
+        return $response;
+    }
+
+    public function getVendedorByCodController($codVendedor){
+        $response = $this->ajaxModel->getVendedoreWFByCodigo($codVendedor);
+        return $response;
+    }
+
+    public function saveNuevoClienteController($formData){
+        $newCodigo = $this->ajaxModel->getNextNumClienteWF(); //Codigo en formado 000XXX
+        return $this->ajaxModel->insertNuevoCliente($formData, $newCodigo);
+    }
 
     /* Retorna la respuesta del modelo ajax*/
     public function insertExtraDataController($extraDataArray){

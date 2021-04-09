@@ -22,4 +22,4 @@ define("DEFAULT_EMAILPASS","");
 /*URL Body Email*/
 define("LOGO_ONLINE","http://www.agricolabaquero.com/img/resources/logo.png");
 define("SITIOWEB_ONLINE","http://www.agricolabaquero.com");
-define("BODY_EMAIL_TEXT","Reciba un cordial saludo de quienes conformamos AGRICOLA BAQUERO, estamos atendiendo a su requerimiento por lo que encontrara el documento solicitado adjunto en este correo");
+define("BODY_EMAIL_TEXT","Reciba un cordial saludo de quienes conformamos IMPERIUM RESTAURANTE, estamos atendiendo a su requerimiento por lo que encontrara el documento solicitado adjunto en este correo");

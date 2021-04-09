@@ -202,25 +202,32 @@ class AjaxModel extends Conexion  {
     }
     
 
-    public function getInfoProductoModel($codigoProducto, $tipoPrecio='A') {
-
+    public function getInfoProductoModel($codigoProducto, $tipoPrecio='A', $bodega='B01') {
         $tipoPrec = 'Prec'.$tipoPrecio; // Determina el tipo de precio que se devolvera segun el cliente
         //Query de consulta con parametros para bindear si es necesario.
         $query = " 
             SELECT 
                 RTRIM(INV_ARTICULOS.CODIGO) as CODIGO, 
                 RTRIM(INV_ARTICULOS.NOMBRE) as NOMBRE, 
+                MARCA.NOMBRE as MARCA,
                 INV_ARTICULOS.$tipoPrec as PRECIO,
+                INV_ARTICULOS.$tipoPrec as PRECIODISTRIBUIDOR,
+                INV_ARTICULOS.PESO as PESO,
+                INV_ARTICULOS.TIPOARTICULO as TIPOARTICULO,
                 RTRIM(INV_ARTICULOS.TipoIva) as TIPOIVA,
                 RTRIM(IVA.VALOR) as VALORIVA,
-                (select dbo.DIMESTOCKFIS('99','$codigoProducto','','B01')) AS STOCK,
-                (select dbo.DIMESTOCKFIS('99','$codigoProducto','','B02')) AS STOCK2,
-                (select dbo.DIMESTOCKFIS('99','$codigoProducto','','B04')) AS STOCK3
+                STOCKLOCAL = dbo.DIMESTOCKFIS('99','$codigoProducto','','$bodega'), 
+                STOCKPROVEEDOR = 0
+                
             FROM 
-                dbo.INV_ARTICULOS WITH (NOLOCK)
+                dbo.INV_ARTICULOS
                 INNER JOIN dbo.INV_IVA AS IVA on IVA.CODIGO = INV_ARTICULOS.TipoIva
+                LEFT JOIN dbo.INV_MARCAS as MARCA on MARCA.CODIGO = INV_ARTICULOS.Marca
+                    
+            WHERE INV_ARTICULOS.Codigo='$codigoProducto'  
             
-            WHERE INV_ARTICULOS.Codigo='$codigoProducto'";  // Final del Query SQL 
+            ";  // Final del Query SQL 
+
 
         try{
             $stmt = $this->instancia->prepare($query); 
@@ -233,11 +240,46 @@ class AjaxModel extends Conexion  {
                 }
             return $resulset;  
 
-        }catch(\PDOException $exception){
+        }catch(PDOException $exception){
             return array('status' => 'error', 'mensaje' => $exception->getMessage() );
         }
    
     }
+
+    public function getPromoProducto($codigoProducto, $bodegaDefault='B01'){
+        $query = "
+            SELECT 
+            TOP 1 *,
+            bodega,
+            codigo,
+            codpvtprom,
+            feciniprom,
+            fecfinprom,
+            estado
+        FROM
+            PVT_DETPROM as PVT 
+        WHERE  codigo = '$codigoProducto'
+            and bodega = '$bodegaDefault'
+            and estado= '1' 
+            and GETDATE() BETWEEN PVT.feciniprom AND COALESCE(PVT.fecfinprom, GETDATE())
+        ";
+
+        try{
+            $stmt = $this->instancia->prepare($query); 
+    
+                if($stmt->execute()){
+                    $resulset = $stmt->fetch( \PDO::FETCH_ASSOC );
+                    
+                }else{
+                    $resulset = false;
+                }
+            return $resulset;  
+
+        }catch(PDOException $exception){
+            return array('status' => 'error', 'mensaje' => $exception->getMessage() );
+        }
+    }
+
 
     public function getAllClientesModel($terminoBusqueda, $tipoBusqueda='NOMBRE') {
 
@@ -254,6 +296,126 @@ class AjaxModel extends Conexion  {
         return $resulset;  
 
    
+    }
+
+    public function getInfoPromoModel ($codigoPromocion){
+        $query = "
+            SELECT 
+                CODIGO, 
+                TIPO, 
+                NOMBRE=(SELECT NOMBRE FROM VEN_MANTAR WHERE CODIGO= PVT_DESCMOV.TIPO), 
+                PORCEN 
+            FROM PVT_DESCMOV 
+            WHERE 
+                CODIGO='$codigoPromocion'
+        ";
+
+        try{
+            $stmt = $this->instancia->prepare($query); 
+    
+                if($stmt->execute()){
+                    $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+                    
+                }else{
+                    $resulset = false;
+                }
+            return $resulset;  
+
+        }catch(PDOException $exception){
+            return array('status' => 'error', 'mensaje' => $exception->getMessage() );
+        }
+    }
+
+    public function getInfoPromoModelByFormaPago ($codigoPromocion, $tipoPago='EFE'){
+        $query = "
+            SELECT 
+                CODIGO, 
+                TIPO, 
+                NOMBRE=(SELECT NOMBRE FROM VEN_MANTAR WHERE CODIGO= PVT_DESCMOV.TIPO), 
+                PORCEN 
+            FROM PVT_DESCMOV 
+            WHERE 
+                CODIGO='$codigoPromocion'
+                AND TIPO ='$tipoPago'
+        ";
+
+        try{
+            $stmt = $this->instancia->prepare($query); 
+    
+                if($stmt->execute()){
+                    $resulset = $stmt->fetch( \PDO::FETCH_ASSOC );
+                    
+                }else{
+                    $resulset = false;
+                }
+            return $resulset;  
+
+        }catch(PDOException $exception){
+            return array('status' => 'error', 'mensaje' => $exception->getMessage() );
+        }
+    }
+
+    public function getVendedoreWFByCodigo($codigo){
+
+        $query  = "SELECT  CODIGO, NOMBRE, ESTADO FROM dbo.COB_VENDEDORES WHERE ESTADO='1' AND CODIGO = '$codigo' ORDER BY NOMBRE";
+      
+        try{
+            $stmt = $this->instancia->prepare($query); 
+    
+             if($stmt->execute()){
+                    $resulset = $stmt->fetch( \PDO::FETCH_ASSOC );
+                    
+                }else{
+                    $resulset = false;
+                }
+            return $resulset;  
+        
+
+        }catch(PDOException $exception){
+            return array('status' => 'error', 'mensaje' => $exception->getMessage() );
+        }
+           
+
+    }
+
+    public function getNextNumClienteWF(){
+         
+        try{
+            $stmt = $this->instancia->prepare("Sp_Contador'CLI','99','','',''"); 
+            $stmt->execute();
+            $stmt->nextRowset();
+            
+            $newCodLimpio = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $newCodLimpio =  $newCodLimpio['NExtID'];
+            
+            $newCod = $this->instancia->query("select RIGHT('00000000' + Ltrim(Rtrim('$newCodLimpio')),8) as newcod");
+            $codigoConFormato = $newCod->fetch(\PDO::FETCH_ASSOC);
+            $codigoConFormato = $codigoConFormato['newcod'];
+            return $codigoConFormato;
+
+        }catch(PDOException $exception){
+            return array('status' => 'error', 'mensaje' => $exception->getMessage() );
+        }
+
+    }
+
+    public function insertNuevoCliente($formData, $newcodigo){
+        $fecha = date('Ymd');
+        $query = "
+            INSERT INTO COB_CLIENTES
+                (OFICINA,CODIGO,NOMBRE,VENDEDOR,CODVENOLD,GRUPO,CONTACTO,EMPRESA,CUENTA,CUENTA2,ESVARIOS,RUC,DIRECCION1,DIRECCION2,TELEFONO1,TELEFONO2,TELEFONO3,CODPOS,FAX,FAXPED,EMAIL,EMAIL2,PAGWEB,DIVISA,IDIOMA,NOTA,FPAGO,DIASPAGO,TIPOPRECIO,PORDES,TIPOCLI,LIMITECRED,DIRENV,DIRENV1,TELENV,GNOMBRE,GCEDULA,GEMPRESA,GDIRECCION,GTELEFONO1,GTELEFONO2,CELULAR,GNOTA,PWD,WEBDERECHO,WEBAVISO,WEBNOTA,LIBRE,CURSO,ESTUDIA,SALDO,ULTIMAVENTA,ULTIMOCOBRO,ESTADO,CREADOPOR,EDITADOPOR,ANULADOPOR,CREADODATE,EDITADODATE,ANULADODATE,PCID,CLASE,NEGOCIO,PAIS,PROVINCIA,CANTON,REQ_ANTICIPO,TIPOIDENT,PROMOCION,CODCOMRELA,DIVISION,ACTIVIDAD1,ACTIVIDAD2,REPRESENTA,CEDREPRESENTA,RECAUDADOR,CONDICION,NUMPAG,ENTREPAG,TIPOPAGO,CONDPAGO,PROVCLIENTE,FECEXPIRAN,CONTACTO1,MAILCON1,EXTCON1,CELCON1,CONTACTO2,MAILCON2,EXTCON2,CELCON2,CONTACTO3,MAILCON3,EXTCON3,CELCON3,SOBRECUPO,DIASGRACIA,DIADEPAGO,HORADEPAGO,GARANTIAS,CODTARJETA,EMITARJETA,VENTARJETA,PORTARJETA,PORTARJETAEFE,PORTARJETACHE,PORTARJETATAR,PORANTICIPO,CONTACTOPAGO,FECHAALTA,WEBENVEMAIL,PARTEREL,TIPCLI) 
+            VALUES('99','$newcodigo','$formData->nombre','$formData->vendedor','','$formData->grupo','','$formData->nombre','','','','$formData->RUC','$formData->direccion','','$formData->telefono','','','','','','$formData->email','','','DOL','ESP','','CON','0','A',0.00,'',0.00,'','','','','','','','','','','','',0.00,'','','',0.00,'0',0.00,'        ','        ','1','','','','        ','        ','        ','','','','593','217','21701','0','$formData->tipoIdentificacion','0','','','','','','','$formData->vendedor','0',0.00,0.00,'','','','        ','','','','','','','','','','','','',0.00,0.00,'','','','','        ','        ',0.00,0.00,0.00,0.00,0.00,'','$fecha','0','NO','01')
+        ";
+        
+        try{
+            $rowsAfected = $this->instancia->exec($query);
+           return array('status' => 'ok', 'mensaje' => $rowsAfected. ' fila afectada(s)' ); //true;
+           
+        }catch(PDOException $exception){
+            return array('status' => 'error', 'mensaje' => $exception->getMessage() );
+        }
+
+        
     }
 
     public function Sp_INVCONARTWAN($terminoBusqueda, $tipoBusqueda='NOMBRE') {

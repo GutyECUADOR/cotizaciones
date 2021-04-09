@@ -9,7 +9,7 @@
         <form>
             <div class="input-group">
                 <span class="input-group-addon" id="basic-addon1">De:</span>
-                <input type="text" class="form-control" placeholder="de@email.com" aria-describedby="basic-addon1" value="<?php echo $_SESSION["usuarioNOMBRE"] ?>" disabled>
+                <input type="text" class="form-control" placeholder="de@email.com" aria-describedby="basic-addon1" value="<?php echo $_SESSION["usuarioNOMBRE".APP_UNIQUE_KEY] ?>" disabled>
             </div>
             <div class="input-group">
                 <span class="input-group-addon" id="basic-addon1">Destinatario: </span>
