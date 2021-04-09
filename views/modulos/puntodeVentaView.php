@@ -418,8 +418,6 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                         <thead>
                             <th style="width: 5%; min-width: 80px;" class="text-center headerTablaProducto">Unidades</th>
                             <th style="width: 10%; min-width: 100px;" class="text-center headerTablaProducto">Descuento</th>
-                            <th style="width: 10%; min-width: 100px;" class="text-center headerTablaProducto">Calculo Tramaco * Factor</th>
-                            <th style="width: 10%; min-width: 100px;" class="text-center headerTablaProducto">Valor Seguro de Envio</th>
                             <th style="width: 20%; min-width: 100px;" class="text-center headerTablaProducto">Subtotal</th>
                             <th style="width: 10%; min-width: 100px;" class="text-center headerTablaProducto">IVA</th>
                             <th style="width: 20%; min-width: 150px;" class="text-center headerTablaProducto">Total</th>
@@ -428,8 +426,6 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                         <tr>
                             <td><input type="text" class="form-control text-center" id="txt_unidadesProd" readonly></td>
                             <td><input type="text" class="form-control text-center" id="txt_descuentoResumen" readonly></td>
-                            <td><input type="text" class="form-control text-center" id="txt_valortramaco_envio" value="0" readonly></td>
-                            <td><input type="text" class="form-control text-center" id="txt_costo_seguro_envio" readonly></td>
                             <td><input type="text" class="form-control text-center" id="txt_subtotal" value="0" readonly></td>
                             <td><input type="text" class="form-control text-center" id="txt_impuesto" readonly></td>
                             <td><input type="text" class="form-control text-center" id="txt_totalPagar" readonly></td>

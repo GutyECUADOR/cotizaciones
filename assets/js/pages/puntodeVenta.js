@@ -889,7 +889,6 @@ $(document).ready(function() {
 
     function validaGuardado() {
       
-        cotizacion.localidadEnvio = app.localidad;
         let cotizacionJSON = JSON.stringify((cotizacion));
         console.log('Guardando:', cotizacion);
        
@@ -902,9 +901,9 @@ $(document).ready(function() {
             confirmButtonText: 'Si, Grabar',
             cancelButtonText: 'No'
         }).then((result) => {
-        if (result.value) {
-            saveData(cotizacionJSON);
-        }
+            if (result) {
+                saveData(cotizacionJSON);
+            }
         });
        
     }
