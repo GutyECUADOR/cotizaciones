@@ -10,7 +10,7 @@ class RouteModel {
 
             
             case 'cotizaciones':
-                $contenido = "views/modulos/cotizacionesView.php";
+                $contenido = "views/modulos/puntodeVentaView.php";
                 break;
 
             /* Módulo de Inventario */
@@ -22,6 +22,8 @@ class RouteModel {
             case 'creacionReceta':
                 $contenido = "views/modulos/creacionRecetaView.php";
                 break;
+
+            /* Shared Options */
 
             case 'login':
             $contenido = "views/modulos/loginView.php";

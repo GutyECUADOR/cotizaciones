@@ -29,6 +29,7 @@ class LoginController  {
                         $_SESSION["usuarioRUC".APP_UNIQUE_KEY] =  $arrayResultados['Codigo'] ;
                         $_SESSION["usuarioNOMBRE".APP_UNIQUE_KEY] =  $arrayResultados['Nombre'] ;
                         $_SESSION["empresaAUTH".APP_UNIQUE_KEY] = $codigoDB;
+                        $_SESSION["bodegaDefault".APP_UNIQUE_KEY] = 'B01';
                         header("Location: index.php?&action=inicio");
                     
                     }else{
