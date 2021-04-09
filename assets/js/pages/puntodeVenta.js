@@ -543,8 +543,10 @@ $(document).ready(function() {
         event.preventDefault();
        
         if (cotizacion.cliente != null && cotizacion.productos.length > 0) {
-           
-        validaGuardado();
+            let cotizacionJSON = JSON.stringify((cotizacion));
+            console.log('Guardando:', cotizacion);
+            saveData(cotizacionJSON);
+        
         
         }else{
             Swal.fire({
@@ -901,7 +903,7 @@ $(document).ready(function() {
             confirmButtonText: 'Si, Grabar',
             cancelButtonText: 'No'
         }).then((result) => {
-            if (result) {
+            if (result.isConfirmed) {
                 saveData(cotizacionJSON);
             }
         });
