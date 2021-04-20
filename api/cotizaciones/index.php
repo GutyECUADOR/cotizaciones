@@ -120,7 +120,7 @@ class ajax{
 
   try{
     $ajax = new ajax(); //Instancia que controla las acciones
-    $HTTPaction = $_GET["action"];
+    $HTTPaction = isset($_GET["action"]) ? $_GET["action"] : '';
 
     switch ($HTTPaction) {
 
