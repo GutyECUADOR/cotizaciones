@@ -1,10 +1,10 @@
 <?php
 
 use App\Controllers\CotizacionController;
+use App\Middleware\RouteMiddleware;
 
-if (!isset($_SESSION["usuarioRUC".APP_UNIQUE_KEY])){
-    header("Location:index.php?&action=login");  
- }   
+$routeMiddleware = new RouteMiddleware();
+$routeMiddleware->checkisLogin();
 
 $cotizacion = new CotizacionController();
 $bodegas = $cotizacion->getBodegas();
@@ -45,7 +45,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                     <div class="panel-body">
                         <div class="input-group input-group-sm">
                             <span class="input-group-addon">Número</span>
-                            <input type="text" v-model="search_proveedor.text" class="form-control" placeholder="Codigo">
+                            <input type="text" v-model="search_proveedor.text" class="form-control">
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="button" data-toggle="modal" data-target="#modal_buscardocumento">
                                     <span class="glyphicon glyphicon-search" aria-hidden="true"></span>

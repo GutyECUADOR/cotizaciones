@@ -1,10 +1,10 @@
 <?php
 
 use App\Controllers\CotizacionController;
+use App\Middleware\RouteMiddleware;
 
-if (!isset($_SESSION["usuarioRUC".APP_UNIQUE_KEY])){
-    header("Location:index.php?&action=login");  
- }   
+$routeMiddleware = new RouteMiddleware();
+$routeMiddleware->checkisLogin();  
 
 $cotizacion = new CotizacionController();
 $bodegas = $cotizacion->getBodegas();

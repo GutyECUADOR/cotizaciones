@@ -30,6 +30,7 @@ if (isset($_SESSION["usuarioRUC"])){
             </div>
 
             <?php $login->actionCatcherController(); ?>
+            <input type="hidden" name="preaction" value="<?php echo isset($_GET['preaction']) ? $_GET['preaction'] : ''?>">
             
             <select class="form-control" name="select_empresa" id="select_empresa" required autofocus>
                 <option value=''>Seleccione Empresa</option>

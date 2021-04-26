@@ -5,7 +5,7 @@ class RouteModel {
     public function actionCatcherModel($action){
         switch ($action) {
             case 'inicio':
-                $contenido = "views/modulos/inicio.php";
+                $contenido = "views/modulos/inicioView.php";
                 break;
 
             
@@ -34,7 +34,7 @@ class RouteModel {
                 break; 
 
             default:
-                $contenido = "views/modulos/inicio.php";
+                $contenido = "views/modulos/inicioView.php";
                 break;
         }
         

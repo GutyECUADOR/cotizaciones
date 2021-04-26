@@ -8,20 +8,20 @@
       <div class='selector'>
           <ul>
             <li onclick="location.href='?action=inventario';">
-                <input id='c1' type='checkbox' title='Inventario'/>
-                <label for='c1'><i class="fa fa-book fa-3x" aria-hidden="true"></i></i> Inventario</label>   
+                <input id='c1' type='checkbox'/>
+                <label for='c1' title='Inventario'><i class="fa fa-book fa-3x" aria-hidden="true"></i></i></label>   
               </a>
             </li>
 
             <li onclick="location.href='?action=creacionReceta';">
-                <input id='c2' type='checkbox' title='Creacion de receta'/>
-                <label for='c2'><i class="fa fa-cutlery fa-3x" aria-hidden="true"></i></i> Creacion de receta</label>   
+                <input id='c2' type='checkbox' />
+                <label for='c2' title='Creacion de receta'><i class="fa fa-cutlery fa-3x" aria-hidden="true"></i></i></label>   
               </a>
             </li>
           
             <li onclick="location.href='?action=cotizaciones';">
-                <input id='c3' type='checkbox' title='Creacion de receta'/>
-                <label for='c3'><i class="fa fa-shopping-cart fa-3x" aria-hidden="true"></i></i> Creacion de receta</label>   
+                <input id='c3' type='checkbox' />
+                <label for='c3' title='Punto de Venta - Cotizaciones'><i class="fa fa-shopping-cart fa-3x" aria-hidden="true"></i></i></label>   
               </a>
             </li>
           

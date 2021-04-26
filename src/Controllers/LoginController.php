@@ -19,6 +19,7 @@ class LoginController  {
         if (isset($_POST['login_username']) && isset($_POST['login_password']) && isset($_POST['select_empresa'])) {
                 $codigoDB = $_POST['select_empresa']; // recuperamos el codigo del select
                 $arrayDatos = array("usuario"=>$_POST['login_username'],"password"=>$_POST['login_password']);
+                $preaction = !empty($_POST['preaction']) ? $_POST['preaction'] : 'inicio';
 
                 //$dataBaseName = $this->loginModel->getDBNameByCodigo($codigoDB); // Obtenemos nombre de la DB segun codigo, retorno de un array
                 $arrayResultados = $this->loginModel->validaIngreso($arrayDatos, $codigoDB); // Validamos info del usuario en esa DB
@@ -30,7 +31,7 @@ class LoginController  {
                         $_SESSION["usuarioNOMBRE".APP_UNIQUE_KEY] =  $arrayResultados['Nombre'] ;
                         $_SESSION["empresaAUTH".APP_UNIQUE_KEY] = $codigoDB;
                         $_SESSION["bodegaDefault".APP_UNIQUE_KEY] = 'B01';
-                        header("Location: index.php?&action=inicio");
+                        header("Location: index.php?&action=$preaction");
                     
                     }else{
                         echo '
