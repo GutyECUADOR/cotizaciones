@@ -15,8 +15,8 @@ class RouteModel {
 
             /* Módulo de Inventario */
 
-            case 'inventario':
-                $contenido = "views/modulos/inventarioView.php";
+            case 'formularioCortes':
+                $contenido = "views/modulos/formularioCortesView.php";
                 break;
 
             case 'creacionReceta':

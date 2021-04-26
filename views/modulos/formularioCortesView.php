@@ -361,4 +361,4 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\xlsx.full.min.js"></script>
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets/js/sweetalert.min.js"></script>
     
-    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\pages\inventario.js?<?php echo date('Ymdhiiss')?>"></script>
+    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\pages\formularioCortes.js?<?php echo date('Ymdhiiss')?>"></script>

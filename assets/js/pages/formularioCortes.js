@@ -209,7 +209,7 @@ class Documento {
 const app = new Vue({
     el: '#app',
     data: {
-        title: 'Ingreso & Egreso de Productos',
+        title: 'Formulario de Cortes',
         search_proveedor: {
             text: '',
             campo: 'NOMBRE',
