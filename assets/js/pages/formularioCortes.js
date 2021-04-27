@@ -388,6 +388,37 @@ const app = new Vue({
             
         },
         addToIngresoList(){
+            if (this.documento.productos_egreso.items.length < 1) {
+                swal({
+                    title: "Ops!",
+                    text: `No se ha indicado el item de egreso, registre primero el item que va a egresar.`,
+                    type: "warning",
+                    showCancelButton: false,
+                    confirmButtonClass: "btn-success",
+                    confirmButtonText: "Aceptar",
+                    closeOnConfirm: false
+                    });
+                return
+            }
+
+            //const found = this.documento.productos_egreso.items.some((producto => producto.codigo === "00000861"));
+            let existeEnEgresos = this.documento.productos_egreso.items.findIndex((productoEnArray) => {
+                return productoEnArray.codigo === this.nuevo_producto.codigo;
+            });
+
+            if (existeEnEgresos !== -1) {
+                swal({
+                    title: "Ops!",
+                    text: `El item ya esta listado como egreso.`,
+                    type: "warning",
+                    showCancelButton: false,
+                    confirmButtonClass: "btn-success",
+                    confirmButtonText: "Aceptar",
+                    closeOnConfirm: false
+                    });
+                return
+            }
+
             let existeInArray = this.documento.productos_ingreso.items.findIndex((productoEnArray) => {
                 return productoEnArray.codigo === this.nuevo_producto.codigo;
             });
