@@ -145,7 +145,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                             <th style="width: 20%; min-width: 200px;" class="text-center headerTablaProducto">Nombre del Articulo</th>
                                             <th style="width: 5%" class="text-center headerTablaProducto">Unidad</th>
                                             <th style="width: 3%" class="text-center headerTablaProducto">Cantidad</th>
-                                            <th style="width: 5%; min-width: 100px;" class="text-center headerTablaProducto">Precio</th>
+                                            <th style="width: 5%; min-width: 100px;" class="text-center headerTablaProducto">Costo</th>
                                             <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Stock</th>
                                             <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Subtotal</th>
                                             <th style="width: 5%" class="text-center headerTablaProducto">Eliminar</th>
@@ -219,7 +219,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                             <th style="width: 20%; min-width: 250px;" class="text-center headerTablaProducto">Nombre del Articulo</th>
                                             <th style="width: 5%"  class="text-center headerTablaProducto">Unidad</th>
                                             <th style="width: 3%"  class="text-center headerTablaProducto">Cantidad</th>
-                                            <th style="width: 5%; min-width: 70px;" class="text-center headerTablaProducto">Precio</th>
+                                            <th style="width: 5%; min-width: 70px;" class="text-center headerTablaProducto">Costo</th>
                                             <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Stock</th>
                                             <th style="width: 10%; min-width: 70px;" class="text-center headerTablaProducto">Subtotal</th>
                                             <th style="width: 5%" class="text-center headerTablaProducto">Eliminar</th>
