@@ -204,6 +204,12 @@ class Documento {
         return this.productos_ingreso.total = parseFloat((this.getSubTotal_Ingresos() + this.getIVA_Ingresos()).toFixed(2));
     };
 
+    getDiferencia_IngresosEgresos(){
+        let totalIngresos = this.productos_ingreso.total = parseFloat((this.getSubTotal_Ingresos() + this.getIVA_Ingresos()).toFixed(2));
+        let totalEgresos = this.productos_egreso.total = parseFloat((this.getSubTotal_Egresos() + this.getIVA_Egresos()).toFixed(2));
+        return totalEgresos - totalIngresos;
+    };
+
 }
 
 const app = new Vue({
