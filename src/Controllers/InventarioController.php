@@ -44,6 +44,11 @@ class InventarioController  {
         return $response;
     }
 
+    function getCantidadByFactor(object $busqueda) {
+        $response = $this->inventarioModel->getCantidadByFactor($busqueda);
+        return $response;
+    }
+
     function getProductos(string $busqueda) {
         $response = $this->inventarioModel->getProductos($busqueda);
         return $response;

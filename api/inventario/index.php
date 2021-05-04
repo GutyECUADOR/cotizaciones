@@ -85,6 +85,20 @@ $InventarioController = new InventarioController();
 
         break;
 
+        case 'getCantidadByFactor':
+          if (isset($_GET['busqueda'])) {
+            $busqueda = json_decode($_GET['busqueda']);
+            $respuesta = $InventarioController->getCantidadByFactor($busqueda);
+            $rawdata = array('status' => 'OK', 'message' => 'Busqueda finalizada', 'data' => $respuesta);
+            
+          }else{
+            $rawdata = array('status' => 'error', 'message' => 'No se ha recibido extra data.');
+          }
+        
+          echo json_encode($rawdata);
+
+        break;
+
         case 'saveInventario':
           if (isset($_POST['documento'])) {
             $documento = json_decode($_POST['documento']);

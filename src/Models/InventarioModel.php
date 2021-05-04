@@ -547,6 +547,27 @@ class InventarioModel extends Conexion  {
         return $resulset;  
     }
 
+    public function getCantidadByFactor(object $busqueda) {
+        //Query de consulta con parametros para bindear si es necesario.
+        $query = "
+            SELECT
+                ISNULL(factor,1) as factor
+                FROM inv_unifactor WITH(NOLOCK) 
+            WHERE codart = :codigo and unidad = :unidad    
+        ";
+
+        $stmt = $this->instancia->prepare($query);
+        $stmt->bindParam(':codigo', $busqueda->codigo); 
+        $stmt->bindParam(':unidad', $busqueda->unidad); 
+       
+            if($stmt->execute()){
+                $resulset = $stmt->fetch( \PDO::FETCH_ASSOC );
+            }else{
+                $resulset = false;
+            }
+        return $resulset;  
+    }
+
     public function getUnidadesMedida(string $busqueda) {
         //Query de consulta con parametros para bindear si es necesario.
         $query = "

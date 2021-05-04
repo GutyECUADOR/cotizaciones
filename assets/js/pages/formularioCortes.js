@@ -345,6 +345,32 @@ const app = new Vue({
             }); 
                 
         },
+        getCantidadByFactor(producto) {
+            const codigo = producto.codigo;
+            const unidad = producto.unidad;
+            let busqueda = JSON.stringify({codigo, unidad});
+            fetch(`./api/inventario/index.php?action=getCantidadByFactor&busqueda=${busqueda}`)
+            .then(response => {
+                return response.json();
+            })
+            .then(response => {
+              console.log(response);
+                if (response.data) {
+                }else{
+                    new PNotify({
+                        title: 'Costo no calculado',
+                        text: `No se ha podido calcular el costo para el con el codigo: ' ${codigo}`,
+                        delay: 3000,
+                        type: 'error',
+                        styling: 'bootstrap3'
+                    });
+                }
+
+             
+            }).catch( error => {
+                console.error(error);
+            }); 
+        },
         getProductos() {
             this.search_producto.isloading = true;
             let busqueda = JSON.stringify(this.search_producto.busqueda);

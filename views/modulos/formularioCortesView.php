@@ -156,7 +156,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                             <td><input type="text" class="form-control text-center input-sm" v-model="producto.codigo" disabled></td>
                                             <td><input type="text" class="form-control text-center input-sm"  v-model="producto.nombre" readonly></td>
                                             <td>
-                                                <select v-model="producto.unidad" @change="getCostoProducto()" class="form-control input-sm">
+                                                <select v-model="producto.unidad" @change="getCantidadByFactor(producto)" class="form-control input-sm">
                                                     <option v-for="unidad in producto.unidades_medida" :value="unidad.Unidad.trim()">
                                                     {{unidad.Unidad}}
                                                     </option>
@@ -237,7 +237,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                             <td><input type="text" class="form-control text-center input-sm" v-model="producto.codigo" disabled></td>
                                             <td><input type="text" class="form-control text-center input-sm"  v-model="producto.nombre" readonly></td>
                                             <td>
-                                                <select v-model="producto.unidad" @change="getCostoProducto()" class="form-control input-sm">
+                                                <select v-model="producto.unidad" @change="getCantidadByFactor(producto)" class="form-control input-sm">
                                                     <option v-for="unidad in producto.unidades_medida" :value="unidad.Unidad.trim()">
                                                     {{unidad.Unidad}}
                                                     </option>
