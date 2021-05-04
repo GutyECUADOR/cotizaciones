@@ -21,7 +21,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
 
  <?php include 'sis_modules/header_main.php'?>
 
-    <form id="app">
+    <form id="app" v-on:submit.prevent>
 
         <div class="container">
             <ol class="breadcrumb">
@@ -215,14 +215,15 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                 <table class="table table-bordered tableExtras">
                                     <thead>
                                         <tr>
-                                            <th style="width: 10%; min-width: 110px;" class="text-center headerTablaProducto">Codigo</th>
-                                            <th style="width: 20%; min-width: 250px;" class="text-center headerTablaProducto">Nombre del Articulo</th>
+                                            <th style="width: 10%; min-width: 100px;" class="text-center headerTablaProducto">Codigo</th>
+                                            <th style="width: 20%; min-width: 200px;" class="text-center headerTablaProducto">Nombre del Articulo</th>
                                             <th style="width: 5%"  class="text-center headerTablaProducto">Unidad</th>
-                                            <th style="width: 3%"  class="text-center headerTablaProducto">Cantidad</th>
+                                            <th style="width: 3%; min-width: 90px;" class="text-center headerTablaProducto">Cantidad</th>
                                             <th style="width: 5%; min-width: 70px;" class="text-center headerTablaProducto">Costo</th>
                                             <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Stock</th>
                                             <th style="width: 10%; min-width: 70px;" class="text-center headerTablaProducto">Subtotal</th>
                                             <th style="width: 5%" class="text-center headerTablaProducto">Eliminar</th>
+                                            <th style="width: 5%" class="text-center headerTablaProducto">Observ.</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tablaProductosIngreso">
@@ -230,26 +231,27 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                             <td><input type="text" class="form-control text-center input-sm" v-model="producto.codigo" disabled></td>
                                             <td><input type="text" class="form-control text-center input-sm"  v-model="producto.nombre" readonly></td>
                                             <td><input type="text" class="form-control text-center input-sm"  v-model="producto.unidad" readonly></td>
-                                            <td><input type="number" class="form-control text-center input-sm" @change="producto.setCantidad($event.target.value)" :value="producto.cantidad" min="1" oninput="validity.valid||(value='1');"></td>
+                                            <td><input type="number" class="form-control text-center input-sm" @change="producto.setCantidad($event.target.value)" :value="producto.cantidad" step=".0001" min="0" oninput="validity.valid||(value='0');"></td>
                                             <td>
                                                 <input type="text" class="form-control text-center input-sm" v-model="producto.precio">
                                             </td>
                                             <td><input type="text" class="form-control text-center input-sm" v-model="producto.stock" disabled></td>
                                             <td><input type="text" class="form-control text-center input-sm" v-model="producto.getSubtotal()" readonly></td>
-                                            <td><button type="button" @click="removeIngresoItem(producto.codigo)" class="btn btn-danger btn-sm btn-block"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Eliminar</button>
+                                            <td><button type="button" @click="removeIngresoItem(producto.codigo)" class="btn btn-danger btn-sm btn-block"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                                            <td><button type="button" @click="" class="btn btn-primary btn-sm btn-block"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></button>
                                             </td>
                                         </tr>
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="5"></td>
+                                            <td colspan="6"></td>
                                             <td class="text-center" style="vertical-align: middle;"><b>Total Productos</b></td>
                                             <td colspan="2">
                                             <input type="number" v-model="documento.getTotal_Ingresos()" class="form-control text-center" readonly></td>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td colspan="5"></td>
+                                            <td colspan="6"></td>
                                             <td class="text-center" style="vertical-align: middle;"><b>Diferencia</b></td>
                                             <td colspan="2">
                                             <input type="number" v-model="documento.getDiferencia_IngresosEgresos()" class="form-control text-center" readonly></td>

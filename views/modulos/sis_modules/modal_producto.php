@@ -8,7 +8,7 @@
         <div class="modal-body">
             
             <div class="input-group select-group">
-                <input type="text" v-model="search_producto.busqueda.texto" placeholder="Codigo o Nombre del producto..." class="form-control"/>
+                <input type="text" @keyup.enter="getProductos" v-model="search_producto.busqueda.texto" placeholder="Codigo o Nombre del producto..." class="form-control"/>
                
                 <div class="input-group-btn">
                     <button @click="getProductos" type="button" class="btn btn-primary" :disabled="search_producto.isloading"  >

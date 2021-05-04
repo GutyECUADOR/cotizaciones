@@ -20,6 +20,14 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
  <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\css\cotizacionStyles.css">
 
  <?php include 'sis_modules/header_main.php'?>
+
+    <div class="container">
+        <ol class="breadcrumb">
+            <li><a href="?action=inicio">Inicio</a></li>
+            <li><a href="#">Ventas</a></li>
+            <li class="active">Punto de Venta - Cotizaciones</li>
+        </ol>
+    </div>
  
     <div class="container card">
         <!-- Hidden Inputs-->
@@ -27,13 +35,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
 
         <!-- Row de cabecera-->
         <div class="row">
-            <div class="form-group formextra col-lg-offset-3 col-lg-6">
-                <div class="text-center">
-                    <?php echo $cotizacion->getStatusDataBase(); ?>
-                </div>
-                
-            </div>
-
+        
             <div class="form-group formextra text-center col-lg-12">
                 <h4>COTIZACION PUNTO DE VENTA</h4>
             </div>
