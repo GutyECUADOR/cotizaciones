@@ -141,9 +141,9 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                 <table class="table table-bordered tableExtras">
                                     <thead>
                                         <tr>
-                                            <th style="width: 10%; min-width: 100px;" class="text-center headerTablaProducto">Codigo</th>
+                                            <th style="width: 10%;" class="text-center headerTablaProducto">Codigo</th>
                                             <th style="width: 20%; min-width: 200px;" class="text-center headerTablaProducto">Nombre del Articulo</th>
-                                            <th style="width: 5%" class="text-center headerTablaProducto">Unidad</th>
+                                            <th style="width: 5%; min-width: 80px;" class="text-center headerTablaProducto">Unidad</th>
                                             <th style="width: 3%" class="text-center headerTablaProducto">Cantidad</th>
                                             <th style="width: 5%; min-width: 100px;" class="text-center headerTablaProducto">Costo</th>
                                             <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Stock</th>
@@ -221,9 +221,9 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                 <table class="table table-bordered tableExtras">
                                     <thead>
                                         <tr>
-                                            <th style="width: 10%; min-width: 100px;" class="text-center headerTablaProducto">Codigo</th>
+                                            <th style="width: 10%;" class="text-center headerTablaProducto">Codigo</th>
                                             <th style="width: 20%; min-width: 200px;" class="text-center headerTablaProducto">Nombre del Articulo</th>
-                                            <th style="width: 5%"  class="text-center headerTablaProducto">Unidad</th>
+                                            <th style="width: 5%; min-width: 80px;"  class="text-center headerTablaProducto">Unidad</th>
                                             <th style="width: 3%; min-width: 90px;" class="text-center headerTablaProducto">Cantidad</th>
                                             <th style="width: 5%; min-width: 70px;" class="text-center headerTablaProducto">Costo</th>
                                             <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Stock</th>
@@ -250,7 +250,29 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                             <td><input type="text" class="form-control text-center input-sm" v-model="producto.stock" disabled></td>
                                             <td><input type="text" class="form-control text-center input-sm" v-model="producto.getSubtotal()" readonly></td>
                                             <td><button type="button" @click="removeIngresoItem(producto.codigo)" class="btn btn-danger btn-sm btn-block"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
-                                            <td><button type="button" @click="" class="btn btn-primary btn-sm btn-block"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></button>
+                                            <td><button type="button" @click="showDescriptionModal(producto)" class="btn btn-primary btn-sm btn-block"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></button>
+                                            
+                                                <div class="modal fade" :id="'modalAddExtraDetail_'+producto.codigo" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog">
+                                                    <div class="modal-dialog modal-lg" role="document">
+                                                        <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title"> Observacion del Producto </h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            
+                                                            
+                                                            <div class="form-group">
+                                                                <label for="comment">Detalle:</label>
+                                                                <textarea class="form-control" rows="5" v-model="producto.observacion"></textarea>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -348,6 +370,9 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
 
             <!-- Modal Producto -->
             <?php require_once 'sis_modules/modal_producto.php'?>
+
+             <!-- Modal Extra Detail -->
+             <?php require_once 'sis_modules/modalAddExtraDetail.php'?>
 
             <!-- Modal Producto -->
             <?php require_once 'sis_modules/modal_detalle_promo.php'?>

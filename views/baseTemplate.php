@@ -18,7 +18,7 @@ use App\Controllers\RouteController;
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1">
      
-      <link rel="shortcut icon" href="assets\css\img\favicon.ico">
+      <link rel="shortcut icon" href="assets\img\favicon.ico">
 
       <!-- CSS Bootstrap -->
       <link rel="stylesheet" href="assets\css\bootstrap.min.css">

@@ -52,6 +52,7 @@ class Producto {
       this.valorIVA = parseFloat(0); // IVA al 0 en inventario
       this.vendedor = null;
       this.descripcion = null;
+      this.observacion = '';
       this.archivos = null;
     }
 
@@ -475,6 +476,9 @@ const app = new Vue({
                 return productoEnArray.codigo === id;
             });
             this.documento.productos_ingreso.items.splice(index, 1);
+        },
+        showDescriptionModal(producto){
+            $('#modalAddExtraDetail_'+producto.codigo).modal('show');
         },
         async saveDocumento(){
             if (!this.validateSaveDocument()) {
