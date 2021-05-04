@@ -241,6 +241,16 @@ const app = new Vue({
             isloading: false,
             results: []
     },
+    search_documentos: {
+        busqueda: {
+            fechaINI: '',
+            fechaFIN: '',
+            texto: '',
+            cantidad: 25
+        },
+        isloading: false,
+        results: []
+    },
       search_producto: {
         busqueda: {
             texto: '',
@@ -257,6 +267,26 @@ const app = new Vue({
       documento : new Documento()
     },
     methods:{
+        getDocumentos() {
+            this.search_documentos.isloading = true;
+            let texto = this.search_documentos.busqueda.texto;
+            let fechaINI = this.search_documentos.busqueda.fechaINI;
+            let fechaFIN = this.search_documentos.busqueda.fechaFIN;
+            let busqueda = JSON.stringify({ texto, fechaINI, fechaFIN});
+            fetch(`./api/inventario/index.php?action=getDocumentos&busqueda=${busqueda}`)
+            .then(response => {
+                return response.json();
+            })
+            .then(productos => {
+              console.log(productos);
+              this.search_documentos.isloading = false;
+              this.search_documentos.results = productos.data;
+             
+            }).catch( error => {
+                console.error(error);
+            }); 
+            
+        },
         getProveedor() {
             fetch(`./api/inventario/index.php?action=getProveedor&busqueda=${this.search_proveedor.text}`)
             .then(response => {

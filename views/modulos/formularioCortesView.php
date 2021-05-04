@@ -35,8 +35,32 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
             <!-- Hidden Inputs-->
             <input id="hiddenBodegaDefault" type="hidden" value="<?php echo $_SESSION["bodegaDefault".APP_UNIQUE_KEY]?>">
 
-            <!-- Egreso de items-->
             <div class="row" style="margin-top:20px">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Búsqueda de Documentos</div>
+                        <div class="panel-body">
+
+                       
+                           
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#modalBuscarDocumento">
+                                        <span class="glyphicon glyphicon-search" aria-hidden="true">
+                                        </span>
+                                    </button>
+                                </span>
+                            </div>
+                       
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Egreso de items-->
+            <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default">
                     <!-- Default panel contents -->
@@ -378,7 +402,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
             <?php require_once 'sis_modules/modal_detalle_promo.php'?>
 
             <!-- Modal Buscar Documento -->
-            <?php require_once 'sis_modules/modal_buscardoc.php'?>
+            <?php require_once 'sis_modules/modalBuscarDocumento_inventario.php'?>
 
             <!-- Modal Enviar Email Personalizado -->
             <?php require_once 'sis_modules/modal_SendEmail.php'?>
@@ -402,8 +426,8 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\pnotify.custom.min.js"></script>
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\sweetalert2@8.js"></script>
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\bootstrap-datepicker.es.min.js"></script>
-<!--     <script src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=ubmvgme7f7n7likjbniglty12b9m92um98w9m75mdtnphwqp"></script> -->
-    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\tinymce.js"></script>
+    <!-- <script src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=ubmvgme7f7n7likjbniglty12b9m92um98w9m75mdtnphwqp"></script> -->
+    <!-- <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\tinymce.js"></script> -->
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\datepicker.js"></script>
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\xlsx.full.min.js"></script>
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets/js/sweetalert.min.js"></script>

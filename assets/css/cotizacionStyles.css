@@ -13,6 +13,18 @@
     margin-bottom: 20px;
 }
 
+.select-group {
+    width: 100%;
+}
+
+.select-group input[type="text"] {
+    width: 80%;
+}
+
+.select-group > .input-group-addon {
+    width: 20%;
+}
+
 #loaderClientes, #loaderProductos, #loaderDocumentos{
     display: none;
 }
