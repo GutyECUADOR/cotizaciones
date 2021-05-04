@@ -254,7 +254,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                             <td colspan="6"></td>
                                             <td class="text-center" style="vertical-align: middle;"><b>Diferencia</b></td>
                                             <td colspan="2">
-                                            <input type="number" v-model="documento.getDiferencia_IngresosEgresos()" class="form-control text-center" readonly></td>
+                                            <input style="background-color: #ffe7e7" type="number" v-model="documento.getDiferencia_IngresosEgresos()" class="form-control text-center" readonly></td>
                                             </td>
                                         </tr>
 

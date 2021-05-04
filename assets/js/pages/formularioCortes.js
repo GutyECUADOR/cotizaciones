@@ -376,6 +376,10 @@ const app = new Vue({
             });
 
             if (existeInArray === -1 && this.nuevo_producto.codigo.length > 0) {
+                if (this.nuevo_producto.precio <= 0) {
+                    alert('Precio del producto en cero.');
+                    return
+                }
                 this.documento.productos_egreso.items.push(this.nuevo_producto);
                 this.nuevo_producto = new Producto();
                 this.search_producto.text = '';
@@ -431,6 +435,7 @@ const app = new Vue({
 
             if (existeInArray === -1  && this.nuevo_producto.codigo.length > 0) {
                 this.documento.productos_ingreso.items.push(this.nuevo_producto);
+                this.updatePrecioProductosIngresoIguales();
                 this.nuevo_producto = new Producto();
                 this.search_producto.text = '';
             }else{
@@ -446,6 +451,15 @@ const app = new Vue({
             }
 
             
+        },
+        updatePrecioProductosIngresoIguales(){
+            const totalEgreso = this.documento.getTotal_Egresos();
+            const totalItemIngreso =  this.documento.productos_ingreso.items.length;
+            const precioIgual = totalEgreso / totalItemIngreso;
+            console.log({totalEgreso, totalItemIngreso, precioIgual});
+            this.documento.productos_ingreso.items.forEach( producto => {
+                producto.precio = precioIgual
+            });
         },
         removeEgresoItem(id){
             let index = this.documento.productos_egreso.items.findIndex( productoEnArray => {
@@ -488,7 +502,7 @@ const app = new Vue({
                     closeOnConfirm: false
                     },
                     function(){
-                        window.location = './index.php?action=inventario'
+                        window.location = './index.php?action=formularioCortes'
                     });
                 
             })  
