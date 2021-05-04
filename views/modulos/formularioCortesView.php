@@ -371,9 +371,6 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
             <!-- Modal Producto -->
             <?php require_once 'sis_modules/modal_producto.php'?>
 
-             <!-- Modal Extra Detail -->
-             <?php require_once 'sis_modules/modalAddExtraDetail.php'?>
-
             <!-- Modal Producto -->
             <?php require_once 'sis_modules/modal_detalle_promo.php'?>
 
