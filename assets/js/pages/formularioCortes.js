@@ -37,13 +37,14 @@ class Proveedor {
 }
 
 class Producto {
-    constructor(codigo, nombre, unidad, tipoArticulo, cantidad, precio, peso, descuento, stock, tipoIVA, valorIVA) {
+    constructor(codigo, nombre, unidad, tipoArticulo, cantidad, precio=0, peso, descuento, stock, tipoIVA, valorIVA) {
       this.codigo = codigo || '';
       this.nombre = nombre || '';
       this.unidad = unidad || '';
+      this.unidades = 0
       this.tipoArticulo = tipoArticulo || ''
-      this.cantidad = parseInt(cantidad) || 1;
-      this.precio = parseFloat(precio) || 0;
+      this.cantidad = parseFloat(cantidad) || 1;
+      this.precio = parseFloat(precio).toFixed(4) || 0;
       this.peso = parseFloat(peso) || 0;
       this.descuento = parseInt(descuento) || 0 ;
       this.stock = parseFloat(stock) || 0 ;
@@ -57,19 +58,19 @@ class Producto {
     }
 
     getIVA(){
-        return parseFloat(((this.getSubtotal() * this.valorIVA) / 100).toFixed(2));
+        return parseFloat(((this.getSubtotal() * this.valorIVA) / 100).toFixed(4));
     }
 
     getDescuento(){
-        return parseFloat((((this.cantidad * this.precio)* this.descuento)/100).toFixed(2));
+        return parseFloat((((this.cantidad * this.precio)* this.descuento)/100).toFixed(4));
     }
 
     getPeso(){
-        return parseFloat((this.peso *this.cantidad).toFixed(2));
+        return parseFloat((this.peso *this.cantidad).toFixed(4));
     }
 
     getSubtotal(){
-        return parseFloat(((this.cantidad * this.precio) - this.getDescuento(this.descuento)).toFixed(2));
+        return parseFloat(((this.cantidad * this.precio) - this.getDescuento(this.descuento)).toFixed(4));
     }
 
     setDescripcion(descripcion){
@@ -81,7 +82,7 @@ class Producto {
     }
 
     setCantidad(cantidad){
-        this.cantidad = parseInt(cantidad);
+        this.cantidad = parseFloat(cantidad);
     }
 }
 
@@ -199,17 +200,17 @@ class Documento {
     /* Totales  */
 
     getTotal_Egresos(){
-        return this.productos_egreso.total = parseFloat((this.getSubTotal_Egresos() + this.getIVA_Egresos()).toFixed(2));
+        return this.productos_egreso.total = parseFloat((this.getSubTotal_Egresos() + this.getIVA_Egresos()).toFixed(4));
     };
 
     getTotal_Ingresos(){
-        return this.productos_ingreso.total = parseFloat((this.getSubTotal_Ingresos() + this.getIVA_Ingresos()).toFixed(2));
+        return this.productos_ingreso.total = parseFloat((this.getSubTotal_Ingresos() + this.getIVA_Ingresos()).toFixed(4));
     };
 
     getDiferencia_IngresosEgresos(){
-        let totalIngresos = this.productos_ingreso.total = parseFloat((this.getSubTotal_Ingresos() + this.getIVA_Ingresos()).toFixed(2));
-        let totalEgresos = this.productos_egreso.total = parseFloat((this.getSubTotal_Egresos() + this.getIVA_Egresos()).toFixed(2));
-        return totalEgresos - totalIngresos;
+        let totalIngresos = this.productos_ingreso.total = parseFloat((this.getSubTotal_Ingresos() + this.getIVA_Ingresos()).toFixed(4));
+        let totalEgresos = this.productos_egreso.total = parseFloat((this.getSubTotal_Egresos() + this.getIVA_Egresos()).toFixed(4));
+        return parseFloat(totalEgresos - totalIngresos).toFixed(4);
     };
 
 }
@@ -297,7 +298,7 @@ const app = new Vue({
                     const producto = productoDB.data.producto;
                     this.unidades_medida = productoDB.data.unidades_medida;
                     this.nuevo_producto = new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, 1, producto.PrecA, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA)
-                    this.getCostoProducto();
+                    this.getCostoProducto(this.nuevo_producto);
                 }else{
                     new PNotify({
                         title: 'Item no disponible',
@@ -314,7 +315,7 @@ const app = new Vue({
             }); 
                 
         },
-        getCostoProducto() {
+        getCostoProducto(producto) {
             let codigo = this.nuevo_producto.codigo;
             let unidad = this.nuevo_producto.unidad;
             let busqueda = JSON.stringify({codigo, unidad});
@@ -326,9 +327,9 @@ const app = new Vue({
             .then(response => {
               console.log(response);
                 if (response.data) {
-                    this.nuevo_producto.stock = parseFloat(response.data.Stock);
-                    this.nuevo_producto.factor = response.data.factor;
-                    this.nuevo_producto.precio = response.data.CostoProducto;
+                    producto.stock = parseFloat(response.data.Stock);
+                    producto.factor = response.data.factor;
+                    producto.precio = response.data.CostoProducto;
                 }else{
                     new PNotify({
                         title: 'Costo no calculado',
