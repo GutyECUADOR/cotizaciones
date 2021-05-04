@@ -107,6 +107,7 @@ class Documento {
             bodega: 'B01',
             items: [],
             cantidad: 0,
+            unidades: 0,
             peso: 0,
             subtotal: 0,
             IVA: 0,
@@ -116,6 +117,7 @@ class Documento {
             bodega: 'B02',
             items: [],
             cantidad: 0,
+            unidades: 0,
             peso: 0,
             subtotal: 0,
             IVA: 0,
@@ -138,11 +140,25 @@ class Documento {
         return this.productos_egreso.cantidad;
     }
 
+    getCantidadUnidades_Egresos() {
+        this.productos_egreso.unidades = this.productos_egreso.items.reduce( (total, producto) => {
+            return total + (producto.cantidad * producto.factor);
+        }, 0);
+        return this.productos_egreso.unidades;
+    }
+
     getCantidadItems_Ingresos() {
         this.productos_ingreso.cantidad = this.productos_ingreso.items.reduce( (total, producto) => {
             return total + producto.cantidad;
         }, 0);
         return this.productos_ingreso.cantidad;
+    }
+
+    getCantidadUnidades_Ingresos() {
+        this.productos_ingreso.unidades = this.productos_ingreso.items.reduce( (total, producto) => {
+            return total + (producto.cantidad * producto.factor);
+        }, 0);
+        return this.productos_ingreso.unidades;
     }
 
     /* Total PESO */
@@ -316,8 +332,8 @@ const app = new Vue({
                 
         },
         getCostoProducto(producto) {
-            let codigo = this.nuevo_producto.codigo;
-            let unidad = this.nuevo_producto.unidad;
+            let codigo = producto.codigo;
+            let unidad = producto.unidad;
             let busqueda = JSON.stringify({codigo, unidad});
             console.log(busqueda);
             fetch(`./api/inventario/index.php?action=getCostoProducto&busqueda=${busqueda}`)
@@ -357,10 +373,11 @@ const app = new Vue({
             .then(response => {
               console.log(response);
                 if (response.data) {
+                    producto.unidades = producto.cantidad * response.data.factor;
                 }else{
                     new PNotify({
                         title: 'Costo no calculado',
-                        text: `No se ha podido calcular el costo para el con el codigo: ' ${codigo}`,
+                        text: `No se ha podido calcular las unidades para el codigo: ' ${codigo}`,
                         delay: 3000,
                         type: 'error',
                         styling: 'bootstrap3'

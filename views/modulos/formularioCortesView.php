@@ -83,7 +83,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                             </select>
                                         </td>
                                         <td>
-                                            <input type="number" @change="nuevo_producto.setCantidad($event.target.value)" :value="nuevo_producto.cantidad" class="form-control text-center input-sm" min="1" oninput="validity.valid||(value=1);"></td>
+                                            <input type="number" @change="nuevo_producto.setCantidad($event.target.value)" :value="nuevo_producto.cantidad" class="form-control text-center input-sm" step=".0001" min="0" oninput="validity.valid||(value=1);"></td>
                                         </td>
                                         <td>
                                             <input type="text" v-model="nuevo_producto.stock" class="form-control text-center input-sm" readonly>
@@ -156,13 +156,13 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                             <td><input type="text" class="form-control text-center input-sm" v-model="producto.codigo" disabled></td>
                                             <td><input type="text" class="form-control text-center input-sm"  v-model="producto.nombre" readonly></td>
                                             <td>
-                                                <select v-model="producto.unidad" @change="getCantidadByFactor(producto)" class="form-control input-sm">
+                                                <select v-model="producto.unidad" @change="getCostoProducto(producto)" class="form-control input-sm">
                                                     <option v-for="unidad in producto.unidades_medida" :value="unidad.Unidad.trim()">
                                                     {{unidad.Unidad}}
                                                     </option>
                                                 </select>
                                             </td>
-                                            <td><input type="number" class="form-control text-center input-sm" @change="producto.setCantidad($event.target.value)" :value="producto.cantidad" min="1" oninput="validity.valid||(value=1);"></td>
+                                            <td><input type="number" class="form-control text-center input-sm" @change="producto.setCantidad($event.target.value)" :value="producto.cantidad" step=".0001" min="0" oninput="validity.valid||(value=1);"></td>
                                             <td>
                                                 <input type="text" class="form-control text-center input-sm" v-model="producto.precio" readonly>
                                             </td>
@@ -250,7 +250,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                             <td><input type="text" class="form-control text-center input-sm" v-model="producto.stock" disabled></td>
                                             <td><input type="text" class="form-control text-center input-sm" v-model="producto.getSubtotal()" readonly></td>
                                             <td><button type="button" @click="removeIngresoItem(producto.codigo)" class="btn btn-danger btn-sm btn-block"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
-                                            <td><button type="button" @click="showDescriptionModal(producto)" class="btn btn-primary btn-sm btn-block"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></button>
+                                            <td><button type="button" @click="showDescriptionModal(producto)" class="btn btn-primary btn-sm btn-block"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
                                             
                                                 <div class="modal fade" :id="'modalAddExtraDetail_'+producto.codigo" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog">
                                                     <div class="modal-dialog modal-lg" role="document">
@@ -324,13 +324,13 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                             <tr>
                                 <td><p>Egresos</p></td>
                                 <td><input type="text" v-model="documento.getCantidadItems_Egresos()" class="form-control text-center" readonly></td>
-                                <td><input type="text" v-model="documento.getCantidadItems_Egresos()" class="form-control text-center" readonly></td>
+                                <td><input type="text" v-model="documento.getCantidadUnidades_Egresos()" class="form-control text-center" readonly></td>
                                 <td><input type="text" v-model="documento.getTotal_Egresos()" class="form-control text-center" readonly></td>
                             </tr>
                             <tr>
                                 <td><p>Ingresos</p></td>
                                 <td><input type="text" v-model="documento.getCantidadItems_Ingresos()" class="form-control text-center" readonly></td>
-                                <td><input type="text" v-model="documento.getCantidadItems_Ingresos()" class="form-control text-center" readonly></td>
+                                <td><input type="text" v-model="documento.getCantidadUnidades_Ingresos()" class="form-control text-center" readonly></td>
                                 <td><input type="text" v-model="documento.getTotal_Ingresos()" class="form-control text-center" readonly></td>
                             </tr>
                         
@@ -402,7 +402,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\pnotify.custom.min.js"></script>
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\sweetalert2@8.js"></script>
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\bootstrap-datepicker.es.min.js"></script>
-    <script src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=ubmvgme7f7n7likjbniglty12b9m92um98w9m75mdtnphwqp"></script>
+<!--     <script src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=ubmvgme7f7n7likjbniglty12b9m92um98w9m75mdtnphwqp"></script> -->
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\tinymce.js"></script>
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\datepicker.js"></script>
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\xlsx.full.min.js"></script>
