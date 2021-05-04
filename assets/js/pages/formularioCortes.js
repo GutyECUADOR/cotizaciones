@@ -48,6 +48,7 @@ class Producto {
       this.descuento = parseInt(descuento) || 0 ;
       this.stock = parseFloat(stock) || 0 ;
       this.tipoIVA = tipoIVA || 'T00';
+      this.unidades_medida = [],
       this.valorIVA = parseFloat(0); // IVA al 0 en inventario
       this.vendedor = null;
       this.descripcion = null;
@@ -380,6 +381,7 @@ const app = new Vue({
                     alert('Precio del producto en cero.');
                     return
                 }
+                this.nuevo_producto.unidades_medida = this.unidades_medida;
                 this.documento.productos_egreso.items.push(this.nuevo_producto);
                 this.nuevo_producto = new Producto();
                 this.search_producto.text = '';
@@ -434,6 +436,7 @@ const app = new Vue({
             });
 
             if (existeInArray === -1  && this.nuevo_producto.codigo.length > 0) {
+                this.nuevo_producto.unidades_medida = this.unidades_medida;
                 this.documento.productos_ingreso.items.push(this.nuevo_producto);
                 this.updatePrecioProductosIngresoIguales();
                 this.nuevo_producto = new Producto();
