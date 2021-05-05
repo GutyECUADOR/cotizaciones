@@ -15,7 +15,7 @@
 
             <div class="input-group select-group">
                 <input type="text" v-model="search_documentos.busqueda.texto" placeholder="Código de documento" class="form-control" value="%"/>
-                <select id="tipoBusquedaModalProducto" class="form-control input-group-addon">
+                <select class="form-control input-group-addon">
                     <option value="">TODOS</option>
                 </select>
                 <div class="input-group-btn">

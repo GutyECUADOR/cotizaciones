@@ -9,7 +9,9 @@
             
             <div class="input-group select-group">
                 <input type="text" @keyup.enter="getProductos" v-model="search_producto.busqueda.texto" placeholder="Codigo o Nombre del producto..." class="form-control"/>
-               
+                <select class="form-control input-group-addon">
+                    <option value="">NOMBRE O CODIGO</option>
+                </select>
                 <div class="input-group-btn">
                     <button @click="getProductos" type="button" class="btn btn-primary" :disabled="search_producto.isloading"  >
                         <i class="fa" :class="[{'fa-spin fa-refresh': search_producto.isloading}, {  'fa-search' : !search_producto.isloading  }]" ></i> Buscar

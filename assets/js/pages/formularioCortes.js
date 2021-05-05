@@ -41,6 +41,7 @@ class Producto {
       this.codigo = codigo || '';
       this.nombre = nombre || '';
       this.unidad = unidad || '';
+      this.factor = 1;
       this.unidades = 0
       this.tipoArticulo = tipoArticulo || ''
       this.cantidad = parseFloat(cantidad) || 1;
@@ -84,6 +85,18 @@ class Producto {
     setCantidad(cantidad){
         this.cantidad = parseFloat(cantidad);
     }
+
+    setStock(stock){
+        this.stock = parseFloat(stock);
+    }
+
+    setFactor(factor){
+        this.factor = factor;
+    }
+
+    setPrecio(precio){
+        this.precio = precio;
+    }
 }
 
 class NuevoCliente {
@@ -124,7 +137,6 @@ class Documento {
             total: 0
         },
         this.cliente = null,
-        this.proveedor = new Proveedor('','',''),
         this.cantidad = 0;
         this.peso = 0;
         this.subtotal = 0;
@@ -216,17 +228,17 @@ class Documento {
     /* Totales  */
 
     getTotal_Egresos(){
-        return this.productos_egreso.total = parseFloat((this.getSubTotal_Egresos() + this.getIVA_Egresos()).toFixed(4));
+        return this.productos_egreso.total = parseFloat((this.getSubTotal_Egresos() + this.getIVA_Egresos()).toFixed(2));
     };
 
     getTotal_Ingresos(){
-        return this.productos_ingreso.total = parseFloat((this.getSubTotal_Ingresos() + this.getIVA_Ingresos()).toFixed(4));
+        return this.productos_ingreso.total = parseFloat((this.getSubTotal_Ingresos() + this.getIVA_Ingresos()).toFixed(2));
     };
 
     getDiferencia_IngresosEgresos(){
         let totalIngresos = this.productos_ingreso.total = parseFloat((this.getSubTotal_Ingresos() + this.getIVA_Ingresos()).toFixed(4));
         let totalEgresos = this.productos_egreso.total = parseFloat((this.getSubTotal_Egresos() + this.getIVA_Egresos()).toFixed(4));
-        return parseFloat(totalEgresos - totalIngresos).toFixed(4);
+        return parseFloat(totalEgresos - totalIngresos).toFixed(2);
     };
 
 }
@@ -373,9 +385,9 @@ const app = new Vue({
             .then(response => {
               console.log(response);
                 if (response.data) {
-                    producto.stock = parseFloat(response.data.Stock);
-                    producto.factor = response.data.factor;
-                    producto.precio = response.data.CostoProducto;
+                    producto.setStock(response.data.Stock);
+                    producto.setFactor(response.data.factor);
+                    producto.setPrecio(response.data.CostoProducto);
                 }else{
                     new PNotify({
                         title: 'Costo no calculado',
@@ -403,7 +415,7 @@ const app = new Vue({
             .then(response => {
               console.log(response);
                 if (response.data) {
-                    producto.unidades = producto.cantidad * response.data.factor;
+                    producto.setFactor(response.data.factor);
                 }else{
                     new PNotify({
                         title: 'Costo no calculado',
@@ -511,7 +523,7 @@ const app = new Vue({
             });
 
             if (existeInArray === -1  && this.nuevo_producto.codigo.length > 0) {
-                this.nuevo_producto.unidades_medida = this.unidades_medida;
+                this.nuevo_producto.unidades_medida = this.unidades_medida; // Se añade para que luego en lista se pueda editar las medidas KG, GR
                 this.documento.productos_ingreso.items.push(this.nuevo_producto);
                 this.updatePrecioProductosIngresoIguales();
                 this.nuevo_producto = new Producto();
@@ -536,7 +548,7 @@ const app = new Vue({
             const precioIgual = totalEgreso / totalItemIngreso;
             console.log({totalEgreso, totalItemIngreso, precioIgual});
             this.documento.productos_ingreso.items.forEach( producto => {
-                producto.precio = precioIgual
+                producto.precio = precioIgual/producto.cantidad;
             });
         },
         removeEgresoItem(id){
@@ -597,7 +609,7 @@ const app = new Vue({
            
             if (this.documento.productos_ingreso.items.length === 0 || this.documento.productos_egreso.items.length === 0){
                 swal({
-                    title: "Lista en blanco.",
+                    title: "Lista en blanco",
                     text: `La lista de ingresos o egresos está vacía.`,
                     type: "warning",
                     showCancelButton: false,
@@ -606,9 +618,24 @@ const app = new Vue({
                     closeOnConfirm: false
                     });
                 return false;
-            }else if (this.documento.getTotal_Egresos() != this.documento.getTotal_Ingresos()){
+            }
+            
+            if (this.documento.getCantidadUnidades_Egresos() != this.documento.getCantidadUnidades_Ingresos()){
+                    swal({
+                        title: "Faltan unidades",
+                        text: `Existe una diferencia de unidades entre el ingreso y egreso. Verifique unidades de medida y su cantidad.`,
+                        type: "warning",
+                        showCancelButton: false,
+                        confirmButtonClass: "btn-success",
+                        confirmButtonText: "Aceptar",
+                        closeOnConfirm: false
+                        });
+                return false;    
+            }
+            
+            if (this.documento.getTotal_Egresos() != this.documento.getTotal_Ingresos()){
                 swal({
-                    title: "Diferencia entre Ingresos y Egresos.",
+                    title: "Diferencia entre Ingresos y Egresos",
                     text: `El Total de los ingresos es de: ${this.documento.getTotal_Egresos()}. Y el de egresos: ${this.documento.getTotal_Ingresos()}`,
                     type: "warning",
                     showCancelButton: false,
