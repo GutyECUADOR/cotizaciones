@@ -127,7 +127,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                     <!-- Default panel contents -->
                 
                     <div class="panel-heading clearfix">
-                        <h4 class="panel-title pull-left" style="padding-top: 7.5px;"><i class="fa fa-address-book" aria-hidden="true"></i></i> Búsqueda de nuevo item</h4>
+                        <h4 class="panel-title pull-left" style="padding-top: 7.5px;"><i class="fa fa-address-book" aria-hidden="true"></i></i> Búsqueda de KIT</h4>
                         
                     </div>
                                         
@@ -139,10 +139,8 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                     <th style="width: 5%; min-width: 150px;" class="text-center headerTablaProducto">Codigo</th>
                                     <th style="width: 10%; min-width: 200px;" class="text-center headerTablaProducto">Nombre del Articulo</th>
                                     <th style="width: 2%; min-width: 80px;"  class="text-center headerTablaProducto">Unidad</th>
-                                    <th style="width: 5%; min-width: 100px;" class="text-center headerTablaProducto">Stock</th>
-                                    <th style="width: 2%; min-width: 80px;"  class="text-center headerTablaProducto">Cantidad</th>
                                     <th style="width: 5%; min-width: 120px;" class="text-center headerTablaProducto">Costo</th>
-                                    <th style="width: 5%; min-width: 120px;" class="text-center headerTablaProducto">Subtotal</th>
+                                    <th style="width: 5%; min-width: 120px;" class="text-center headerTablaProducto">Precio</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -168,13 +166,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                             </select>
                                         </td>
                                         <td>
-                                            <input type="text" v-model="nuevo_producto.stock" class="form-control text-center input-sm" readonly>
-                                        </td>
-                                        <td>
-                                            <input type="number" @change="nuevo_producto.setCantidad($event.target.value)" :value="nuevo_producto.cantidad" class="form-control text-center input-sm" min="1" oninput="validity.valid||(value=1);"></td>
-                                        </td>
-                                        <td>
-                                            <input type="number" v-model="nuevo_producto.precio" class="form-control text-center input-sm" min="0" value="0">
+                                            <input type="number" v-model="nuevo_producto.precio" class="form-control text-center input-sm" min="0" value="0" readonly>
                                         </td>
                                         <td>
                                             <input type="text" v-model="nuevo_producto.getSubtotal()" class="form-control text-center input-sm importe_linea" readonly>
@@ -185,73 +177,14 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                     
                                 </tbody>
                             </table>
-                                <button type="button" @click="addToList" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-arrow-down"></span> Agregar</button>
+                                <button type="button" @click="getComposicionProducto(nuevo_producto.codigo)" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-search"></span> Verificar Composición</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- items en lista KIT -->
-
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="panel panel-default">
-                        <!-- Default panel contents -->
-                    
-                        <div class="panel-heading clearfix">
-                        <h4 class="panel-title pull-left" style="padding-top: 7.5px; padding-bottom: 7.5px;"><i class="fa fa-list" aria-hidden="true"></i> Lista de KITs</h4>
-                            <div class="btn-group pull-right">
-                                
-                            </div>
-                        </div>
-
-                        <div class="panel-body">
-                            <div class="responsibetable">        
-                                <table class="table table-bordered tableExtras">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 5%; min-width: 50px;" class="text-center headerTablaProducto">Codigo</th>
-                                            <th style="width: 20%; min-width: 200px;" class="text-center headerTablaProducto">Nombre del Articulo</th>
-                                            <th style="width: 3%" class="text-center headerTablaProducto">Unidad</th>
-                                            <th style="width: 3%" class="text-center headerTablaProducto">Cantidad</th>
-                                            <th style="width: 5%; min-width: 100px;" class="text-center headerTablaProducto">Costo</th>
-                                            <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Stock</th>
-                                            <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Subtotal</th>
-                                            <th style="width: 5%" class="text-center headerTablaProducto">Eliminar</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tablaProductos">
-                                        <tr v-for="producto in documento.productos.items">
-                                            <td><button type="button" @click="getComposicionProducto(producto.codigo)" class="btn btn-primary btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> {{ producto.codigo }}</button></td>
-                                            <td><input type="text" class="form-control text-center input-sm"  v-model="producto.nombre" readonly></td>
-                                            <td><input type="text" class="form-control text-center input-sm" v-model="producto.unidad" readonly></td>
-                                            <td><input type="number" class="form-control text-center input-sm" @change="producto.setCantidad($event.target.value)" :value="producto.cantidad" min="1" oninput="validity.valid||(value=1);"></td>
-                                            <td>
-                                                <input type="text" class="form-control text-center input-sm" v-model="producto.precio" readonly>
-                                            </td>
-                                            <td><input type="text" class="form-control text-center input-sm" v-model="producto.stock" disabled></td>
-                                            <td><input type="text" class="form-control text-center input-sm" v-model="producto.getSubtotal()" readonly></td>
-                                            <td><button type="button" @click="removeItem(producto.codigo)" class="btn btn-danger btn-sm btn-block"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Eliminar</button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td colspan="5"></td>
-                                            <td class="text-center" style="vertical-align: middle;"><b>Total Productos</b></td>
-                                            <td colspan="2">
-                                            <input type="text" v-model="documento.getTotal()" class="form-control text-center" readonly></td>
-                                            </td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+          
             <!-- items en lista detalle del KIT -->
             <div class="row">
                 <div class="col-md-12">
@@ -261,6 +194,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                         <div class="panel-heading clearfix">
                         <h4 class="panel-title pull-left" style="padding-top: 7.5px; padding-bottom: 7.5px;"><i class="fa fa-list" aria-hidden="true"></i> Detalle del KIT (Composición)</h4>
                             <div class="btn-group pull-right">
+                                <button type="button" @click="addToList(nuevo_producto.codigo)" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-arrow-down"></span> Agregar Item a Composicion</button>
                             </div>
                         </div>
 
@@ -276,19 +210,24 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                             <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Stock</th>
                                             <th style="width: 5%; min-width: 100px;" class="text-center headerTablaProducto">Costo</th>
                                             <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Costo Total</th>
+                                            <th style="width: 5%" class="text-center headerTablaProducto">Eliminar</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tablaProductos">
                                         <tr v-for="producto in documento.productos_detalle">
-                                            <td><input type="text" class="form-control text-center input-sm" v-model="producto.Codigo.trim()" readonly></td>
-                                            <td><input type="text" class="form-control text-center input-sm"  v-model="producto.Nombre.trim()" readonly></td>
-                                            <td><input type="text" class="form-control text-center input-sm" v-model="producto.Unidad" readonly></td>
-                                            <td><input type="number" class="form-control text-center input-sm" v-model="producto.Cantidad" readonly></td>
-                                            <td><input type="text" class="form-control text-center input-sm" v-model="producto.Stock" readonly></td>
+                                            <td><input type="text" class="form-control text-center input-sm" v-model="producto.codigo.trim()" readonly></td>
+                                            <td><input type="text" class="form-control text-center input-sm"  v-model="producto.nombre.trim()" readonly></td>
+                                            <td><input type="text" class="form-control text-center input-sm" v-model="producto.unidad" readonly></td>
+                                            <td><input type="number" class="form-control text-center input-sm" v-model="producto.cantidad" readonly></td>
+                                            <td><input type="text" class="form-control text-center input-sm" v-model="producto.stock" readonly></td>
                                             <td>
-                                                <input type="text" class="form-control text-center input-sm" v-model="producto.Costo" readonly>
+                                                <input type="text" class="form-control text-center input-sm" v-model="producto.costo" readonly>
                                             </td>
-                                            <td><input type="text" class="form-control text-center input-sm" v-model="producto.Costotot" readonly></td>
+                                            <td>
+                                                <input type="text" class="form-control text-center input-sm" v-model="producto.getSubtotal()" readonly></td>
+                                            </td>
+                                            <td>
+                                                <button type="button" @click="removeEgresoItem(producto.codigo)" class="btn btn-danger btn-sm btn-block"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Eliminar</button>
                                             </td>
                                         </tr>
                                     </tbody>

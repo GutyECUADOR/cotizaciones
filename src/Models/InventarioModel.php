@@ -524,7 +524,6 @@ class InventarioModel extends Conexion  {
     public function getCostoProducto(object $busqueda) {
         //Query de consulta con parametros para bindear si es necesario.
         $query = "
-            
             SELECT
             DBO.DimeStockFis('99', :codigostock,'' ,'B01') AS Stock,
             dbo.DimecostoProm('99', :codigocostoPrimedio,'') as costoPromedio,
