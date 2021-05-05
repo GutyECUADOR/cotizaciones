@@ -267,7 +267,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                                     </option>
                                                 </select>
                                             </td>
-                                            <td><input type="number" class="form-control text-center input-sm" @change="producto.setCantidad($event.target.value)" :value="producto.cantidad" step=".0001" min="0" oninput="validity.valid||(value='0');"></td>
+                                            <td><input type="number" class="form-control text-center input-sm" @change="producto.setCantidad($event.target.value); updatePrecioProductosIngresoIguales()" :value="producto.cantidad" step=".0001" min="0" oninput="validity.valid||(value='0');"></td>
                                             <td>
                                                 <input type="text" class="form-control text-center input-sm" v-model="producto.precio">
                                             </td>
