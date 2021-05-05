@@ -21,7 +21,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
 
  <?php include 'sis_modules/header_main.php'?>
 
-    <form id="app" v-on:submit.prevent="saveDocumento">
+    <form id="app" v-on:submit.prevent>
         <div class="container">
             <ol class="breadcrumb">
                 <li><a href="?action=inicio">Inicio</a></li>
@@ -39,7 +39,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                 </div>
             </div>
 
-            <!-- Row datos de proveedor-->
+            <!-- Row -->
             <div class="row">
 
                 <div class="col-lg-6 col-md-12">
@@ -194,7 +194,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                         <div class="panel-heading clearfix">
                         <h4 class="panel-title pull-left" style="padding-top: 7.5px; padding-bottom: 7.5px;"><i class="fa fa-list" aria-hidden="true"></i> Detalle del KIT (Composición)</h4>
                             <div class="btn-group pull-right">
-                                <button type="button" @click="addToList(nuevo_producto.codigo)" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-arrow-down"></span> Agregar Item a Composicion</button>
+                                <button type="button"  data-toggle="modal" data-target="#modal_producto_composicion" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-search"></span> Agregar Item a Composicion</button>
                             </div>
                         </div>
 
@@ -260,6 +260,9 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
 
             <!-- Modal Producto -->
             <?php require_once 'sis_modules/modal_producto.php'?>
+
+             <!-- Modal Producto -->
+             <?php require_once 'sis_modules/modal_producto_composicion.php'?>
 
        
      

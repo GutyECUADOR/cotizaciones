@@ -140,6 +140,16 @@ const app = new Vue({
           isloading: false,
           results: []
       },
+      search_producto_composicion: {
+        busqueda: {
+          texto: '',
+          gestion: 'INV',
+          bodega: '',
+          cantidad: 25
+        },
+        isloading: false,
+        results: []
+    },
       unidades_medida : [],
       nuevo_producto: new Producto(),
       documento : new Documento()
@@ -228,20 +238,37 @@ const app = new Vue({
             }); 
             
         },
+        getProductos_composicion() {
+            this.search_producto_composicion.isloading = true;
+            let busqueda = JSON.stringify(this.search_producto_composicion.busqueda);
+            fetch(`./api/inventario/index.php?action=searchProductos&busqueda=${busqueda}`)
+            .then(response => {
+                return response.json();
+            })
+            .then(productos => {
+              this.search_producto_composicion.isloading = false;
+              const productosKit = productos.data.filter( producto => {
+                return producto.Eskit != "1";
+              });
+              console.log(productosKit);
+              this.search_producto_composicion.results = productosKit;
+             
+            }).catch( error => {
+                console.error(error);
+            }); 
+            
+        },
         selectProduct(codigo){
             this.search_producto.busqueda.texto = codigo.trim();
             this.getProducto();
             $('#modalBuscarProducto').modal('hide');
         },
-        addToList(){
+        addToList(codigo){
             let existeInArray = this.documento.productos_detalle.findIndex((productoEnArray) => {
-                return productoEnArray.codigo === this.nuevo_producto.codigo;
+                return productoEnArray.codigo === codigo;
             });
 
             if (existeInArray === -1 && this.nuevo_producto.codigo.length > 0) {
-                let composicion = this.getComposicionProducto(this.nuevo_producto.codigo);
-                console.log(composicion);
-                this.nuevo_producto.composicion = composicion;
                 this.documento.productos_detalle.push(this.nuevo_producto);
                 
             }else{
