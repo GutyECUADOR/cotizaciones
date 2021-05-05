@@ -167,9 +167,9 @@ const app = new Vue({
                     const producto = productoDB.data.producto;
                     this.unidades_medida = productoDB.data.unidades_medida;
                     this.nuevo_producto = new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, 1, producto.PrecA, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
-                    let composicion = this.getComposicionProducto(this.nuevo_producto.codigo);
-                    this.nuevo_producto.composicion = composicion;
-
+                    this.getComposicionProducto(this.nuevo_producto.codigo);
+                    this.documento.kit = this.nuevo_producto;
+                   
                 }else{   
                     new PNotify({
                         title: 'Item no disponible',

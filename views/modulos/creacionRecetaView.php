@@ -215,13 +215,13 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                     </thead>
                                     <tbody id="tablaProductos">
                                         <tr v-for="producto in documento.productos_detalle">
-                                            <td><input type="text" class="form-control text-center input-sm" v-model="producto.codigo.trim()" readonly></td>
-                                            <td><input type="text" class="form-control text-center input-sm"  v-model="producto.nombre.trim()" readonly></td>
+                                            <td><input type="text" class="form-control text-center input-sm" v-model="producto.codigo" disabled></td>
+                                            <td><input type="text" class="form-control text-center input-sm"  v-model="producto.nombre" readonly></td>
                                             <td><input type="text" class="form-control text-center input-sm" v-model="producto.unidad" readonly></td>
-                                            <td><input type="number" class="form-control text-center input-sm" v-model="producto.cantidad" readonly></td>
+                                            <td><input type="number" class="form-control text-center input-sm" @change="producto.setCantidad($event.target.value)" :value="producto.cantidad" step=".0001" min="0" oninput="validity.valid||(value=1);"></td>
                                             <td><input type="text" class="form-control text-center input-sm" v-model="producto.stock" readonly></td>
                                             <td>
-                                                <input type="text" class="form-control text-center input-sm" v-model="producto.costo" readonly>
+                                                <input type="text" class="form-control text-center input-sm" v-model="producto.precio">
                                             </td>
                                             <td>
                                                 <input type="text" class="form-control text-center input-sm" v-model="producto.getSubtotal()" readonly></td>
