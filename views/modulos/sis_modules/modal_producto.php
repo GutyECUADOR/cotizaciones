@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal_producto_composicion" tabindex="-1" role="dialog">
+<div class="modal fade" id="modalBuscarProducto" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
         <div class="modal-header">
@@ -8,13 +8,13 @@
         <div class="modal-body">
             
             <div class="input-group select-group">
-                <input type="text" @keyup.enter="getProductos_composicion" v-model="search_producto_composicion.busqueda.texto" placeholder="Codigo o Nombre del producto..." class="form-control"/>
+                <input type="text" @keyup.enter="getProductos" v-model="search_producto.busqueda.texto" placeholder="Codigo o Nombre del producto..." class="form-control"/>
                 <select class="form-control input-group-addon">
                     <option value="">NOMBRE O CODIGO</option>
                 </select>
                 <div class="input-group-btn">
-                    <button @click="getProductos" type="button" class="btn btn-primary" :disabled="search_producto_composicion.isloading"  >
-                        <i class="fa" :class="[{'fa-spin fa-refresh': search_producto_composicion.isloading}, {  'fa-search' : !search_producto_composicion.isloading  }]" ></i> Buscar
+                    <button @click="getProductos" type="button" class="btn btn-primary" :disabled="search_producto.isloading"  >
+                        <i class="fa" :class="[{'fa-spin fa-refresh': search_producto.isloading}, {  'fa-search' : !search_producto.isloading  }]" ></i> Buscar
                     </button>
                 </div> 
             </div>
@@ -34,14 +34,14 @@
                             </thead> 
                             
                             <tbody>
-                            <tr v-for="producto in search_producto_composicion.results">
+                            <tr v-for="producto in search_producto.results">
                                 <td>{{producto.Codigo}}</td>
                                 <td>{{producto.Nombre.trim()}}</td>
                                 <td>{{parseFloat(producto.PreaA.trim()).toFixed(2)}}</td>
                                 <td>{{parseFloat(producto.Stock.trim())}}</td>
                                 <td>
-                                    <button type="button" class="btn btn-primary btn-sm btn-block" @click="addToList(producto.Codigo)">
-                                        <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+                                    <button type="button" class="btn btn-primary btn-sm btn-block" @click="selectProduct(producto.Codigo)">
+                                        <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
                                     </button>
                                 </td>
                                 

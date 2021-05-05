@@ -69,6 +69,7 @@ class Documento {
             IVA: 0,
             total: 0
         },
+        this.kit = null;
         this.productos_detalle = []
         this.cantidad = 0;
         this.peso = 0;
