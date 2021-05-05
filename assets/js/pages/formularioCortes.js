@@ -346,7 +346,8 @@ const app = new Vue({
             
         },
         getProducto() {
-            fetch(`./api/inventario/index.php?action=getProducto&busqueda=${this.search_producto.text}`)
+            const busqueda = this.search_producto.busqueda.texto;
+            fetch(`./api/inventario/index.php?action=getProducto&busqueda=${busqueda}`)
             .then(response => {
                 return response.json();
             })
@@ -360,7 +361,7 @@ const app = new Vue({
                 }else{
                     new PNotify({
                         title: 'Item no disponible',
-                        text: `No se ha encontrado el producto con el codigo: ' ${this.search_producto.text}`,
+                        text: `No se ha encontrado el producto con el codigo: ' ${busqueda}`,
                         delay: 3000,
                         type: 'warn',
                         styling: 'bootstrap3'
@@ -449,7 +450,7 @@ const app = new Vue({
             
         },
         selectProduct(codigo){
-            this.search_producto.text = codigo.trim();
+            this.search_producto.busqueda.texto = codigo.trim();
             this.getProducto();
             $('#modalBuscarProducto').modal('hide');
         },

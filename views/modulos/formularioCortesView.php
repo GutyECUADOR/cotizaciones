@@ -59,7 +59,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                 </div>
             </div>
 
-            <!-- Egreso de items-->
+            <!-- Busqueda de items-->
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default">
@@ -88,7 +88,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                     <tr>
                                         <td>
                                             <div class="input-group">
-                                            <input type="text" @change="getProducto" v-model="search_producto.text" class="form-control text-center input-sm" placeholder="Codigo de Producto">
+                                            <input type="text" @change="getProducto" v-model="search_producto.busqueda.texto" class="form-control text-center input-sm" placeholder="Codigo de Producto">
                                             <span class="input-group-btn">
                                                 <button id="btnSeachProductos" class="btn btn-default input-sm" type="button" data-toggle="modal" data-target="#modalBuscarProducto">
                                                     <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
