@@ -12,7 +12,7 @@ class WinfenixModel extends Conexion  {
     public function Sp_INVCONARTWAN(object $busqueda) {
         $query = "exec Sp_INVCONARTWAN :texto,'', :gestion,'N', :bodega,'', :cantidad,'0','0','1','99','','','','','','','','','','0'";
         $stmt = $this->instancia->prepare($query); 
-        $stmt->bindValue(':texto', $busqueda->texto); 
+        $stmt->bindValue(':texto', '%'.$busqueda->texto); 
         $stmt->bindValue(':gestion', $busqueda->gestion); 
         $stmt->bindValue(':bodega', $busqueda->bodega); 
         $stmt->bindValue(':cantidad', $busqueda->cantidad); 

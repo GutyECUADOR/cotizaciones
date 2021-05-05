@@ -122,7 +122,7 @@ const app = new Vue({
           busqueda: {
             texto: '',
             gestion: 'INV',
-            bodega: 'B01',
+            bodega: '',
             cantidad: 25
           },
           isloading: false,
@@ -202,7 +202,12 @@ const app = new Vue({
             .then(productos => {
               console.log(productos);
               this.search_producto.isloading = false;
-              this.search_producto.results = productos.data;
+              const productosKit = productos.data.filter( producto => {
+                return producto.Eskit == "1";
+              });
+
+              console.log(productosKit);
+              this.search_producto.results = productosKit;
              
             }).catch( error => {
                 console.error(error);
