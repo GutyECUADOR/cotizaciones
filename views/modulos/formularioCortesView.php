@@ -107,7 +107,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                             </select>
                                         </td>
                                         <td>
-                                            <input type="number" @change="nuevo_producto.setCantidad($event.target.value)" :value="nuevo_producto.cantidad" class="form-control text-center input-sm" step=".0001" min="0" oninput="validity.valid||(value=1);"></td>
+                                            <input type="number" @change="nuevo_producto.setCantidad($event.target.value);" :value="nuevo_producto.cantidad" class="form-control text-center input-sm" step=".0001" min="0" oninput="validity.valid||(value=1);"></td>
                                         </td>
                                         <td>
                                             <input type="text" v-model="nuevo_producto.stock" class="form-control text-center input-sm" readonly>
@@ -186,7 +186,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                                     </option>
                                                 </select>
                                             </td>
-                                            <td><input type="number" class="form-control text-center input-sm" @change="producto.setCantidad($event.target.value)" :value="producto.cantidad" step=".0001" min="0" oninput="validity.valid||(value=1);"></td>
+                                            <td><input type="number" class="form-control text-center input-sm" @change="producto.setCantidad($event.target.value); updatePrecioProductosIngresoIguales()" :value="producto.cantidad" step=".0001" min="0" oninput="validity.valid||(value=1);"></td>
                                             <td>
                                                 <input type="text" class="form-control text-center input-sm" v-model="producto.precio" readonly>
                                             </td>
