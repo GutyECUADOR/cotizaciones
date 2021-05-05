@@ -1,7 +1,7 @@
 <?php namespace App\Controllers;
 
 use App\Models\InventarioModel;
-use App\Models\winfenixModel;
+use App\Models\WinfenixModel;
 
 class InventarioController  {
 
@@ -13,7 +13,7 @@ class InventarioController  {
         $this->inventarioModel = new InventarioModel();
         $this->inventarioModel->setDbname($this->defaulDataBase);
         $this->inventarioModel->conectarDB();
-        $this->winfenixModel = new winfenixModel();
+        $this->winfenixModel = new WinfenixModel();
         $this->winfenixModel->setDbname($this->defaulDataBase);
         $this->winfenixModel->conectarDB();
     }

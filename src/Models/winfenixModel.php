@@ -2,7 +2,7 @@
 
 /* LOS MODELOS del MVC retornaran unicamente arrays PHP sin serializar*/
 
-class winfenixModel extends Conexion  {
+class WinfenixModel extends Conexion  {
     
     public function __construct() {
         parent::__construct();
