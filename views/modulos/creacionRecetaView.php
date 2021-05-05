@@ -159,7 +159,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                             <input type="text" v-model="nuevo_producto.nombre" class="form-control text-center input-sm" readonly>
                                         </td>
                                         <td>
-                                            <select v-model='nuevo_producto.unidad' @change="getCostoProducto()" class="form-control input-sm">
+                                            <select v-model='nuevo_producto.unidad' @change="getCostoProducto(nuevo_producto)" class="form-control input-sm">
                                                 <option v-for="unidad in unidades_medida" :value="unidad.Unidad.trim()">
                                                 {{unidad.Unidad}}
                                                 </option>
@@ -217,7 +217,13 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                         <tr v-for="producto in documento.productos_detalle">
                                             <td><input type="text" class="form-control text-center input-sm" v-model="producto.codigo" disabled></td>
                                             <td><input type="text" class="form-control text-center input-sm"  v-model="producto.nombre" readonly></td>
-                                            <td><input type="text" class="form-control text-center input-sm" v-model="producto.unidad" readonly></td>
+                                            <td>
+                                                <select v-model="producto.unidad" @change="getCantidadByFactor(producto)" class="form-control input-sm">
+                                                    <option v-for="unidad in producto.unidades_medida" :value="unidad.Unidad.trim()">
+                                                    {{unidad.Unidad}}
+                                                    </option>
+                                                </select>
+                                            </td>
                                             <td><input type="number" class="form-control text-center input-sm" @change="producto.setCantidad($event.target.value)" :value="producto.cantidad" step=".0001" min="0" oninput="validity.valid||(value=1);"></td>
                                             <td><input type="text" class="form-control text-center input-sm" v-model="producto.stock" readonly></td>
                                             <td>

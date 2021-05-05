@@ -3,29 +3,33 @@ class Producto {
       this.codigo = codigo || '';
       this.nombre = nombre || '';
       this.unidad = unidad || '';
+      this.factor = 1;
+      this.unidades = 0
       this.tipoArticulo = tipoArticulo || ''
-      this.cantidad = parseInt(cantidad) || 1;
+      this.cantidad = parseFloat(cantidad) || 1;
       this.precio = parseFloat(precio).toFixed(4) || 0;
       this.peso = parseFloat(peso) || 0;
       this.descuento = parseInt(descuento) || 0 ;
       this.stock = parseFloat(stock) || 0 ;
       this.tipoIVA = tipoIVA || 'T00';
+      this.unidades_medida = [],
       this.valorIVA = parseFloat(0); // IVA al 0 en inventario
       this.vendedor = null;
       this.descripcion = null;
+      this.observacion = '';
       this.archivos = null;
     }
 
     getIVA(){
-        return parseFloat(((this.getSubtotal() * this.valorIVA) / 100).toFixed(2));
+        return parseFloat(((this.getSubtotal() * this.valorIVA) / 100).toFixed(4));
     }
 
     getDescuento(){
-        return parseFloat((((this.cantidad * this.precio)* this.descuento)/100).toFixed(2));
+        return parseFloat((((this.cantidad * this.precio)* this.descuento)/100).toFixed(4));
     }
 
     getPeso(){
-        return parseFloat((this.peso *this.cantidad).toFixed(2));
+        return parseFloat((this.peso *this.cantidad).toFixed(4));
     }
 
     getSubtotal(){
@@ -41,7 +45,7 @@ class Producto {
     }
 
     setCantidad(cantidad){
-        this.cantidad = parseInt(cantidad);
+        this.cantidad = parseFloat(cantidad);
     }
 
     setStock(stock){
@@ -295,7 +299,7 @@ const app = new Vue({
               console.log(productosDB);
                 if (productosDB.data) {
                     let productosComposicion = productosDB.data.map( producto => {
-                        return new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, 1, producto.PrecA, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
+                        return new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, producto.Cantidad, producto.PrecA, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
                     });
 
                     this.documento.productos_detalle = productosComposicion;
