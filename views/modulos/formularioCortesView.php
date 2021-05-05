@@ -252,8 +252,9 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                             <th style="width: 5%; min-width: 70px;" class="text-center headerTablaProducto">Costo</th>
                                             <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Stock</th>
                                             <th style="width: 10%; min-width: 70px;" class="text-center headerTablaProducto">Subtotal</th>
-                                            <th style="width: 5%" class="text-center headerTablaProducto">Eliminar</th>
                                             <th style="width: 5%" class="text-center headerTablaProducto">Observ.</th>
+                                            <th style="width: 5%" class="text-center headerTablaProducto">Eliminar</th>
+                                            
                                         </tr>
                                     </thead>
                                     <tbody id="tablaProductosIngreso">
@@ -273,8 +274,9 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                             </td>
                                             <td><input type="text" class="form-control text-center input-sm" v-model="producto.stock" disabled></td>
                                             <td><input type="text" class="form-control text-center input-sm" v-model="producto.getSubtotal()" readonly></td>
-                                            <td><button type="button" @click="removeIngresoItem(producto.codigo)" class="btn btn-danger btn-sm btn-block"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
                                             <td><button type="button" @click="showDescriptionModal(producto)" class="btn btn-primary btn-sm btn-block"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
+                                            <td><button type="button" @click="removeIngresoItem(producto.codigo)" class="btn btn-danger btn-sm btn-block"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                                           
                                             
                                                 <div class="modal fade" :id="'modalAddExtraDetail_'+producto.codigo" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog">
                                                     <div class="modal-dialog modal-lg" role="document">

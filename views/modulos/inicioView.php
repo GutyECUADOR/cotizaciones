@@ -9,7 +9,7 @@
           <ul>
             <li onclick="location.href='?action=formularioCortes';">
                 <input id='c1' type='checkbox'/>
-                <label for='c1' title='Formulario de Cortes'><i class="fa fa-book fa-3x" aria-hidden="true"></i></i></label>   
+                <label for='c1' title='Formulario de Cortes'><i class="fa fa-retweet fa-3x" aria-hidden="true"></i></i></label>   
               </a>
             </li>
 
