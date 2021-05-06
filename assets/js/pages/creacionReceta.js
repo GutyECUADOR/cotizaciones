@@ -98,31 +98,34 @@ const app = new Vue({
       documento : new Documento()
     },
     methods:{
-        async getProducto() {
-        const response = await fetch(`./api/inventario/index.php?action=getProducto&busqueda=${this.search_producto.busqueda.texto}`)
+        setKit(codigo){
+            this.getProducto(codigo).then( response => {
+                if (response.data) {
+                    const producto = response.data.producto;
+                    const kit = new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, 1, producto.PrecA, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
+                    kit.unidades_medida = response.data.unidades_medida;
+                    this.getComposicionProducto(kit.codigo);
+                    this.documento.kit = kit;
+                   
+                }else{   
+                    new PNotify({
+                        title: 'Item no disponible',
+                        text: `No se ha encontrado el producto con el codigo: ' ${codigo}`,
+                        delay: 3000,
+                        type: 'warn',
+                        styling: 'bootstrap3'
+                    });
+                }
+            });  
+        },
+        async getProducto(codigo) {
+            return await fetch(`./api/inventario/index.php?action=getProducto&busqueda=${codigo}`)
             .then(response => {
                 return response.json();
             }).catch( error => {
                 console.error(error);
             }); 
            
-            if (response.data) {
-                const producto = response.data.producto;
-                this.kit = new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, 1, producto.PrecA, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
-                this.kit.unidades_medida = response.data.unidades_medida;
-                this.getComposicionProducto(this.kit.codigo);
-                this.documento.kit = this.kit;
-               
-            }else{   
-                new PNotify({
-                    title: 'Item no disponible',
-                    text: `No se ha encontrado el producto con el codigo: ' ${this.search_producto.busqueda.texto}`,
-                    delay: 3000,
-                    type: 'warn',
-                    styling: 'bootstrap3'
-                });
-            }
-
         },
         async getCostoProducto(producto) {
             let codigo = producto.codigo;
@@ -190,7 +193,7 @@ const app = new Vue({
         },
         selectProduct(codigo){
             this.search_producto.busqueda.texto = codigo.trim();
-            this.getProducto();
+            this.setKit(codigo);
             $('#modalBuscarProducto').modal('hide');
         },
         addToList(codigo){
@@ -198,8 +201,26 @@ const app = new Vue({
                 return productoEnArray.codigo === codigo;
             });
 
-            if (existeInArray === -1 && this.kit.codigo.length > 0) {
-                this.documento.kit.composicion.push(this.kit);
+            if (existeInArray === -1 && this.documento.kit.codigo.length > 0) {
+                this.getProducto(codigo).then( response => {
+                    if (response.data) {
+                        const producto = response.data.producto;
+                        console.log(producto);
+                        const newProduct = new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, 1, producto.PrecA, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
+                        newProduct.unidades_medida = response.data.unidades_medida;
+                      
+                        this.documento.kit.composicion.push(newProduct);
+                    }else{   
+                        new PNotify({
+                            title: 'Item no disponible',
+                            text: `No se ha encontrado el producto con el codigo: ' ${codigo}`,
+                            delay: 3000,
+                            type: 'warn',
+                            styling: 'bootstrap3'
+                        });
+                    }
+                });
+                
                 
             }else{
                 swal({

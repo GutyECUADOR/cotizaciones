@@ -141,7 +141,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                     <tr>
                                         <td>
                                             <div class="input-group">
-                                            <input type="text" @change="getProducto" v-model="search_producto.busqueda.texto" class="form-control text-center input-sm" placeholder="Codigo de Producto">
+                                            <input type="text" @change="setKit(search_producto.busqueda.texto)" v-model="search_producto.busqueda.texto" class="form-control text-center input-sm" placeholder="Codigo de Producto">
                                             <span class="input-group-btn">
                                                 <button id="btnSeachProductos" class="btn btn-default input-sm" type="button" data-toggle="modal" data-target="#modalBuscarProducto">
                                                     <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
@@ -199,7 +199,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                         <tr>
                                             <th style="width: 5%; min-width: 80px;" class="text-center headerTablaProducto">Codigo</th>
                                             <th style="width: 10%; min-width: 170px;" class="text-center headerTablaProducto">Nombre del Articulo</th>
-                                            <th style="width: 2%" class="text-center headerTablaProducto">Unidad</th>
+                                            <th style="width: 2%; min-width: 80px;" class="text-center headerTablaProducto">Unidad</th>
                                             <th style="width: 3%; min-width: 90px;" class="text-center headerTablaProducto">Cantidad</th>
                                             <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Stock</th>
                                             <th style="width: 5%; min-width: 100px;" class="text-center headerTablaProducto">Costo</th>

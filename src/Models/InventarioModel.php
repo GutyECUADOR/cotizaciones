@@ -572,7 +572,7 @@ class InventarioModel extends Conexion  {
     public function getUnidadesMedida(string $busqueda) {
         //Query de consulta con parametros para bindear si es necesario.
         $query = "
-            SELECT Unidad FROM INV_UniFactor
+            SELECT trim(Unidad) as Unidad FROM INV_UniFactor
             WHERE CodArt = :codigo";  // Final del Query SQL 
 
         $stmt = $this->instancia->prepare($query);
