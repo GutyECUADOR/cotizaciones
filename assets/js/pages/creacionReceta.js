@@ -3,6 +3,7 @@ class Producto {
       this.codigo = codigo || '';
       this.nombre = nombre || '';
       this.unidad = unidad || '';
+      this.composicion = []
       this.factor = 1;
       this.unidades = 0
       this.tipoArticulo = tipoArticulo || ''
@@ -63,78 +64,17 @@ class Producto {
 
 class Documento {
     constructor() {
-        this.productos = {
-            bodega_egreso: 'B01',
-            bodega_ingreso: 'B02',
-            items: [],
-            cantidad: 0,
-            peso: 0,
-            subtotal: 0,
-            IVA: 0,
-            total: 0
-        },
-        this.kit = null;
-        this.productos_detalle = []
-        this.cantidad = 0;
-        this.peso = 0;
-        this.subtotal = 0;
-        this.total = 0
+        this.bodega_egreso = 'B01',
+        this.bodega_ingreso = 'B02',
+        this.kit = new Producto()
     }
 
-    /* CANTIDAD DE ITEMS */
-    getCantidad() {
-        this.productos.cantidad = this.productos.items.reduce( (total, producto) => {
-            return total + producto.cantidad;
-        }, 0);
-        return this.productos.cantidad;
-    }
-
-
-    /* Total PESO */
-    getPeso(){
-        this.productos.peso = this.productositems.reduce( (total, producto) => { 
-            return total + producto.getPeso(); 
-        }, 0); 
-        return this.productos.peso;
-    }
-
-   
-
-    /* Subtotales  */
-    getSubTotal(){
-        this.productos.subtotal = this.productos.items.reduce( (total, producto) => { 
-            return total + producto.getSubtotal(); 
-        }, 0);
-        return this.productos.subtotal;
-    }
-
-    
-    /* Total IVA */
-    getIVA(){
-        this.productos.IVA = this.productos.items.reduce( (total, producto) => { 
-            return total + producto.getIVA(); 
-        }, 0); 
-        return this.productos.IVA;
-    };
-
-    /* Totales  */
-    getTotal(){
-        return parseFloat((this.getSubTotal() + this.getIVA()).toFixed(4));
-    };
-
-   
 }
 
 const app = new Vue({
     el: '#app',
     data: {
       title: 'Creación de Recetas',
-      search_proveedor: {
-        text: '',
-        campo: 'NOMBRE',
-        isloading: false,
-        results: []
-    },
       search_producto: {
           busqueda: {
             texto: '',
@@ -155,8 +95,6 @@ const app = new Vue({
         isloading: false,
         results: []
     },
-      unidades_medida : [],
-      nuevo_producto: new Producto(),
       documento : new Documento()
     },
     methods:{
@@ -166,13 +104,12 @@ const app = new Vue({
                 return response.json();
             })
             .then(productoDB => {
-              console.log(productoDB);
                 if (productoDB.data) {
                     const producto = productoDB.data.producto;
-                    this.unidades_medida = productoDB.data.unidades_medida;
-                    this.nuevo_producto = new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, 1, producto.PrecA, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
-                    this.getComposicionProducto(this.nuevo_producto.codigo);
-                    this.documento.kit = this.nuevo_producto;
+                    this.kit = new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, 1, producto.PrecA, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
+                    this.kit.unidades_medida = productoDB.data.unidades_medida;
+                    this.getComposicionProducto(this.kit.codigo);
+                    this.documento.kit = this.kit;
                    
                 }else{   
                     new PNotify({
@@ -229,13 +166,11 @@ const app = new Vue({
                 return response.json();
             })
             .then(productos => {
-              console.log(productos);
               this.search_producto.isloading = false;
               const productosKit = productos.data.filter( producto => {
                 return producto.Eskit == "1";
               });
 
-              console.log(productosKit);
               this.search_producto.results = productosKit;
              
             }).catch( error => {
@@ -269,12 +204,12 @@ const app = new Vue({
             $('#modalBuscarProducto').modal('hide');
         },
         addToList(codigo){
-            let existeInArray = this.documento.productos_detalle.findIndex((productoEnArray) => {
+            let existeInArray = this.documento.kit.composicion.findIndex((productoEnArray) => {
                 return productoEnArray.codigo === codigo;
             });
 
-            if (existeInArray === -1 && this.nuevo_producto.codigo.length > 0) {
-                this.documento.productos_detalle.push(this.nuevo_producto);
+            if (existeInArray === -1 && this.kit.codigo.length > 0) {
+                this.documento.kit.composicion.push(this.kit);
                 
             }else{
                 swal({
@@ -302,7 +237,7 @@ const app = new Vue({
                         return new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, producto.Cantidad, producto.PrecA, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
                     });
 
-                    this.documento.productos_detalle = productosComposicion;
+                    this.documento.kit.composicion = productosComposicion;
                     return productosComposicion;
                 }else{
                     new PNotify({
@@ -320,10 +255,10 @@ const app = new Vue({
             }); 
         },   
         removeEgresoItem(codigo){
-            let index = this.documento.productos_detalle.findIndex( productoEnArray => {
+            let index = this.documento.kit.composicion.findIndex( productoEnArray => {
                 return productoEnArray.codigo === codigo;
             });
-            this.documento.productos_detalle.splice(index, 1);
+            this.documento.kit.composicion.splice(index, 1);
         },
         async saveDocumento(){
             if (!this.validateSaveDocument()) {

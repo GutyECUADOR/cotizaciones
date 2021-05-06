@@ -32,15 +32,9 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
 
         <div class="container card">
         
-            <!-- Row de cabecera-->
-            <div class="row">
-                <div class="form-group formextra text-center col-lg-12">
-                    <h4>{{ title }}</h4>
-                </div>
-            </div>
-
-            <!-- Row -->
-            <div class="row">
+            <!-- row Egresa Componentes & Ingresa KITs -->
+            
+            <div class="row" style="margin-top:20px">
 
                 <div class="col-lg-6 col-md-12">
                     <div class="panel panel-default">
@@ -48,7 +42,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                         <div class="panel-body">
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon">Número</span>
-                                <input type="text" v-model="search_proveedor.text" class="form-control">
+                                <input type="text" class="form-control">
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button" data-toggle="modal" data-target="#modal_buscardocumento">
                                         <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
@@ -60,7 +54,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
 
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon">Bodega egreso</span>
-                                <select id='bodegaEgreso' v-model="documento.productos.bodega_egreso" class="form-control input-sm" style="background-color: #ffe7e7;">
+                                <select id='bodegaEgreso' v-model="documento.bodega_egreso" class="form-control input-sm" style="background-color: #ffe7e7;">
                                         <?php
                                         foreach ($bodegas as $bodega => $row) {
 
@@ -76,7 +70,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
 
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon">Bodega ingreso</span>
-                                <select id='bodegaIngreso' v-model="documento.productos.bodega_ingreso" class="form-control input-sm" style="background-color: #d9f7d9;">
+                                <select id='bodegaIngreso' v-model="documento.bodega_ingreso" class="form-control input-sm" style="background-color: #d9f7d9;">
                                         <?php
                                         foreach ($bodegas as $bodega => $row) {
 
@@ -120,7 +114,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
             </div>
 
 
-            <!--  items-->
+            <!--  Row busqueda del KIT -->
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default">
@@ -156,20 +150,20 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                             </div><!-- /input-group -->
                                         </td>
                                         <td>
-                                            <input type="text" v-model="nuevo_producto.nombre" class="form-control text-center input-sm" readonly>
+                                            <input type="text" v-model="documento.kit.nombre" class="form-control text-center input-sm" readonly>
                                         </td>
                                         <td>
-                                            <select v-model='nuevo_producto.unidad' @change="getCostoProducto(nuevo_producto)" class="form-control input-sm">
-                                                <option v-for="unidad in unidades_medida" :value="unidad.Unidad.trim()">
+                                            <select v-model='documento.kit.unidad' @change="getCostoProducto(kit)" class="form-control input-sm">
+                                                <option v-for="unidad in documento.kit.unidades_medida" :value="unidad.Unidad.trim()">
                                                 {{unidad.Unidad}}
                                                 </option>
                                             </select>
                                         </td>
                                         <td>
-                                            <input type="number" v-model="nuevo_producto.precio" class="form-control text-center input-sm" min="0" value="0" readonly>
+                                            <input type="number" v-model="documento.kit.precio" class="form-control text-center input-sm" min="0" value="0" readonly>
                                         </td>
                                         <td>
-                                            <input type="text" v-model="nuevo_producto.getSubtotal()" class="form-control text-center input-sm importe_linea" readonly>
+                                            <input type="text" v-model="documento.kit.getSubtotal()" class="form-control text-center input-sm importe_linea" readonly>
                                         </td>
                                     </tr>
 
@@ -177,7 +171,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                     
                                 </tbody>
                             </table>
-                                <button type="button" @click="getComposicionProducto(nuevo_producto.codigo)" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-search"></span> Verificar Composición</button>
+                                <button type="button" @click="getComposicionProducto(documento.kit.codigo)" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-search"></span> Verificar Composición</button>
                             </div>
                         </div>
                     </div>
@@ -185,7 +179,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
             </div>
 
           
-            <!-- items en lista detalle del KIT -->
+            <!-- Row composicion del KIT -->
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default">
@@ -214,7 +208,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                         </tr>
                                     </thead>
                                     <tbody id="tablaProductos">
-                                        <tr v-for="producto in documento.productos_detalle">
+                                        <tr v-for="producto in documento.kit.composicion">
                                             <td><input type="text" class="form-control text-center input-sm" v-model="producto.codigo" disabled></td>
                                             <td><input type="text" class="form-control text-center input-sm"  v-model="producto.nombre" readonly></td>
                                             <td>
