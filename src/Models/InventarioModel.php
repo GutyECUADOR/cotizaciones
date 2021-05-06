@@ -498,10 +498,11 @@ class InventarioModel extends Conexion  {
             SELECT TOP 1
                 INV_ARTICULOS.Codigo,
                 INV_ARTICULOS.Nombre,
-                dbo.INVDIMEFACTOR(:codigofactor,'1') as Unidad,
+                dbo.INVDIMEFACTOR(:codigoFactor,'1') as Unidad,
+                Costo = (SELECT dbo.DimecostoProm('99', :codigoCosto,'') as Costo),
+                Stock = (SELECT dbo.DimeStockFis('99', :codigoStock,'' ,'') as Stock),
                 INV_ARTICULOS.TipoArticulo,
                 INV_ARTICULOS.PrecA,
-                INV_ARTICULOS.Stock,
                 INV_ARTICULOS.Peso,
                 INV_ARTICULOS.TipoIva,
                 RTRIM(IVA.VALOR) as VALORIVA
@@ -510,7 +511,9 @@ class InventarioModel extends Conexion  {
             WHERE INV_ARTICULOS.Codigo = :codigo";  // Final del Query SQL 
 
         $stmt = $this->instancia->prepare($query);
-        $stmt->bindParam(':codigofactor', $busqueda); 
+        $stmt->bindParam(':codigoFactor', $busqueda); 
+        $stmt->bindParam(':codigoCosto', $busqueda); 
+        $stmt->bindParam(':codigoStock', $busqueda); 
         $stmt->bindParam(':codigo', $busqueda); 
        
             if($stmt->execute()){

@@ -103,6 +103,7 @@ const app = new Vue({
                 if (response.data) {
                     const producto = response.data.producto;
                     const kit = new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, 1, producto.PrecA, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
+                   
                     kit.unidades_medida = response.data.unidades_medida;
                     this.getComposicionProducto(kit.codigo);
                     this.documento.kit = kit;
@@ -131,7 +132,7 @@ const app = new Vue({
             let codigo = producto.codigo;
             let unidad = producto.unidad;
             let busqueda = JSON.stringify({codigo, unidad});
-            console.log(busqueda);
+            
             const response = await fetch(`./api/inventario/index.php?action=getCostoProducto&busqueda=${busqueda}`)
             .then(response => {
                 return response.json();
@@ -207,8 +208,9 @@ const app = new Vue({
                         const producto = response.data.producto;
                         console.log(producto);
                         const newProduct = new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, 1, producto.PrecA, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
+                        this.getCostoProducto(newProduct);
                         newProduct.unidades_medida = response.data.unidades_medida;
-                      
+                        
                         this.documento.kit.composicion.push(newProduct);
                         new PNotify({
                             title: 'Item agregado',
@@ -252,8 +254,30 @@ const app = new Vue({
             }); 
 
             if (response.data) {
-                let productosComposicion = response.data.map( producto => {
-                    return new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, producto.Cantidad, producto.PrecA, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
+                let productosComposicion = [];
+                response.data.forEach( productoDB => {
+                    
+                    this.getProducto(productoDB.Codigo).then( response => {
+                        if (response.data) {
+                            const producto = response.data.producto;
+                          
+                            const newProduct = new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, productoDB.Cantidad, producto.Costo, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
+                            this.getCostoProducto(newProduct);
+                            newProduct.unidades_medida = response.data.unidades_medida;
+                            productosComposicion.push(newProduct);
+                        }else{   
+                            new PNotify({
+                                title: 'Item no disponible',
+                                text: `No se ha encontrado el producto con el codigo: ' ${producto.Codigo}`,
+                                delay: 3000,
+                                type: 'warn',
+                                styling: 'bootstrap3'
+                            });
+                        }
+                    });
+
+                   
+                 
                 });
 
                 this.documento.kit.composicion = productosComposicion;
@@ -267,6 +291,33 @@ const app = new Vue({
                     styling: 'bootstrap3'
                 });
             }
+        },
+        getCantidadByFactor(producto) {
+            const codigo = producto.codigo;
+            const unidad = producto.unidad;
+            let busqueda = JSON.stringify({codigo, unidad});
+            fetch(`./api/inventario/index.php?action=getCantidadByFactor&busqueda=${busqueda}`)
+            .then(response => {
+                return response.json();
+            })
+            .then(response => {
+              console.log(response);
+                if (response.data) {
+                    producto.setFactor(response.data.factor);
+                }else{
+                    new PNotify({
+                        title: 'Costo no calculado',
+                        text: `No se ha podido calcular las unidades para el codigo: ' ${codigo}`,
+                        delay: 3000,
+                        type: 'error',
+                        styling: 'bootstrap3'
+                    });
+                }
+
+             
+            }).catch( error => {
+                console.error(error);
+            }); 
         },   
         removeEgresoItem(codigo){
             let index = this.documento.kit.composicion.findIndex( productoEnArray => {
