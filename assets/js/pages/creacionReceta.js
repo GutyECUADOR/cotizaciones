@@ -215,34 +215,30 @@ const app = new Vue({
 
             
         },
-        getComposicionProducto(codigo){
-            return fetch(`./api/inventario/index.php?action=getComposicionProducto&busqueda=${codigo}`)
+        async getComposicionProducto(codigo){
+            const response = await fetch(`./api/inventario/index.php?action=getComposicionProducto&busqueda=${codigo}`)
             .then(response => {
                 return response.json();
-            })
-            .then(productosDB => {
-              console.log(productosDB);
-                if (productosDB.data) {
-                    let productosComposicion = productosDB.data.map( producto => {
-                        return new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, producto.Cantidad, producto.PrecA, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
-                    });
-
-                    this.documento.kit.composicion = productosComposicion;
-                    return productosComposicion;
-                }else{
-                    new PNotify({
-                        title: 'Item no disponible',
-                        text: `No se ha encontrado la composicion del KIT ${codigo}`,
-                        delay: 3000,
-                        type: 'warn',
-                        styling: 'bootstrap3'
-                    });
-                }
-
-             
             }).catch( error => {
                 console.error(error);
             }); 
+
+            if (response.data) {
+                let productosComposicion = response.data.map( producto => {
+                    return new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, producto.Cantidad, producto.PrecA, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
+                });
+
+                this.documento.kit.composicion = productosComposicion;
+                return productosComposicion;
+            }else{
+                new PNotify({
+                    title: 'Item no disponible',
+                    text: `No se ha encontrado la composicion del KIT ${codigo}`,
+                    delay: 3000,
+                    type: 'warn',
+                    styling: 'bootstrap3'
+                });
+            }
         },   
         removeEgresoItem(codigo){
             let index = this.documento.kit.composicion.findIndex( productoEnArray => {
