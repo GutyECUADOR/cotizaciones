@@ -234,6 +234,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                     </tbody>
                                 </table>
                             </div>
+                            <button type="button"  data-toggle="modal" data-target="#modalPreparacion" class="btn btn-primary btn-block btn-sm"><span class="glyphicon glyphicon-pencil"></span> Preparación</button>
                         </div>
                     </div>
                 </div>
@@ -264,6 +265,26 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
 
              <!-- Modal Producto -->
              <?php require_once 'sis_modules/modal_producto_composicion.php'?>
+
+             <div class="modal fade" id="modalPreparacion" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title"> Preparación de la receta </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="comment">Detalle:</label>
+                            <textarea class="form-control" rows="5" v-model="documento.kit.descripcion"></textarea>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    </div>
+                    </div>
+                </div>
+            </div>
 
        
      

@@ -325,6 +325,9 @@ const app = new Vue({
             });
             this.documento.kit.composicion.splice(index, 1);
         },
+        showDescriptionModal(producto){
+            $('#modalPreparacion').modal('show');
+        },
         async saveDocumento(){
             if (!this.validateSaveDocument()) {
                 return;
