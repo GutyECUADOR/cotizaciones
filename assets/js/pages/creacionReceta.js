@@ -210,6 +210,13 @@ const app = new Vue({
                         newProduct.unidades_medida = response.data.unidades_medida;
                       
                         this.documento.kit.composicion.push(newProduct);
+                        new PNotify({
+                            title: 'Item agregado',
+                            text: `Se agrego a la composicion el item: ' ${newProduct.nombre}`,
+                            delay: 3000,
+                            type: 'success',
+                            styling: 'bootstrap3'
+                        });
                     }else{   
                         new PNotify({
                             title: 'Item no disponible',
