@@ -299,65 +299,20 @@ const app = new Vue({
             }); 
             
         },
-        getProveedor() {
-            fetch(`./api/inventario/index.php?action=getProveedor&busqueda=${this.search_proveedor.text}`)
-            .then(response => {
-                return response.json();
-            })
-            .then(proveedorDB => {
-              console.log(proveedorDB);
-                if (proveedorDB.data) {
-                    const proveedor = proveedorDB.data;
-                    this.nuevo_proveedor = new Proveedor(proveedor.Codigo, proveedor.Nombre, proveedor.Ruc, proveedor.DiasPago, proveedor.Fpago, proveedor.Direccion1, proveedor.telefono1, proveedor.email, proveedor.divisa);
-                    this.documento.proveedor = this.nuevo_proveedor;
-                }else{
-                    new PNotify({
-                        title: 'Item no disponible',
-                        text: `No se ha encontrado el proveedor con el RUC: ' ${this.search_proveedor.text}`,
-                        delay: 3000,
-                        type: 'warn',
-                        styling: 'bootstrap3'
-                    });
-                }
-
-            }).catch( error => {
-                console.error(error);
-            }); 
-                
-        },
-        getProveedores() {
-            this.search_proveedor.isloading = true;
-            let termino = this.search_proveedor.text;
-            let campo = this.search_proveedor.campo;
-            let busqueda = JSON.stringify({termino, campo});
-            console.log(busqueda);
-            fetch(`./api/inventario/index.php?action=getProveedores&busqueda=${busqueda}`)
-            .then(response => {
-                return response.json();
-            })
-            .then(clientes => {
-              console.log(clientes);
-              this.search_proveedor.isloading = false;
-              this.search_proveedor.results = clientes.data;
-             
-            }).catch( error => {
-                console.error(error);
-            }); 
-            
-        },
-        getProducto() {
+        async getProducto() {
             const busqueda = this.search_producto.busqueda.texto;
-            fetch(`./api/inventario/index.php?action=getProducto&busqueda=${busqueda}`)
+            const productoDB = await fetch(`./api/inventario/index.php?action=getProducto&busqueda=${busqueda}`)
             .then(response => {
                 return response.json();
-            })
-            .then(productoDB => {
-              console.log(productoDB);
+            }).catch( error => {
+                console.error(error);
+            }); 
+           
                 if (productoDB.data) {
                     const producto = productoDB.data.producto;
                     this.unidades_medida = productoDB.data.unidades_medida;
                     this.nuevo_producto = new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, 1, producto.PrecA, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA)
-                    this.getCostoProducto(this.nuevo_producto);
+                    //this.getCostoProducto(this.nuevo_producto);
                 }else{
                     new PNotify({
                         title: 'Item no disponible',
@@ -367,11 +322,6 @@ const app = new Vue({
                         styling: 'bootstrap3'
                     });
                 }
-
-             
-            }).catch( error => {
-                console.error(error);
-            }); 
                 
         },
         getCostoProducto(producto) {

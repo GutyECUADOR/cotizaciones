@@ -392,9 +392,8 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
             <?php require_once 'sis_modules/modal_info_session.php'?>
 
             <!-- Modal Proveedor -->
-            <?php require_once 'sis_modules/modal_proveedor.php'?>
-
-                <!-- Modal Cliente Nuevo -->
+           
+            <!-- Modal Cliente Nuevo -->
             <?php require_once 'sis_modules/modal_cliente_nuevo.php'?>
 
             <!-- Modal Producto -->

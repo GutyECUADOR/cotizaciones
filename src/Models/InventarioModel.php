@@ -527,7 +527,7 @@ class InventarioModel extends Conexion  {
         //Query de consulta con parametros para bindear si es necesario.
         $query = "
             SELECT
-            DBO.DimeStockFis('99', :codigostock,'' ,'B01') AS Stock,
+            DBO.DimeStockFis('99', :codigostock,'' ,'B01') / factor AS Stock,
             dbo.DimecostoProm('99', :codigocostoPrimedio,'') as costoPromedio,
             ISNULL(factor,1) as factor,
             CostoProducto =  CAST(factor * dbo.DimecostoProm('99', :codigocosto,'') as varchar)
