@@ -98,46 +98,44 @@ const app = new Vue({
       documento : new Documento()
     },
     methods:{
-        getProducto() {
-            fetch(`./api/inventario/index.php?action=getProducto&busqueda=${this.search_producto.busqueda.texto}`)
+        async getProducto() {
+        const response = await fetch(`./api/inventario/index.php?action=getProducto&busqueda=${this.search_producto.busqueda.texto}`)
             .then(response => {
                 return response.json();
-            })
-            .then(productoDB => {
-                if (productoDB.data) {
-                    const producto = productoDB.data.producto;
-                    this.kit = new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, 1, producto.PrecA, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
-                    this.kit.unidades_medida = productoDB.data.unidades_medida;
-                    this.getComposicionProducto(this.kit.codigo);
-                    this.documento.kit = this.kit;
-                   
-                }else{   
-                    new PNotify({
-                        title: 'Item no disponible',
-                        text: `No se ha encontrado el producto con el codigo: ' ${this.search_producto.busqueda.texto}`,
-                        delay: 3000,
-                        type: 'warn',
-                        styling: 'bootstrap3'
-                    });
-                }
-
-             
             }).catch( error => {
                 console.error(error);
             }); 
-                
+           
+            if (response.data) {
+                const producto = response.data.producto;
+                this.kit = new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, 1, producto.PrecA, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
+                this.kit.unidades_medida = response.data.unidades_medida;
+                this.getComposicionProducto(this.kit.codigo);
+                this.documento.kit = this.kit;
+               
+            }else{   
+                new PNotify({
+                    title: 'Item no disponible',
+                    text: `No se ha encontrado el producto con el codigo: ' ${this.search_producto.busqueda.texto}`,
+                    delay: 3000,
+                    type: 'warn',
+                    styling: 'bootstrap3'
+                });
+            }
+
         },
-        getCostoProducto(producto) {
+        async getCostoProducto(producto) {
             let codigo = producto.codigo;
             let unidad = producto.unidad;
             let busqueda = JSON.stringify({codigo, unidad});
             console.log(busqueda);
-            fetch(`./api/inventario/index.php?action=getCostoProducto&busqueda=${busqueda}`)
+            const response = await fetch(`./api/inventario/index.php?action=getCostoProducto&busqueda=${busqueda}`)
             .then(response => {
                 return response.json();
-            })
-            .then(response => {
-              console.log(response);
+            }).catch( error => {
+                console.error(error);
+            }); 
+
                 if (response.data) {
                     producto.setStock(response.data.Stock);
                     producto.setFactor(response.data.factor);
@@ -151,11 +149,6 @@ const app = new Vue({
                         styling: 'bootstrap3'
                     });
                 }
-
-             
-            }).catch( error => {
-                console.error(error);
-            }); 
                 
         },
         async getProductos() {
