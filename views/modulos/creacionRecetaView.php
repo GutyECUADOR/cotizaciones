@@ -275,7 +275,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="comment">Detalle:</label>
-                            <textarea class="form-control" rows="5" v-model="documento.kit.descripcion"></textarea>
+                            <textarea class="form-control" rows="5" @keyup="setPreparacionToProducts()" v-model="documento.kit.descripcion"></textarea>
                         </div>
 
                     </div>

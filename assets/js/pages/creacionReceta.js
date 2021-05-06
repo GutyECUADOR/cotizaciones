@@ -16,7 +16,7 @@ class Producto {
       this.unidades_medida = [],
       this.valorIVA = parseFloat(0); // IVA al 0 en inventario
       this.vendedor = null;
-      this.descripcion = null;
+      this.descripcion = '';
       this.observacion = '';
       this.archivos = null;
     }
@@ -252,18 +252,20 @@ const app = new Vue({
             }).catch( error => {
                 console.error(error);
             }); 
+           
 
             if (response.data) {
                 let productosComposicion = [];
                 response.data.forEach( productoDB => {
-                    
+                    console.log(productoDB);
                     this.getProducto(productoDB.Codigo).then( response => {
                         if (response.data) {
                             const producto = response.data.producto;
-                          
+                            
                             const newProduct = new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, productoDB.Cantidad, producto.Costo, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
                             this.getCostoProducto(newProduct);
                             newProduct.unidades_medida = response.data.unidades_medida;
+                            this.documento.kit.descripcion = productoDB.Preparacion;
                             productosComposicion.push(newProduct);
                         }else{   
                             new PNotify({
@@ -275,11 +277,7 @@ const app = new Vue({
                             });
                         }
                     });
-
-                   
-                 
                 });
-
                 this.documento.kit.composicion = productosComposicion;
                 return productosComposicion;
             }else{
@@ -291,6 +289,12 @@ const app = new Vue({
                     styling: 'bootstrap3'
                 });
             }
+        },
+        setPreparacionToProducts(){
+            this.documento.kit.composicion.forEach( producto => {
+                producto.descripcion = this.documento.kit.descripcion;
+            });
+            
         },
         getCantidadByFactor(producto) {
             const codigo = producto.codigo;

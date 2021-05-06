@@ -838,7 +838,7 @@ class InventarioModel extends Conexion  {
                     $stmt->bindValue(':unidad', $producto->unidad);
                     $stmt->bindValue(':cantidad', $producto->cantidad);
                     $stmt->bindValue(':COSTO', $producto->precio);
-                    $stmt->bindValue(':Preparacion', '');
+                    $stmt->bindValue(':Preparacion', $producto->descripcion);
                     $stmt->bindValue(':CreadoPor', $_SESSION["usuarioRUC".APP_UNIQUE_KEY]);
                     $stmt->bindValue(':PCID', php_uname('n'));
                     
