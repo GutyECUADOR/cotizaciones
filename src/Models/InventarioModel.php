@@ -505,9 +505,12 @@ class InventarioModel extends Conexion  {
                 INV_ARTICULOS.PrecA,
                 INV_ARTICULOS.Peso,
                 INV_ARTICULOS.TipoIva,
-                RTRIM(IVA.VALOR) as VALORIVA
+                RTRIM(IVA.VALOR) as VALORIVA,
+                extraData.fechaCaducidad,
+	            extraData.observacion
             FROM INV_ARTICULOS 
             INNER JOIN dbo.INV_IVA AS IVA on IVA.CODIGO = INV_ARTICULOS.TipoIva
+            LEFT JOIN wssp.dbo.INV_ARTICULOS_EXTRA_DATA as extraData on extraData.codigo = INV_ARTICULOS.CODIGO
             WHERE INV_ARTICULOS.Codigo = :codigo";  // Final del Query SQL 
 
         $stmt = $this->instancia->prepare($query);
@@ -716,6 +719,31 @@ class InventarioModel extends Conexion  {
                         $stmt->bindValue(':cantidadproducto', $producto->cantidad);
                         $stmt->bindValue(':costoproducto', $producto->precio);
                         $stmt->bindValue(':costototal', $producto->precio);
+                       
+                    $stmt->execute();
+                }
+
+                foreach ($documento->productos_ingreso->items as $producto) {
+                    $query = "
+                        IF EXISTS(SELECT codigo FROM wssp.dbo.INV_ARTICULOS_EXTRA_DATA WHERE codigo= :codigoSelect)
+                            UPDATE wssp.dbo.INV_ARTICULOS_EXTRA_DATA 
+                                SET fechaCaducidad = :fechaCaducidad_update, observacion = :observacion_update  
+                            WHERE codigo= :codigo_update
+                        ELSE
+                            INSERT INTO 
+                                wssp.dbo.INV_ARTICULOS_EXTRA_DATA (codigo, fechaCaducidad,observacion)
+                            VALUES ( :codigo, :fechaCaducidad, :observacion)
+                    ";  
+                        $stmt = $this->instancia->prepare($query);
+                        $stmt->bindParam(':codigoSelect', $producto->codigo);
+
+                        $stmt->bindParam(':fechaCaducidad_update', $producto->fechaCaducidad);
+                        $stmt->bindParam(':observacion_update', $producto->observacion);
+                        $stmt->bindParam(':codigo_update', $producto->codigo);
+
+                        $stmt->bindParam(':codigo',  $producto->codigo);
+                        $stmt->bindParam(':fechaCaducidad', $producto->fechaCaducidad);
+                        $stmt->bindParam(':observacion', $producto->observacion);
                        
                     $stmt->execute();
                 }

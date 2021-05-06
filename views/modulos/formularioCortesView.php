@@ -186,7 +186,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                                     </option>
                                                 </select>
                                             </td>
-                                            <td><input type="number" class="form-control text-center input-sm" @change="producto.setCantidad($event.target.value); updatePrecioProductosIngresoIguales()" :value="producto.cantidad" step=".0001" min="0" oninput="validity.valid||(value=1);"></td>
+                                            <td><input type="number" class="form-control text-center input-sm" @change="producto.setCantidad($event.target.value)" :value="producto.cantidad" step=".0001" min="0" oninput="validity.valid||(value=1);"></td>
                                             <td>
                                                 <input type="text" class="form-control text-center input-sm" v-model="producto.precio" readonly>
                                             </td>
@@ -268,7 +268,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                                     </option>
                                                 </select>
                                             </td>
-                                            <td><input type="number" class="form-control text-center input-sm" @change="producto.setCantidad($event.target.value); updatePrecioProductosIngresoIguales()" :value="producto.cantidad" step=".0001" min="0" oninput="validity.valid||(value='0');"></td>
+                                            <td><input type="number" class="form-control text-center input-sm" @change="producto.setCantidad($event.target.value)" :value="producto.cantidad" step=".0001" min="0" oninput="validity.valid||(value='0');"></td>
                                             <td>
                                                 <input type="text" class="form-control text-center input-sm" v-model="producto.precio">
                                             </td>
@@ -285,10 +285,13 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                                             <h4 class="modal-title"> Observacion del Producto </h4>
                                                         </div>
                                                         <div class="modal-body">
-                                                            
+                                                            <div class="form-group">
+                                                                <label for="comment">Fecha de Caducidad:</label>
+                                                                <input type="date" class="form-control text-center input-sm" v-model="producto.fechaCaducidad">
+                                                            </div>
                                                             
                                                             <div class="form-group">
-                                                                <label for="comment">Detalle:</label>
+                                                                <label for="comment">Observacion:</label>
                                                                 <textarea class="form-control" rows="5" v-model="producto.observacion"></textarea>
                                                             </div>
 
@@ -314,7 +317,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                             <td colspan="6"></td>
                                             <td class="text-center" style="vertical-align: middle;"><b>Diferencia</b></td>
                                             <td colspan="2">
-                                            <input style="background-color: #ffe7e7" type="number" v-model="documento.getDiferencia_IngresosEgresos()" class="form-control text-center" readonly></td>
+                                            <input style="background-color: #ffe7e7" type="text" v-model="documento.getDiferencia_IngresosEgresos()" class="form-control text-center" readonly></td>
                                             </td>
                                         </tr>
 
