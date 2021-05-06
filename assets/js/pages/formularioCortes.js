@@ -42,6 +42,7 @@ class Producto {
       this.nombre = nombre || '';
       this.unidad = unidad || '';
       this.factor = 1;
+      this.fechaCaducidad = ''
       this.unidades = 0
       this.tipoArticulo = tipoArticulo || ''
       this.cantidad = parseFloat(cantidad) || 1;
@@ -55,7 +56,6 @@ class Producto {
       this.vendedor = null;
       this.descripcion = null;
       this.observacion = '';
-      this.archivos = null;
     }
 
     getIVA(){
@@ -307,12 +307,14 @@ const app = new Vue({
             }).catch( error => {
                 console.error(error);
             }); 
-           
+                console.log(productoDB);
                 if (productoDB.data) {
                     const producto = productoDB.data.producto;
                     this.unidades_medida = productoDB.data.unidades_medida;
                     this.nuevo_producto = new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, 1, producto.PrecA, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA)
-                    //this.getCostoProducto(this.nuevo_producto);
+                    this.nuevo_producto.observacion = producto.observacion;
+                    this.nuevo_producto.fechaCaducidad = producto.fechaCaducidad;
+                    this.getCostoProducto(this.nuevo_producto);
                 }else{
                     new PNotify({
                         title: 'Item no disponible',
@@ -328,7 +330,7 @@ const app = new Vue({
             let codigo = producto.codigo;
             let unidad = producto.unidad;
             let busqueda = JSON.stringify({codigo, unidad});
-            console.log(busqueda);
+           
             fetch(`./api/inventario/index.php?action=getCostoProducto&busqueda=${busqueda}`)
             .then(response => {
                 return response.json();
@@ -451,7 +453,6 @@ const app = new Vue({
                 return
             }
 
-            //const found = this.documento.productos_egreso.items.some((producto => producto.codigo === "00000861"));
             let existeEnEgresos = this.documento.productos_egreso.items.findIndex((productoEnArray) => {
                 return productoEnArray.codigo === this.nuevo_producto.codigo;
             });
@@ -476,7 +477,7 @@ const app = new Vue({
             if (existeInArray === -1  && this.nuevo_producto.codigo.length > 0) {
                 this.nuevo_producto.unidades_medida = this.unidades_medida; // Se añade para que luego en lista se pueda editar las medidas KG, GR
                 this.documento.productos_ingreso.items.push(this.nuevo_producto);
-                this.updatePrecioProductosIngresoIguales();
+                //this.updatePrecioProductosIngresoIguales();
                 this.nuevo_producto = new Producto();
                 this.search_producto.text = '';
             }else{
