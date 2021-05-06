@@ -282,7 +282,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                                     <div class="modal-dialog modal-lg" role="document">
                                                         <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h4 class="modal-title"> Observacion del Producto </h4>
+                                                            <h4 class="modal-title"> Observacion del Producto: {{producto.nombre}}</h4>
                                                         </div>
                                                         <div class="modal-body">
                                                             <div class="form-group">
@@ -292,7 +292,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                                             
                                                             <div class="form-group">
                                                                 <label for="comment">Observacion:</label>
-                                                                <textarea class="form-control" rows="5" v-model="producto.observacion"></textarea>
+                                                                <textarea class="form-control" rows="5" maxlength="250" v-model="producto.observacion"></textarea>
                                                             </div>
 
                                                         </div>
