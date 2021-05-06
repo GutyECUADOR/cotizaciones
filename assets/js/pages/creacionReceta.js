@@ -158,44 +158,41 @@ const app = new Vue({
             }); 
                 
         },
-        getProductos() {
+        async getProductos() {
             this.search_producto.isloading = true;
             let busqueda = JSON.stringify(this.search_producto.busqueda);
-            fetch(`./api/inventario/index.php?action=searchProductos&busqueda=${busqueda}`)
+            const response = await fetch(`./api/inventario/index.php?action=searchProductos&busqueda=${busqueda}`)
             .then(response => {
                 return response.json();
-            })
-            .then(productos => {
-              this.search_producto.isloading = false;
-              const productosKit = productos.data.filter( producto => {
-                return producto.Eskit == "1";
-              });
-
-              this.search_producto.results = productosKit;
-             
             }).catch( error => {
                 console.error(error);
             }); 
+
+            this.search_producto.isloading = false;
+            const productosKit = response.data.filter( producto => {
+              return producto.Eskit == "1";
+            });
+
+            this.search_producto.results = productosKit;
             
         },
-        getProductos_composicion() {
+        async getProductos_composicion() {
             this.search_producto_composicion.isloading = true;
             let busqueda = JSON.stringify(this.search_producto_composicion.busqueda);
-            fetch(`./api/inventario/index.php?action=searchProductos&busqueda=${busqueda}`)
+            const response = await fetch(`./api/inventario/index.php?action=searchProductos&busqueda=${busqueda}`)
             .then(response => {
                 return response.json();
-            })
-            .then(productos => {
-              this.search_producto_composicion.isloading = false;
-              const productosKit = productos.data.filter( producto => {
+            }).catch( error => {
+                console.error(error);
+            }); 
+
+            this.search_producto_composicion.isloading = false;
+              const productosKit = response.data.filter( producto => {
                 return producto.Eskit != "1";
               });
               console.log(productosKit);
               this.search_producto_composicion.results = productosKit;
              
-            }).catch( error => {
-                console.error(error);
-            }); 
             
         },
         selectProduct(codigo){
@@ -270,7 +267,7 @@ const app = new Vue({
             let formData = new FormData();
             formData.append('documento', JSON.stringify(this.documento));  
             return;
-            fetch(`./api/inventario/index.php?action=saveCreacionReceta`, {
+            await fetch(`./api/inventario/index.php?action=saveCreacionReceta`, {
                 method: 'POST',
                 body: formData
             })
