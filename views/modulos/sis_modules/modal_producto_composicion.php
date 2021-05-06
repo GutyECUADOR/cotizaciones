@@ -3,7 +3,7 @@
         <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Búsqueda de Producto</h4>
+            <h4 class="modal-title">Búsqueda de Producto para la composición</h4>
         </div>
         <div class="modal-body">
             
@@ -13,7 +13,7 @@
                     <option value="">NOMBRE O CODIGO</option>
                 </select>
                 <div class="input-group-btn">
-                    <button @click="getProductos" type="button" class="btn btn-primary" :disabled="search_producto_composicion.isloading"  >
+                    <button @click="getProductos_composicion" type="button" class="btn btn-primary" :disabled="search_producto_composicion.isloading"  >
                         <i class="fa" :class="[{'fa-spin fa-refresh': search_producto_composicion.isloading}, {  'fa-search' : !search_producto_composicion.isloading  }]" ></i> Buscar
                     </button>
                 </div> 

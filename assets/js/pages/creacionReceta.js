@@ -198,11 +198,11 @@ const app = new Vue({
             $('#modalBuscarProducto').modal('hide');
         },
         addToList(codigo){
-            let existeInArray = this.documento.kit.composicion.findIndex((productoEnArray) => {
-                return productoEnArray.codigo === codigo;
+            let existeInArray = this.documento.kit.composicion.findIndex( productoEnArray => {
+                return productoEnArray.codigo.trim() == codigo.trim();
             });
 
-            if (existeInArray === -1 && this.documento.kit.codigo.length > 0) {
+            if (existeInArray === -1) {
                 this.getProducto(codigo).then( response => {
                     if (response.data) {
                         const producto = response.data.producto;
