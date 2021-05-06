@@ -816,49 +816,48 @@ class InventarioModel extends Conexion  {
     }
     
     public function Winfenix_SaveCreacionReceta (object $documento) {
+        $kit = $documento->kit;
+
         try{
             $this->instancia->beginTransaction();
-            // Ejecuta Sp_Contador Documento
-            $query = "Sp_Contador 'INV','99','','STK',''";
-            
-            $stmt = $this->instancia->prepare($query); 
-            $stmt->execute();
-            $stmt->nextRowset();
-            $nextID = $stmt->fetchColumn();
-            $NextIDWithFormat = str_pad($nextID, 8, '0', STR_PAD_LEFT);
-
-            // Ejecuta Sp_Contador Documento
-            $query = "Sp_Contador 'CNT','99','','DSK',''";
-            
-            $stmt = $this->instancia->prepare($query); 
-            $stmt->execute();
-            $stmt->nextRowset();
-            $nextIDAsiento = $stmt->fetchColumn();
-            $NextIDCNT = '992020DSK'.str_pad($nextIDAsiento, 8, '0', STR_PAD_LEFT);
-            
-            // Ejecuta Sp_comgracab para Ingreso de Inventario
-            $query = "
-            Sp_INVgracab 'I', :usuario, :pcid,'99','2020','STK', ::secuencia, :fecha,'SSTK', :bodega_egreso, :bodega_ingreso,'DOL','1.00','S','0','', :total, :num_cnt,'INV','',' ',' ',' ',' '";
-
-            $stmt = $this->instancia->prepare($query); 
-            $stmt->bindValue(':usuario', $_SESSION["usuarioRUC".APP_UNIQUE_KEY]);
-            $stmt->bindValue(':pcid', php_uname('n'));
-            $stmt->bindValue(':secuencia', $NextIDWithFormat);
-            $stmt->bindValue(':fecha', date('Ymd'));
-            $stmt->bindValue(':bodega_egreso', $documento->productos->bodega_egreso);
-            $stmt->bindValue(':bodega_ingreso', $documento->productos->bodega_ingreso);
-            $stmt->bindValue(':num_cnt', $NextIDCNT);
-            $stmt->bindValue(':total', $documento->productos_egreso->total);
            
-        
-        $stmt->execute();
+            $query = "DELETE INV_KIT  WHERE CodigoKit = :codigoKit";
+            $stmt = $this->instancia->prepare($query); 
+            $stmt->bindValue(':codigoKit', $kit->codigo);
+            $stmt->execute();
+
+            foreach ($kit->composicion as $producto) {
+                $query = "
+                INSERT INV_KIT 
+	                    (Ofi,CODIGOKIT,codigo,unidad,cantidad,COSTO,Tipo,nameKitUno,namekitvar,PrecioUno,PrecioVar,Preparacion, CreadoPor,CreadoDate,PCID)
+                VALUES ('99' , :CODIGOKIT, :codigo, :unidad, :cantidad, :COSTO,'CO','','','0','0', :Preparacion, :CreadoPor, GETDATE(), :PCID)
+                ";  
+                    $stmt = $this->instancia->prepare($query);
+                    $stmt->bindValue(':CODIGOKIT', $kit->codigo);
+                    $stmt->bindValue(':codigo', $producto->codigo);
+                    $stmt->bindValue(':unidad', $producto->unidad);
+                    $stmt->bindValue(':cantidad', $producto->cantidad);
+                    $stmt->bindValue(':COSTO', $producto->precio);
+                    $stmt->bindValue(':Preparacion', '');
+                    $stmt->bindValue(':CreadoPor', $_SESSION["usuarioRUC".APP_UNIQUE_KEY]);
+                    $stmt->bindValue(':PCID', php_uname('n'));
+                    
+                   
+                $stmt->execute();
+            }
+          
+            /* $query = "DELETE INV_KITOBS  WHERE CodigoKit = :codigoKit";
+            $stmt = $this->instancia->prepare($query); 
+            $stmt->bindValue(':codigoKit', $kit->codigo);
+            $stmt->execute(); */
+
                 
             $commit = $this->instancia->commit();
-            return array('status' => 'ok', 'commit' => $commit, 'newcod' => $NextIDWithFormat);
+            return array('status' => 'ok', 'commit' => $commit, 'kit' => $kit->codigo);
             
         }catch(\PDOException $exception){
             $this->instancia->rollBack();
-            return array('status' => 'error', 'message' => $exception->getMessage(), 'newcod' => $NextIDWithFormat );
+            return array('status' => 'error', 'message' => $exception->getMessage());
         }
    
     }

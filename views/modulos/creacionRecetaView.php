@@ -245,7 +245,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                     
 
                         <div class="btn-group" role="group">
-                            <button type="submit" class="btn btn-primary btn-lg" id="btnGuardar"><span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"></span> Registrar</button>
+                            <button type="button" class="btn btn-primary btn-lg" @click="saveDocumento" id="btnGuardar"><span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"></span> Registrar</button>
                         </div>
 
                         <div class="btn-group" role="group">

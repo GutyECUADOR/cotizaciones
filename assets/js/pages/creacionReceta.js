@@ -334,7 +334,6 @@ const app = new Vue({
 
             let formData = new FormData();
             formData.append('documento', JSON.stringify(this.documento));  
-            return;
             await fetch(`./api/inventario/index.php?action=saveCreacionReceta`, {
                 method: 'POST',
                 body: formData
@@ -346,7 +345,7 @@ const app = new Vue({
                 console.log(data);
                 swal({
                     title: "Realizado",
-                    text: `Se ha generado exitosamente el ingreso #IPC ${data.transaction.newcod}`,
+                    text: `Se ha actualizado exitosamente el ingreso KIT # ${data.transaction.kit}`,
                     type: "success",
                     showCancelButton: false,
                     confirmButtonClass: "btn-success",
@@ -354,7 +353,7 @@ const app = new Vue({
                     closeOnConfirm: false
                     },
                     function(){
-                        window.location = './index.php?action=inventario'
+                        window.location = './index.php?action=creacionReceta'
                     });
                 
             })  
