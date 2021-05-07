@@ -198,10 +198,12 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="5"></td>
-                                            <td class="text-center" style="vertical-align: middle;"><b>Total Costo</b></td>
+                                            <td colspan="3" class="text-center" style="vertical-align: middle;"><b>Total</b></td>
+                                            <td><input type="text" v-model="documento.getCantidadItems_Egresos()" class="form-control text-center" readonly></td>
+                                            <td><input type="text" v-model="documento.getCantidadUnidades_Egresos()" class="form-control text-center" readonly></td>
+                                            <td><input type="text" v-model="documento.getTotal_Egresos()" class="form-control text-center" readonly></td>
                                             <td colspan="2">
-                                            <input type="text" v-model="documento.getTotal_Egresos()" class="form-control text-center" readonly></td>
+                                                <input type="text" v-model="documento.getTotal_Egresos()" class="form-control text-center" readonly></td>
                                             </td>
                                         </tr>
 
@@ -307,17 +309,19 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="6"></td>
-                                            <td class="text-center" style="vertical-align: middle;"><b>Total Costo</b></td>
-                                            <td colspan="2">
+                                            <td colspan="3" class="text-center" style="vertical-align: middle;"><b>Total</b></td>
+                                            <td><input type="text" v-model="documento.getCantidadItems_Ingresos()" class="form-control text-center" readonly></td>
+                                            <td><input type="text" v-model="documento.getCantidadUnidades_Ingresos()" class="form-control text-center" readonly></td>
+                                            <td><input type="text" v-model="documento.getTotal_Ingresos()" class="form-control text-center" readonly></td>
+                                            <td colspan="3">
                                             <input type="number" v-model="documento.getTotal_Ingresos()" class="form-control text-center" readonly></td>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td colspan="6"></td>
-                                            <td class="text-center" style="vertical-align: middle;"><b>Diferencia</b></td>
-                                            <td colspan="2">
-                                            <input style="background-color: #ffe7e7" type="text" v-model="documento.getDiferencia_IngresosEgresos()" class="form-control text-center" readonly></td>
+                                            <td colspan="5"></td>
+                                            <td colspan="2" class="text-center" style="vertical-align: middle;"><b>Diferencia <span class="glyphicon glyphicon-arrow-right"></span></b></td>
+                                            <td colspan="3">
+                                                <input style="background-color: #ffe7e7" type="text" v-model="documento.getDiferencia_IngresosEgresos()" class="form-control text-center" readonly></td>
                                             </td>
                                         </tr>
 
@@ -329,51 +333,6 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                 </div>
             </div>
         
-
-            <!-- fila de resumen-->
-            <div class="row">
-                <div class="col-md-12">
-                <div class="panel panel-default">
-                    <!-- Default panel contents -->
-                
-                    <div class="panel-heading clearfix">
-                    <h4 class="panel-title pull-left">Resumen</h4>
-                    </div>
-
-                    <div class="panel-body">
-                        <div class="responsibetable">        
-                            <table class="table table-bordered tableExtras">
-                            <thead>
-                                <th style="width: 5%; min-width: 80px;" class="text-center headerTablaProducto"></th>
-                                <th style="width: 5%; min-width: 80px;" class="text-center headerTablaProducto">Cantidad de Items</th>
-                                <th style="width: 5%; min-width: 80px;" class="text-center headerTablaProducto">Unidades</th>
-                                <th style="width: 20%; min-width: 150px;" class="text-center headerTablaProducto">Total</th>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td><p>Egresos</p></td>
-                                <td><input type="text" v-model="documento.getCantidadItems_Egresos()" class="form-control text-center" readonly></td>
-                                <td><input type="text" v-model="documento.getCantidadUnidades_Egresos()" class="form-control text-center" readonly></td>
-                                <td><input type="text" v-model="documento.getTotal_Egresos()" class="form-control text-center" readonly></td>
-                            </tr>
-                            <tr>
-                                <td><p>Ingresos</p></td>
-                                <td><input type="text" v-model="documento.getCantidadItems_Ingresos()" class="form-control text-center" readonly></td>
-                                <td><input type="text" v-model="documento.getCantidadUnidades_Ingresos()" class="form-control text-center" readonly></td>
-                                <td><input type="text" v-model="documento.getTotal_Ingresos()" class="form-control text-center" readonly></td>
-                            </tr>
-                        
-                            </tbody>
-                            </table>
-
-                        </div>
-                    </div>
-
-                </div>
-                </div>
-            </div>    
-
-    
             <div class="row extraButton">
                 <div class="col-md-12">
                     <div class="btn-group btn-group-justified" role="group" aria-label="...">
