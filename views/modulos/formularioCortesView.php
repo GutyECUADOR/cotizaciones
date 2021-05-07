@@ -77,9 +77,9 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                 <tr>
                                     <th style="width: 5%; min-width: 150px;" class="text-center headerTablaProducto">Codigo</th>
                                     <th style="width: 10%; min-width: 200px;" class="text-center headerTablaProducto">Nombre del Articulo</th>
-                                    <th style="width: 2%; min-width: 80px;"  class="text-center headerTablaProducto">Unidad</th>
-                                    <th style="width: 2%; min-width: 80px;"  class="text-center headerTablaProducto">Cantidad</th>
                                     <th style="width: 5%; min-width: 100px;" class="text-center headerTablaProducto">Stock</th>
+                                    <th style="width: 2%; min-width: 80px;"  class="text-center headerTablaProducto">Cantidad</th>
+                                    <th style="width: 2%; min-width: 80px;"  class="text-center headerTablaProducto">Unidad</th>
                                     <th style="width: 5%; min-width: 120px;" class="text-center headerTablaProducto">Costo / {{ nuevo_producto.unidad }}</th>
                                     <th style="width: 5%; min-width: 120px;" class="text-center headerTablaProducto">Subtotal</th>
                                 </tr>
@@ -100,17 +100,17 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                             <input type="text" v-model="nuevo_producto.nombre" class="form-control text-center input-sm" readonly>
                                         </td>
                                         <td>
-                                            <select v-model='nuevo_producto.unidad' @change="getCostoProducto(nuevo_producto)" class="form-control input-sm">
-                                                <option v-for="unidad in unidades_medida" :value="unidad.Unidad.trim()">
-                                                {{unidad.Unidad}}
-                                                </option>
-                                            </select>
+                                            <input type="text" v-model="nuevo_producto.stock" class="form-control text-center input-sm" readonly>
                                         </td>
                                         <td>
                                             <input type="number" @change="nuevo_producto.setCantidad($event.target.value);" :value="nuevo_producto.cantidad" class="form-control text-center input-sm" step=".0001" min="0" oninput="validity.valid||(value=1);"></td>
                                         </td>
                                         <td>
-                                            <input type="text" v-model="nuevo_producto.stock" class="form-control text-center input-sm" readonly>
+                                            <select v-model='nuevo_producto.unidad' @change="getCostoProducto(nuevo_producto)" class="form-control input-sm">
+                                                <option v-for="unidad in unidades_medida" :value="unidad.Unidad.trim()">
+                                                {{unidad.Unidad}}
+                                                </option>
+                                            </select>
                                         </td>
                                         <td>
                                             <input type="number" v-model="nuevo_producto.precio" class="form-control text-center input-sm" min="0" value="0" step=".0001" >
@@ -133,7 +133,6 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
             </div>
 
             <!-- items en lista egreso-->
-
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default">
@@ -167,10 +166,10 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                         <tr>
                                             <th style="width: 10%;" class="text-center headerTablaProducto">Codigo</th>
                                             <th style="width: 20%; min-width: 200px;" class="text-center headerTablaProducto">Nombre del Articulo</th>
-                                            <th style="width: 5%; min-width: 80px;" class="text-center headerTablaProducto">Unidad</th>
-                                            <th style="width: 3%" class="text-center headerTablaProducto">Cantidad</th>
-                                            <th style="width: 5%; min-width: 100px;" class="text-center headerTablaProducto">Costo</th>
                                             <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Stock</th>
+                                            <th style="width: 3%" class="text-center headerTablaProducto">Cantidad</th>
+                                            <th style="width: 5%; min-width: 80px;" class="text-center headerTablaProducto">Unidad</th>
+                                            <th style="width: 5%; min-width: 100px;" class="text-center headerTablaProducto">Costo</th>
                                             <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Subtotal</th>
                                             <th style="width: 5%" class="text-center headerTablaProducto">Eliminar</th>
                                         </tr>
@@ -179,6 +178,8 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                         <tr v-for="producto in documento.productos_egreso.items">
                                             <td><input type="text" class="form-control text-center input-sm" v-model="producto.codigo" disabled></td>
                                             <td><input type="text" class="form-control text-center input-sm"  v-model="producto.nombre" readonly></td>
+                                            <td><input type="text" class="form-control text-center input-sm" v-model="producto.stock" disabled></td>
+                                            <td><input type="number" class="form-control text-center input-sm" @change="producto.setCantidad($event.target.value)" :value="producto.cantidad" step=".0001" min="0" oninput="validity.valid||(value=1);"></td>
                                             <td>
                                                 <select v-model="producto.unidad" @change="getCostoProducto(producto)" class="form-control input-sm">
                                                     <option v-for="unidad in producto.unidades_medida" :value="unidad.Unidad.trim()">
@@ -186,11 +187,10 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                                     </option>
                                                 </select>
                                             </td>
-                                            <td><input type="number" class="form-control text-center input-sm" @change="producto.setCantidad($event.target.value)" :value="producto.cantidad" step=".0001" min="0" oninput="validity.valid||(value=1);"></td>
                                             <td>
-                                                <input type="text" class="form-control text-center input-sm" v-model="producto.precio" readonly>
+                                                <input type="text" class="form-control text-center input-sm" v-model="producto.precio">
                                             </td>
-                                            <td><input type="text" class="form-control text-center input-sm" v-model="producto.stock" disabled></td>
+                                            
                                             <td><input type="text" class="form-control text-center input-sm" v-model="producto.getSubtotal()" readonly></td>
                                             <td><button type="button" @click="removeEgresoItem(producto.codigo)" class="btn btn-danger btn-sm btn-block"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Eliminar</button>
                                             </td>
@@ -199,7 +199,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                     <tfoot>
                                         <tr>
                                             <td colspan="5"></td>
-                                            <td class="text-center" style="vertical-align: middle;"><b>Total Productos</b></td>
+                                            <td class="text-center" style="vertical-align: middle;"><b>Total Costo</b></td>
                                             <td colspan="2">
                                             <input type="text" v-model="documento.getTotal_Egresos()" class="form-control text-center" readonly></td>
                                             </td>
@@ -247,10 +247,10 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                         <tr>
                                             <th style="width: 10%;" class="text-center headerTablaProducto">Codigo</th>
                                             <th style="width: 20%; min-width: 200px;" class="text-center headerTablaProducto">Nombre del Articulo</th>
-                                            <th style="width: 5%; min-width: 80px;"  class="text-center headerTablaProducto">Unidad</th>
-                                            <th style="width: 3%; min-width: 90px;" class="text-center headerTablaProducto">Cantidad</th>
-                                            <th style="width: 5%; min-width: 70px;" class="text-center headerTablaProducto">Costo</th>
                                             <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Stock</th>
+                                            <th style="width: 3%; min-width: 90px;" class="text-center headerTablaProducto">Cantidad</th>
+                                            <th style="width: 5%; min-width: 80px;"  class="text-center headerTablaProducto">Unidad</th>
+                                            <th style="width: 5%; min-width: 70px;" class="text-center headerTablaProducto">Costo</th>
                                             <th style="width: 10%; min-width: 70px;" class="text-center headerTablaProducto">Subtotal</th>
                                             <th style="width: 5%" class="text-center headerTablaProducto">Observ.</th>
                                             <th style="width: 5%" class="text-center headerTablaProducto">Eliminar</th>
@@ -261,6 +261,8 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                         <tr v-for="producto in documento.productos_ingreso.items">
                                             <td><input type="text" class="form-control text-center input-sm" v-model="producto.codigo" disabled></td>
                                             <td><input type="text" class="form-control text-center input-sm"  v-model="producto.nombre" readonly></td>
+                                            <td><input type="text" class="form-control text-center input-sm" v-model="producto.stock" disabled></td>
+                                            <td><input type="number" class="form-control text-center input-sm" @change="producto.setCantidad($event.target.value)" :value="producto.cantidad" step=".0001" min="0" oninput="validity.valid||(value='0');"></td>
                                             <td>
                                                 <select v-model="producto.unidad" @change="getCostoProducto(producto)" class="form-control input-sm">
                                                     <option v-for="unidad in producto.unidades_medida" :value="unidad.Unidad.trim()">
@@ -268,11 +270,9 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                                     </option>
                                                 </select>
                                             </td>
-                                            <td><input type="number" class="form-control text-center input-sm" @change="producto.setCantidad($event.target.value)" :value="producto.cantidad" step=".0001" min="0" oninput="validity.valid||(value='0');"></td>
                                             <td>
                                                 <input type="text" class="form-control text-center input-sm" v-model="producto.precio">
                                             </td>
-                                            <td><input type="text" class="form-control text-center input-sm" v-model="producto.stock" disabled></td>
                                             <td><input type="text" class="form-control text-center input-sm" v-model="producto.getSubtotal()" readonly></td>
                                             <td><button type="button" @click="showDescriptionModal(producto)" class="btn btn-primary btn-sm btn-block"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
                                             <td><button type="button" @click="removeIngresoItem(producto.codigo)" class="btn btn-danger btn-sm btn-block"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
@@ -308,7 +308,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                     <tfoot>
                                         <tr>
                                             <td colspan="6"></td>
-                                            <td class="text-center" style="vertical-align: middle;"><b>Total Productos</b></td>
+                                            <td class="text-center" style="vertical-align: middle;"><b>Total Costo</b></td>
                                             <td colspan="2">
                                             <input type="number" v-model="documento.getTotal_Ingresos()" class="form-control text-center" readonly></td>
                                             </td>
