@@ -2,7 +2,7 @@
 
 use App\Controllers\LoginController;
 
-if (isset($_SESSION["usuarioRUC"])){
+if (isset($_SESSION["usuarioRUC".APP_UNIQUE_KEY])){
         echo "Sigue Logeado";
         header('location:index.php?action=inicio');  
     }
