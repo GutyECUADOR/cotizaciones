@@ -332,13 +332,21 @@ const app = new Vue({
         showDescriptionModal(producto){
             $('#modalPreparacion').modal('show');
         },
-        async saveDocumento(){
-            if (!this.validateSaveDocument()) {
+        validateSaveDocument(){
+            return true;
+        },
+        async saveReceta(){
+            const confirmar = confirm('Confirma actualizar la receta?');
+            if (!confirmar) {
                 return;
             }
 
-            console.log(this.documento);
+            if (this.documento.kit.codigo == '') {
+                alert('No se ha indicado una receta');
+                return
+            }
 
+            console.log(this.documento);
             let formData = new FormData();
             formData.append('documento', JSON.stringify(this.documento));  
             await fetch(`./api/inventario/index.php?action=saveCreacionReceta`, {
@@ -370,9 +378,10 @@ const app = new Vue({
 
             
         },
-        validateSaveDocument(){
-           return true;
+        async saveDocumento(){
+            alert('Save');
         }
+        
     },
     mounted(){
 
