@@ -407,6 +407,7 @@ const app = new Vue({
 
             if (response) {
                 console.log(response);
+                alert(response.transaction.message);
             }
 
             

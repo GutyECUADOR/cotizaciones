@@ -894,9 +894,9 @@ class InventarioModel extends Conexion  {
             
 
             // Creacion de NextID STK
-            $stmt = $this->instancia->prepare("SET NOCOUNT ON  exec Sp_Contador 'INV','99','','STK',''"); 
+            $stmt = $this->instancia->prepare("exec Sp_Contador 'INV','99','','STK',''"); 
             $stmt->execute();
-          
+            
             $nextID = $stmt->fetchColumn();
             $STK_secuencia =  str_pad($nextID, 8, '0', STR_PAD_LEFT);
            
@@ -913,8 +913,9 @@ class InventarioModel extends Conexion  {
            
             $nextID = $stmt->fetchColumn();
             $DEK_secuencia =  str_pad($nextID, 8, '0', STR_PAD_LEFT);
+           
         
-            // Ejecuta Sp_INVgracab STK
+            // Ejecuta Sp_INVgracab STK (Egresos)
             $query = "
             Sp_INVgracab 'I', :usuario, :pcid,'99','2020','STK', :secuencia, :fecha,'SSTK', :bodega_egreso, :bodega_ingreso,'DOL', :factor,'S','0','', :precio, :num_cnt,'INV', :num_rel,' ',' ',' ',' '
             ";
@@ -933,6 +934,7 @@ class InventarioModel extends Conexion  {
             $stmt->execute();
             // Ejecuta Sp_invgraMOV STK
 
+            //Save inv_gramov
             foreach ($documento->kit->composicion as $producto) {
                 $query = "
                 Sp_invgraMOV 'I','99','2020','STK', :secuencia, :fecha, :bodega_egreso,'S', :codproducto, :unidadproducto, :cantidadproducto, :costoproducto,'0', :costototal,'','','','','', :codKIT
@@ -950,7 +952,7 @@ class InventarioModel extends Conexion  {
                     
                 $stmt->execute();
             }
-
+            // Save mov_kardex
             foreach ($documento->kit->composicion as $producto) {
                 $query = "
                 Sp_invgraKardex 'I','99','2020','STK', :secuencia,'INV', :fecha,' ',' ',' ', :bodega_egreso,'S', :codproducto, :unidadproducto, :cantidadproducto, :costoproducto, :costototal, :usuario, :pcid,'DOL', :factor
@@ -972,6 +974,74 @@ class InventarioModel extends Conexion  {
                 $stmt->execute();
             }
 
+
+            // Ejecuta Sp_INVgracab ETK (Ingresos)
+            $query = "
+            Sp_INVgracab 'I', :usuario, :pcid,'99','2020','ETK', :secuencia, :fecha,'EETK', :bodega_ingreso, :bodega_egreso,'DOL', :factor,'E','0','', :precio, :num_cnt,' ',' ',' ',' ',' ',' '
+            ";
+
+            $stmt = $this->instancia->prepare($query); 
+            $stmt->bindValue(':usuario', $_SESSION["usuarioRUC".APP_UNIQUE_KEY]);
+            $stmt->bindValue(':pcid', php_uname('n'));
+            $stmt->bindValue(':secuencia', $STK_secuencia);
+            $stmt->bindValue(':fecha', date('Ymd'));
+            $stmt->bindValue(':bodega_egreso', $documento->bodega_egreso);
+            $stmt->bindValue(':bodega_ingreso', $documento->bodega_ingreso);
+            $stmt->bindValue(':factor', $documento->kit->factor);
+            $stmt->bindValue(':precio', $documento->kit->precio);
+            $stmt->bindValue(':num_cnt', '992020DEK'.$STK_secuencia);
+            $stmt->execute();
+
+            // Ejecuta Sp_INVgrmov ETK (Ingresos)
+            $producto = $documento->kit;
+            $query = "
+                Sp_invgraMOV 'I','99','2020','ETK', :secuencia, :fecha, :bodega_ingreso,'E', :codproducto, :unidadproducto, :cantidadproducto, :costoproducto,'', :costototal,''
+            ";  
+                $stmt = $this->instancia->prepare($query);
+                $stmt->bindValue(':secuencia', $STK_secuencia);
+                $stmt->bindValue(':fecha', date('Ymd'));
+                $stmt->bindValue(':bodega_ingreso', $documento->bodega_ingreso);
+                $stmt->bindValue(':codproducto', $producto->codigo);
+                $stmt->bindValue(':unidadproducto', $producto->unidad);
+                $stmt->bindValue(':cantidadproducto', $producto->cantidad);
+                $stmt->bindValue(':costoproducto', $producto->precio);
+                $stmt->bindValue(':costototal', ($producto->precio * $producto->cantidad));
+                $stmt->execute();
+                
+            // Ejecuta Sp_invgraKardex ETK (Ingresos)
+            $query = "
+            Sp_invgraKardex 'I','99','2020','STK', :secuencia,'INV', :fecha,' ',' ',' ', :bodega_ingreso,'S', :codproducto, :unidadproducto, :cantidadproducto, :costoproducto, :costototal, :usuario, :pcid,'DOL', :factor
+
+            ";  
+                $stmt = $this->instancia->prepare($query);
+                $stmt->bindValue(':secuencia', $STK_secuencia);
+                $stmt->bindValue(':fecha', date('Ymd'));
+                $stmt->bindValue(':bodega_ingreso', $documento->bodega_ingreso);
+                $stmt->bindValue(':codproducto', $producto->codigo);
+                $stmt->bindValue(':unidadproducto', $producto->unidad);
+                $stmt->bindValue(':cantidadproducto', $producto->cantidad);
+                $stmt->bindValue(':costoproducto', $producto->precio);
+                $stmt->bindValue(':costototal', ($producto->precio * $producto->cantidad));
+                $stmt->bindValue(':usuario', $_SESSION["usuarioRUC".APP_UNIQUE_KEY]);
+                $stmt->bindValue(':pcid', php_uname('n'));
+                $stmt->bindValue(':factor', $producto->factor);
+                
+                $stmt->execute();
+
+
+            // Ejecuta Sp_cntgracab ETK (Ingresos)
+            $query = "
+            Sp_cntgracab'I',:usuario, :pcid,'99','2020','DSK', :secuencia, :fecha,'DOL', :factor, :glosa,'','INV','','','',:idDOC
+            ";  
+                $stmt = $this->instancia->prepare($query);
+                $stmt->bindValue(':usuario', $_SESSION["usuarioRUC".APP_UNIQUE_KEY]);
+                $stmt->bindValue(':pcid', php_uname('n'));
+                $stmt->bindValue(':secuencia', $DSK_secuencia);
+                $stmt->bindValue(':fecha', date('Ymd'));
+                $stmt->bindValue(':factor', $documento->kit->factor);
+                $stmt->bindValue(':glosa', '[Inv] - 992020STK'.$STK_secuencia);
+                $stmt->bindValue(':idDOC', '992020STK'.$STK_secuencia);
+                $stmt->execute();
 
                 
             $commit = $this->instancia->commit();
