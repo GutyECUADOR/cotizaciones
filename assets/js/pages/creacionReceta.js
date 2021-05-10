@@ -342,7 +342,7 @@ const app = new Vue({
             }
 
             if (this.documento.kit.codigo == '') {
-                alert('No se ha indicado una receta');
+                alert('No se ha indicado un KIT');
                 return
             }
 
@@ -379,7 +379,35 @@ const app = new Vue({
             
         },
         async saveDocumento(){
-            alert('Save');
+            const confirmar = confirm('Confirma guardar el egreso por producion?');
+            if (!confirmar) {
+                return;
+            }
+
+            if (this.documento.kit.codigo == '') {
+                alert('No se ha indicado un KIT.');
+                return
+            }
+
+            console.log(this.documento);
+            let formData = new FormData();
+            formData.append('documento', JSON.stringify(this.documento));  
+            const response = await fetch(`./api/inventario/index.php?action=saveTransformacionKITS`, {
+                                    method: 'POST',
+                                    body: formData
+                                    })
+                                    .then(response => {
+                                        return response.json();
+                                    })
+                                    .catch(function(error) {
+                                        console.error(error);
+                                    });  
+
+            if (response) {
+                console.log(response);
+            }
+
+            
         }
         
     },

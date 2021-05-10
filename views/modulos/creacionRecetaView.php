@@ -102,9 +102,14 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                     <div class="panel panel-default">
                     <div class="panel-heading">Detalle</div>
                         <div class="panel-body">
-                            
                             <div class="form-group">
                                 <textarea class="form-control" rows="2" id="comment" name="comment" maxlength="100" placeholder="Comentario de hasta maximo 100 caracteres..."></textarea>
+                            </div>
+                            <div class="form-group">
+                            <label>Se puede producir: </label>
+                                <div class="well text-center wellextra" >
+                                    <span id="welltotal_produccion">0</span>
+                                </div>
                             </div>
                             
                         </div>
@@ -130,11 +135,13 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                             <table id="tablaAgregaNuevo" class="table table-bordered tableExtras">
                                 <thead>
                                 <tr>
-                                    <th style="width: 5%; min-width: 150px;" class="text-center headerTablaProducto">Codigo</th>
+                                    <th style="width: 5%; min-width: 120px;" class="text-center headerTablaProducto">Codigo</th>
                                     <th style="width: 10%; min-width: 200px;" class="text-center headerTablaProducto">Nombre del Articulo</th>
-                                    <th style="width: 2%; min-width: 80px;"  class="text-center headerTablaProducto">Unidad</th>
+                                    <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Stock</th>
+                                    <th style="width: 3%; min-width: 90px;" class="text-center headerTablaProducto">Cantidad</th>
+                                    <th style="width: 5%; min-width: 80px;"  class="text-center headerTablaProducto">Unidad</th>
                                     <th style="width: 5%; min-width: 120px;" class="text-center headerTablaProducto">Costo</th>
-                                    <th style="width: 5%; min-width: 120px;" class="text-center headerTablaProducto">Precio</th>
+                                    <th style="width: 5%; min-width: 120px;" class="text-center headerTablaProducto">Subtotal</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -152,8 +159,10 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                         <td>
                                             <input type="text" v-model="documento.kit.nombre" class="form-control text-center input-sm" readonly>
                                         </td>
+                                        <td><input type="text" class="form-control text-center input-sm" v-model="documento.kit.stock" disabled></td>
+                                        <td><input type="number" class="form-control text-center input-sm" @change="documento.kit.setCantidad($event.target.value)" :value="documento.kit.cantidad" step=".0001" min="0" oninput="validity.valid||(value='0');"></td>
                                         <td>
-                                            <select v-model='documento.kit.unidad' @change="getCostoProducto(kit)" class="form-control input-sm">
+                                            <select v-model='documento.kit.unidad' @change="getCostoProducto(documento.kit)" class="form-control input-sm">
                                                 <option v-for="unidad in documento.kit.unidades_medida" :value="unidad.Unidad.trim()">
                                                 {{unidad.Unidad}}
                                                 </option>
@@ -189,7 +198,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                         <h4 class="panel-title pull-left" style="padding-top: 7.5px; padding-bottom: 7.5px;"><i class="fa fa-list" aria-hidden="true"></i> Detalle del KIT (Composición)</h4>
                             <div class="btn-group pull-right">
                                 <button type="button" @click="getComposicionProducto(documento.kit.codigo)" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-refresh"></span> Recargar Composicion</button>
-                                <button type="button" @click="saveReceta" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-floppy-disk"></span> Actualizar Receta</button>
+                                <button type="button" @click="saveReceta" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar cambios en Receta</button>
                                 <button type="button"  data-toggle="modal" data-target="#modal_producto_composicion" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-search"></span> Agregar Item a Composicion</button>
                             </div>
                         </div>
