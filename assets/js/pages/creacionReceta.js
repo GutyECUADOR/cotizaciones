@@ -392,7 +392,8 @@ const app = new Vue({
 
             console.log(this.documento);
             let formData = new FormData();
-            formData.append('documento', JSON.stringify(this.documento));  
+            formData.append('documento', JSON.stringify(this.documento)); 
+             
             const response = await fetch(`./api/inventario/index.php?action=saveTransformacionKITS`, {
                                     method: 'POST',
                                     body: formData

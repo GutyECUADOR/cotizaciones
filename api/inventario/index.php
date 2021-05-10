@@ -127,6 +127,20 @@ $InventarioController = new InventarioController();
 
         break;
 
+        case 'saveTransformacionKITS':
+          if (isset($_POST['documento'])) {
+            $documento = json_decode($_POST['documento']);
+            $respuesta = $InventarioController->saveTransformacionKITS($documento);
+            $rawdata = array('status' => 'OK', 'transaction' => $respuesta);
+            
+          }else{
+            $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha recibido objeto de inventario requerido, revise estructura de JS.');
+          }
+        
+          echo json_encode($rawdata);
+
+        break;
+
         case 'test':
             $rawdata = array('status' => 'OK', 'mensaje' => 'Respuesta correcta');
             echo json_encode($rawdata);

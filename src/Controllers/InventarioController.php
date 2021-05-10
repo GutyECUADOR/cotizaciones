@@ -66,5 +66,12 @@ class InventarioController  {
         return $response;
     }
 
+    function saveTransformacionKITS(object $documento) {
+        $response = $this->inventarioModel->Winfenix_saveTransformacionKITS($documento);
+        return $response;
+    }
+
+    
+
 
 }

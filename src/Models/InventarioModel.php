@@ -490,8 +490,6 @@ class InventarioModel extends Conexion  {
         return $resulset;  
     }
 
-    
-    
     public function getProducto(string $busqueda) {
         //Query de consulta con parametros para bindear si es necesario.
         $query = "
@@ -654,8 +652,6 @@ class InventarioModel extends Conexion  {
             }
         return $resulset;  
     }
-
-   
 
     public function Winfenix_SaveIngreso (object $documento) {
         try{
@@ -889,6 +885,111 @@ class InventarioModel extends Conexion  {
         }
    
     }
+
+    public function Winfenix_saveTransformacionKITS (object $documento) {
+        $kit = $documento->kit;
+
+        try{
+            $this->instancia->beginTransaction();
+            
+
+            // Creacion de NextID STK
+            $stmt = $this->instancia->prepare("SET NOCOUNT ON  exec Sp_Contador 'INV','99','','STK',''"); 
+            $stmt->execute();
+          
+            $nextID = $stmt->fetchColumn();
+            $STK_secuencia =  str_pad($nextID, 8, '0', STR_PAD_LEFT);
+           
+            // Creacion de NextID DSK
+            $stmt = $this->instancia->prepare("exec Sp_Contador 'CNT','99','','DSK',''"); 
+            $stmt->execute();
+           
+            $nextID = $stmt->fetchColumn();
+            $DSK_secuencia =  str_pad($nextID, 8, '0', STR_PAD_LEFT);
+
+            // Creacion de NextID DEK
+            $stmt = $this->instancia->prepare("exec Sp_Contador 'CNT','99','','DSK',''"); 
+            $stmt->execute();
+           
+            $nextID = $stmt->fetchColumn();
+            $DEK_secuencia =  str_pad($nextID, 8, '0', STR_PAD_LEFT);
+        
+            // Ejecuta Sp_INVgracab STK
+            $query = "
+            Sp_INVgracab 'I', :usuario, :pcid,'99','2020','STK', :secuencia, :fecha,'SSTK', :bodega_egreso, :bodega_ingreso,'DOL', :factor,'S','0','', :precio, :num_cnt,'INV', :num_rel,' ',' ',' ',' '
+            ";
+
+            $stmt = $this->instancia->prepare($query); 
+            $stmt->bindValue(':usuario', $_SESSION["usuarioRUC".APP_UNIQUE_KEY]);
+            $stmt->bindValue(':pcid', php_uname('n'));
+            $stmt->bindValue(':secuencia', $STK_secuencia);
+            $stmt->bindValue(':fecha', date('Ymd'));
+            $stmt->bindValue(':bodega_egreso', $documento->bodega_egreso);
+            $stmt->bindValue(':bodega_ingreso', $documento->bodega_ingreso);
+            $stmt->bindValue(':factor', $documento->kit->factor);
+            $stmt->bindValue(':precio', $documento->kit->precio);
+            $stmt->bindValue(':num_cnt', '992020DSK'.$STK_secuencia);
+            $stmt->bindValue(':num_rel', '992020ETK'.$STK_secuencia);
+            $stmt->execute();
+            // Ejecuta Sp_invgraMOV STK
+
+            foreach ($documento->kit->composicion as $producto) {
+                $query = "
+                Sp_invgraMOV 'I','99','2020','STK', :secuencia, :fecha, :bodega_egreso,'S', :codproducto, :unidadproducto, :cantidadproducto, :costoproducto,'0', :costototal,'','','','','', :codKIT
+                ";  
+                    $stmt = $this->instancia->prepare($query);
+                    $stmt->bindValue(':secuencia', $STK_secuencia);
+                    $stmt->bindValue(':fecha', date('Ymd'));
+                    $stmt->bindValue(':bodega_egreso', $documento->bodega_egreso);
+                    $stmt->bindValue(':codproducto', $producto->codigo);
+                    $stmt->bindValue(':unidadproducto', $producto->unidad);
+                    $stmt->bindValue(':cantidadproducto', $producto->cantidad);
+                    $stmt->bindValue(':costoproducto', $producto->precio);
+                    $stmt->bindValue(':costototal', ($producto->precio * $producto->cantidad));
+                    $stmt->bindValue(':codKIT', $documento->kit->codigo);
+                    
+                $stmt->execute();
+            }
+
+            foreach ($documento->kit->composicion as $producto) {
+                $query = "
+                Sp_invgraKardex 'I','99','2020','STK', :secuencia,'INV', :fecha,' ',' ',' ', :bodega_egreso,'S', :codproducto, :unidadproducto, :cantidadproducto, :costoproducto, :costototal, :usuario, :pcid,'DOL', :factor
+
+                ";  
+                    $stmt = $this->instancia->prepare($query);
+                    $stmt->bindValue(':secuencia', $STK_secuencia);
+                    $stmt->bindValue(':fecha', date('Ymd'));
+                    $stmt->bindValue(':bodega_egreso', $documento->bodega_egreso);
+                    $stmt->bindValue(':codproducto', $producto->codigo);
+                    $stmt->bindValue(':unidadproducto', $producto->unidad);
+                    $stmt->bindValue(':cantidadproducto', $producto->cantidad);
+                    $stmt->bindValue(':costoproducto', $producto->precio);
+                    $stmt->bindValue(':costototal', ($producto->precio * $producto->cantidad));
+                    $stmt->bindValue(':usuario', $_SESSION["usuarioRUC".APP_UNIQUE_KEY]);
+                    $stmt->bindValue(':pcid', php_uname('n'));
+                    $stmt->bindValue(':factor', $producto->factor);
+                    
+                $stmt->execute();
+            }
+
+
+                
+            $commit = $this->instancia->commit();
+            return array('status' => 'ok', 
+                        'commit' => $commit, 
+                        'STK_secuencia' => $STK_secuencia, 
+                        'DSK_secuencia' => $DSK_secuencia, 
+                        'DEK_secuencia' => $DEK_secuencia);
+            
+        }catch(\PDOException $exception){
+            $this->instancia->rollBack();
+            return array('status' => 'error', 'message' => $exception->getMessage());
+        }
+   
+    }
+
+
+    
     
 
     
