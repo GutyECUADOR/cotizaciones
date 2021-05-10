@@ -107,6 +107,7 @@ const app = new Vue({
                     kit.unidades_medida = response.data.unidades_medida;
                     this.getComposicionProducto(kit.codigo);
                     this.documento.kit = kit;
+                    this.getCostoProducto(this.documento.kit);
                    
                 }else{   
                     new PNotify({
