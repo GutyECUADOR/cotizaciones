@@ -197,7 +197,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                         <div class="panel-heading clearfix">
                         <h4 class="panel-title pull-left" style="padding-top: 7.5px; padding-bottom: 7.5px;"><i class="fa fa-list" aria-hidden="true"></i> Detalle del KIT (Composición)</h4>
                             <div class="btn-group pull-right">
-                                <button type="button" @click="getComposicionProducto(documento.kit.codigo)" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-refresh"></span> Recargar Composicion</button>
+                                <button type="button" @click="setKit(documento.kit.codigo)" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-refresh"></span> Recargar Composicion</button>
                                 <button type="button" @click="saveReceta" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar cambios en Receta</button>
                                 <button type="button"  data-toggle="modal" data-target="#modal_producto_composicion" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-search"></span> Agregar Item a Composicion</button>
                             </div>

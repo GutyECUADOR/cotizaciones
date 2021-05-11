@@ -100,27 +100,65 @@ const app = new Vue({
       documento : new Documento()
     },
     methods:{
-        setKit(codigo){
-            this.getProducto(codigo).then( response => {
-                if (response.data) {
-                    const producto = response.data.producto;
-                    const kit = new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, 1, producto.PrecA, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
-                   
-                    kit.unidades_medida = response.data.unidades_medida;
-                    this.getComposicionProducto(kit.codigo);
+        async setKit(codigo){
+            const response = await this.getProducto(codigo);  
+            if (response.data) {
+                const producto = response.data.producto;
+                const kit = new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, 1, producto.PrecA, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
+               
+                kit.unidades_medida = response.data.unidades_medida;
+                const responseComposicion = await this.getComposicionProducto(kit.codigo);
+
+                if (responseComposicion.data) {
+                    let productosComposicion = [];
+                    responseComposicion.data.forEach( async productoDB => {
+                       
+                        let productoComposicion = await this.getProducto(productoDB.Codigo.trim());
+                        if (productoComposicion.data) {
+                            const producto = productoComposicion.data.producto;
+                            
+                            const newProduct = new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, productoDB.Cantidad, producto.Costo, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
+                            const prodcutoCostoActualizado = await this.getCostoProducto(newProduct);
+                            prodcutoCostoActualizado.unidades_medida = productoComposicion.data.unidades_medida;
+                            this.documento.kit.descripcion = productoDB.Preparacion;
+                            productosComposicion.push(prodcutoCostoActualizado);
+                        }else{   
+                            new PNotify({
+                                title: 'Item no disponible',
+                                text: `No se ha encontrado el producto con el codigo: ' ${producto.Codigo}`,
+                                delay: 3000,
+                                type: 'warn',
+                                styling: 'bootstrap3'
+                            });
+                        }
+                    });
+
                     this.documento.kit = kit;
-                    this.getCostoProducto(this.documento.kit);
-                   
-                }else{   
+                    this.documento.kit.composicion = productosComposicion;
+                    
+                //this.getCostoProducto(this.documento.kit);
+                }else{
                     new PNotify({
                         title: 'Item no disponible',
-                        text: `No se ha encontrado el producto con el codigo: ' ${codigo}`,
+                        text: `No se ha encontrado la composicion del KIT ${codigo}`,
                         delay: 3000,
                         type: 'warn',
                         styling: 'bootstrap3'
                     });
                 }
-            });  
+                
+
+               
+               
+            }else{   
+                new PNotify({
+                    title: 'Item no disponible',
+                    text: `No se ha encontrado el producto con el codigo: ' ${codigo}`,
+                    delay: 3000,
+                    type: 'warn',
+                    styling: 'bootstrap3'
+                });
+            }
         },
         async getProducto(codigo) {
             return await fetch(`./api/inventario/index.php?action=getProducto&busqueda=${codigo}`)
@@ -142,7 +180,7 @@ const app = new Vue({
             }).catch( error => {
                 console.error(error);
             }); 
-
+            
                 if (response.data) {
                     producto.setStock(response.data.Stock);
                     producto.setFactor(response.data.factor);
@@ -156,6 +194,7 @@ const app = new Vue({
                         styling: 'bootstrap3'
                     });
                 }
+            return producto;
                 
         },
         async getProductos() {
@@ -249,55 +288,17 @@ const app = new Vue({
             
         },
         async getComposicionProducto(codigo){
-            const response = await fetch(`./api/inventario/index.php?action=getComposicionProducto&busqueda=${codigo}`)
+            return await fetch(`./api/inventario/index.php?action=getComposicionProducto&busqueda=${codigo}`)
             .then(response => {
                 return response.json();
             }).catch( error => {
                 console.error(error);
             }); 
-           
-
-            if (response.data) {
-                let productosComposicion = [];
-                response.data.forEach( productoDB => {
-                    console.log(productoDB);
-                    this.getProducto(productoDB.Codigo).then( response => {
-                        if (response.data) {
-                            const producto = response.data.producto;
-                            
-                            const newProduct = new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, productoDB.Cantidad, producto.Costo, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
-                            this.getCostoProducto(newProduct);
-                            newProduct.unidades_medida = response.data.unidades_medida;
-                            this.documento.kit.descripcion = productoDB.Preparacion;
-                            productosComposicion.push(newProduct);
-                        }else{   
-                            new PNotify({
-                                title: 'Item no disponible',
-                                text: `No se ha encontrado el producto con el codigo: ' ${producto.Codigo}`,
-                                delay: 3000,
-                                type: 'warn',
-                                styling: 'bootstrap3'
-                            });
-                        }
-                    });
-                });
-                this.documento.kit.composicion = productosComposicion;
-                return productosComposicion;
-            }else{
-                new PNotify({
-                    title: 'Item no disponible',
-                    text: `No se ha encontrado la composicion del KIT ${codigo}`,
-                    delay: 3000,
-                    type: 'warn',
-                    styling: 'bootstrap3'
-                });
-            }
         },
         setPreparacionToProducts(){
             this.documento.kit.composicion.forEach( producto => {
                 producto.descripcion = this.documento.kit.descripcion;
             });
-            
         },
         getCantidadByFactor(producto) {
             const codigo = producto.codigo;
