@@ -24,6 +24,7 @@ $InventarioController = new InventarioController();
             $respuesta = $InventarioController->searchProductos($busqueda);
             $rawdata = array('status' => 'ok', 'mensaje' => 'respuesta correcta', 'data' => $respuesta);
           }else{
+            http_response_code(400);
             $rawdata = array('status' => 'error', 'mensaje' => 'No se ha indicado parámetros.');
           }
           echo json_encode($rawdata);
@@ -36,6 +37,7 @@ $InventarioController = new InventarioController();
             $rawdata = array('status' => 'OK', 'message' => 'Busqueda finalizada', 'data' => $respuesta);
             
           }else{
+            http_response_code(400);
             $rawdata = array('status' => 'error', 'message' => 'No se ha recibido extra data.');
           }
         
@@ -50,6 +52,7 @@ $InventarioController = new InventarioController();
             $rawdata = array('status' => 'OK', 'message' => 'Busqueda finalizada', 'data' => $respuesta);
             
           }else{
+            http_response_code(400);
             $rawdata = array('status' => 'error', 'message' => 'No se ha recibido extra data.');
           }
         
@@ -64,6 +67,7 @@ $InventarioController = new InventarioController();
             $rawdata = array('status' => 'OK', 'message' => 'Busqueda finalizada', 'data' => $respuesta);
             
           }else{
+            http_response_code(400);
             $rawdata = array('status' => 'error', 'message' => 'No se ha recibido extra data.');
           }
         
@@ -78,6 +82,7 @@ $InventarioController = new InventarioController();
             $rawdata = array('status' => 'OK', 'message' => 'Busqueda finalizada', 'data' => $respuesta);
             
           }else{
+            http_response_code(400);
             $rawdata = array('status' => 'error', 'message' => 'No se ha recibido extra data.');
           }
         
@@ -92,6 +97,7 @@ $InventarioController = new InventarioController();
             $rawdata = array('status' => 'OK', 'message' => 'Busqueda finalizada', 'data' => $respuesta);
             
           }else{
+            http_response_code(400);
             $rawdata = array('status' => 'error', 'message' => 'No se ha recibido extra data.');
           }
         
@@ -106,6 +112,7 @@ $InventarioController = new InventarioController();
             $rawdata = array('status' => 'OK', 'transaction' => $respuesta);
             
           }else{
+            http_response_code(400);
             $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha recibido objeto de inventario requerido, revise estructura de JS.');
           }
         
@@ -120,6 +127,7 @@ $InventarioController = new InventarioController();
             $rawdata = array('status' => 'OK', 'transaction' => $respuesta);
             
           }else{
+            http_response_code(400);
             $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha recibido objeto de inventario requerido, revise estructura de JS.');
           }
         
@@ -131,9 +139,10 @@ $InventarioController = new InventarioController();
           if (isset($_POST['documento'])) {
             $documento = json_decode($_POST['documento']);
             $respuesta = $InventarioController->saveTransformacionKITS($documento);
-            $rawdata = array('status' => 'OK', 'transaction' => $respuesta);
+            $rawdata = $respuesta;
             
           }else{
+            http_response_code(400);
             $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha recibido objeto de inventario requerido, revise estructura de JS.');
           }
         

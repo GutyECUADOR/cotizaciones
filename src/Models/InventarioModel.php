@@ -1,5 +1,10 @@
 <?php namespace App\Models;
 
+use PDO;
+use App\Models\Conexion;
+use App\Models\VenCabClass;
+use App\Models\VenMovClass;
+
 /* LOS MODELOS del MVC retornaran unicamente arrays PHP sin serializar*/
 
 class InventarioModel extends Conexion  {
@@ -750,6 +755,7 @@ class InventarioModel extends Conexion  {
             
         }catch(\PDOException $exception){
             $this->instancia->rollBack();
+            http_response_code(400);
             return array('status' => 'error', 'message' => $exception->getMessage() );
         }
    
@@ -834,6 +840,7 @@ class InventarioModel extends Conexion  {
             
         }catch(\PDOException $exception){
             $this->instancia->rollBack();
+            http_response_code(400);
             return array('status' => 'error', 'message' => $exception->getMessage(), 'newcod' => $NextIDWithFormat );
         }
    
@@ -881,6 +888,7 @@ class InventarioModel extends Conexion  {
             
         }catch(\PDOException $exception){
             $this->instancia->rollBack();
+            http_response_code(400);
             return array('status' => 'error', 'message' => $exception->getMessage());
         }
    
@@ -893,34 +901,42 @@ class InventarioModel extends Conexion  {
             $this->instancia->beginTransaction();
             
             // Creacion de NextID STK
-            $stmt = $this->instancia->prepare("exec Sp_Contador 'INV','99','','STK',''"); 
+            $stmt = $this->instancia->prepare("SET NOCOUNT ON; exec Sp_Contador :gestion,'99','', :tipoDOC,''"); 
+
+            $tipoDoc = 'STK';
+            $gestion = 'INV';
+            $stmt->bindParam(':tipoDOC', $tipoDoc); 
+            $stmt->bindParam(':gestion', $gestion); 
             $stmt->execute();
-            $stmt->nextRowset();
-            $newCodLimpio = $stmt->fetch(\PDO::FETCH_ASSOC);
-            $nextID =  $newCodLimpio['NExtID'];
-            
-            $STK_secuencia =  str_pad($nextID, 8, '0', STR_PAD_LEFT);
-           
+            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $nextID = $row['NExtID'];
+            $STK_secuencia = str_pad($nextID, 8, '0', STR_PAD_LEFT);
+
             // Creacion de NextID DSK
-            $stmt = $this->instancia->prepare("exec Sp_Contador 'CNT','99','','DSK',''"); 
+            $tipoDoc = 'DSK';
+            $gestion = 'CNT';
+            $stmt->bindParam(':tipoDOC', $tipoDoc); 
+            $stmt->bindParam(':gestion', $gestion); 
             $stmt->execute();
-            $stmt->nextRowset();
-            $newCodLimpio = $stmt->fetch(\PDO::FETCH_ASSOC);
-            $nextID =  $newCodLimpio['NExtID'];
-            $DSK_secuencia =  str_pad($nextID, 8, '0', STR_PAD_LEFT);
+            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $nextID = $row['NExtID'];
+            $DSK_secuencia = str_pad($nextID, 8, '0', STR_PAD_LEFT);
 
             // Creacion de NextID DEK
-            $stmt = $this->instancia->prepare("exec Sp_Contador 'CNT','99','','DSK',''"); 
+            $tipoDoc = 'DEK';
+            $gestion = 'CNT';
+            $stmt->bindParam(':tipoDOC', $tipoDoc); 
+            $stmt->bindParam(':gestion', $gestion); 
             $stmt->execute();
-            
-            $newCodLimpio = $stmt->fetch(\PDO::FETCH_ASSOC);
-            $nextID = $newCodLimpio['NExtID'];
-            $DEK_secuencia =  str_pad($nextID, 8, '0', STR_PAD_LEFT);
+            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $nextID = $row['NExtID'];
+            $DEK_secuencia = str_pad($nextID, 8, '0', STR_PAD_LEFT);
+           
            
         
             // Ejecuta Sp_INVgracab STK (Egresos)
             $query = "
-            Sp_INVgracab 'I', :usuario, :pcid,'99','2020','STK', :secuencia, :fecha,'SSTK', :bodega_egreso, :bodega_ingreso,'DOL', :factor,'S','0','', :precio, :num_cnt,'INV', :num_rel,' ',' ',' ',' '
+                Sp_INVgracab 'I', :usuario, :pcid,'99','2020','STK', :secuencia, :fecha,'SSTK', :bodega_egreso, :bodega_ingreso,'DOL', :factor,'S','0','', :precio, :num_cnt,'INV', :num_rel,' ',' ',' ',' '
             ";
 
             $stmt = $this->instancia->prepare($query); 
@@ -940,7 +956,7 @@ class InventarioModel extends Conexion  {
             //Save inv_gramov
             foreach ($documento->kit->composicion as $producto) {
                 $query = "
-                Sp_invgraMOV 'I','99','2020','STK', :secuencia, :fecha, :bodega_egreso,'S', :codproducto, :unidadproducto, :cantidadproducto, :costoproducto,'0', :costototal,'','','','','', :codKIT
+                    Sp_invgraMOV 'I','99','2020','STK', :secuencia, :fecha, :bodega_egreso,'S', :codproducto, :unidadproducto, :cantidadproducto, :costoproducto,'0', :costototal,'','','','','', :codKIT
                 ";  
                     $stmt = $this->instancia->prepare($query);
                     $stmt->bindValue(':secuencia', $STK_secuencia);
@@ -995,7 +1011,7 @@ class InventarioModel extends Conexion  {
             $stmt->bindValue(':num_cnt', '992020DEK'.$STK_secuencia);
             $stmt->execute();
 
-           /*  // Ejecuta Sp_INVgrmov ETK (Ingresos)
+            // Ejecuta Sp_INVgrmov ETK (Ingresos)
             $producto = $documento->kit;
             $query = "
                 Sp_invgraMOV 'I','99','2020','ETK', :secuencia, :fecha, :bodega_ingreso,'E', :codproducto, :unidadproducto, :cantidadproducto, :costoproducto,'', :costototal,''
@@ -1010,10 +1026,11 @@ class InventarioModel extends Conexion  {
                 $stmt->bindValue(':costoproducto', $producto->precio);
                 $stmt->bindValue(':costototal', ($producto->precio * $producto->cantidad));
                 $stmt->execute();
+
                 
-            // Ejecuta Sp_invgraKardex ETK (Ingresos)
+            // Ejecuta Sp_invgraKardex ETK (Ingresos) error aqui
             $query = "
-            Sp_invgraKardex 'I','99','2020','STK', :secuencia,'INV', :fecha,' ',' ',' ', :bodega_ingreso,'S', :codproducto, :unidadproducto, :cantidadproducto, :costoproducto, :costototal, :usuario, :pcid,'DOL', :factor
+            Sp_invgraKardex 'I','99','2020','ETK', :secuencia,'INV', :fecha,' ',' ',' ', :bodega_ingreso,'E', :codproducto, :unidadproducto, :cantidadproducto, :costoproducto, :costototal, :usuario, :pcid,'DOL', :factor
 
             ";  
                 $stmt = $this->instancia->prepare($query);
@@ -1044,18 +1061,20 @@ class InventarioModel extends Conexion  {
                 $stmt->bindValue(':factor', $documento->kit->factor);
                 $stmt->bindValue(':glosa', '[Inv] - 992020STK'.$STK_secuencia);
                 $stmt->bindValue(':idDOC', '992020STK'.$STK_secuencia);
-                $stmt->execute(); */
+                $stmt->execute();
  
                 
             $commit = $this->instancia->commit();
             return array('status' => 'ok', 
-                        'commit' => $commit, 
+                        'commit' => $commit,
+                        'message' => 'Se ha registrado correctamente el documento STK #'. $STK_secuencia,
                         'STK_secuencia' => $STK_secuencia, 
                         'DSK_secuencia' => $DSK_secuencia, 
                         'DEK_secuencia' => $DEK_secuencia);
             
         }catch(\PDOException $exception){
             $this->instancia->rollBack();
+            http_response_code(400);
             return array('status' => 'error', 'message' => $exception->getMessage());
         }
    

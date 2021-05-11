@@ -395,22 +395,43 @@ const app = new Vue({
             formData.append('documento', JSON.stringify(this.documento)); 
              
             const response = await fetch(`./api/inventario/index.php?action=saveTransformacionKITS`, {
-                                    method: 'POST',
-                                    body: formData
-                                    })
-                                    .then(response => {
-                                        return response.json();
-                                    })
-                                    .catch(function(error) {
-                                        console.error(error);
-                                    });  
+                            method: 'POST',
+                            body: formData
+                            })
+                            .then(response => {
+                                return response.json();
+                            })
+                            .catch(function(error) {
+                                console.error(error);
+                            });  
 
             if (response.commit) {
-                console.log();
-                alert('Se ha geneado exitosamente: STK' + STK_secuencia);
+                console.log(response);
+                swal({
+                    title: "Realizado",
+                    text: `${response.message}`,
+                    type: "success",
+                    showCancelButton: false,
+                    confirmButtonClass: "btn-success",
+                    confirmButtonText: "Aceptar",
+                    closeOnConfirm: false
+                    },
+                    function(){
+                        window.location = './index.php?action=creacionReceta'
+                    });
             }else {
-                alert(response.transaction.message);
+                console.log(response);
+                swal({
+                    title: "No se pudo completar.",
+                    text: `${response.message}`,
+                    type: "error",
+                    showCancelButton: false,
+                    confirmButtonClass: "btn-success",
+                    confirmButtonText: "Aceptar",
+                    closeOnConfirm: false
+                    });
             }  
+            
 
             
         }
