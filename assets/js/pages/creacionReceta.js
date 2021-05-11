@@ -102,7 +102,7 @@ const app = new Vue({
     methods:{
         async setKit(codigo){
             const response = await this.getProducto(codigo);  
-            if (response.data) {
+            if (response.data.producto) {
                 const producto = response.data.producto;
                 const kit = new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, 1, producto.PrecA, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
                
@@ -161,7 +161,7 @@ const app = new Vue({
             }
         },
         async getProducto(codigo) {
-            return await fetch(`./api/inventario/index.php?action=getProducto&busqueda=${codigo}`)
+            return await fetch(`./api/inventario/index.php?action=getProducto&busqueda=${codigo.trim()}`)
             .then(response => {
                 return response.json();
             }).catch( error => {
