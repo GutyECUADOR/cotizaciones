@@ -12,6 +12,7 @@ class Producto {
       this.peso = parseFloat(peso) || 0;
       this.descuento = parseInt(descuento) || 0 ;
       this.stock = parseFloat(stock) || 0 ;
+      this.subtotal = 0;
       this.tipoIVA = tipoIVA || 'T00';
       this.unidades_medida = [],
       this.valorIVA = parseFloat(0); // IVA al 0 en inventario
@@ -34,7 +35,8 @@ class Producto {
     }
 
     getSubtotal(){
-        return parseFloat(((this.cantidad * this.precio) - this.getDescuento(this.descuento)).toFixed(4));
+        this.subtotal = parseFloat(((this.cantidad * this.precio) - this.getDescuento(this.descuento)).toFixed(2));
+        return this.subtotal;
     }
 
     setDescripcion(descripcion){

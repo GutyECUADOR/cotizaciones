@@ -966,7 +966,7 @@ class InventarioModel extends Conexion  {
                     $stmt->bindValue(':unidadproducto', $producto->unidad);
                     $stmt->bindValue(':cantidadproducto', $producto->cantidad);
                     $stmt->bindValue(':costoproducto', $producto->precio);
-                    $stmt->bindValue(':costototal', ($producto->precio * $producto->cantidad));
+                    $stmt->bindValue(':costototal', $producto->subtotal);
                     $stmt->bindValue(':codKIT', $documento->kit->codigo);
                     
                 $stmt->execute();
@@ -985,7 +985,7 @@ class InventarioModel extends Conexion  {
                     $stmt->bindValue(':unidadproducto', $producto->unidad);
                     $stmt->bindValue(':cantidadproducto', $producto->cantidad);
                     $stmt->bindValue(':costoproducto', $producto->precio);
-                    $stmt->bindValue(':costototal', ($producto->precio * $producto->cantidad));
+                    $stmt->bindValue(':costototal', $producto->subtotal);
                     $stmt->bindValue(':usuario', $_SESSION["usuarioRUC".APP_UNIQUE_KEY]);
                     $stmt->bindValue(':pcid', php_uname('n'));
                     $stmt->bindValue(':factor', $producto->factor);
@@ -1007,7 +1007,7 @@ class InventarioModel extends Conexion  {
             $stmt->bindValue(':bodega_egreso', $documento->bodega_egreso);
             $stmt->bindValue(':bodega_ingreso', $documento->bodega_ingreso);
             $stmt->bindValue(':factor', $documento->kit->factor);
-            $stmt->bindValue(':precio', $documento->kit->precio);
+            $stmt->bindValue(':precio', $producto->subtotal);
             $stmt->bindValue(':num_cnt', '992020DEK'.$STK_secuencia);
             $stmt->execute();
 
@@ -1024,7 +1024,7 @@ class InventarioModel extends Conexion  {
                 $stmt->bindValue(':unidadproducto', $producto->unidad);
                 $stmt->bindValue(':cantidadproducto', $producto->cantidad);
                 $stmt->bindValue(':costoproducto', $producto->precio);
-                $stmt->bindValue(':costototal', ($producto->precio * $producto->cantidad));
+                $stmt->bindValue(':costototal', $producto->subtotal);
                 $stmt->execute();
 
                 
@@ -1041,7 +1041,7 @@ class InventarioModel extends Conexion  {
                 $stmt->bindValue(':unidadproducto', $producto->unidad);
                 $stmt->bindValue(':cantidadproducto', $producto->cantidad);
                 $stmt->bindValue(':costoproducto', $producto->precio);
-                $stmt->bindValue(':costototal', ($producto->precio * $producto->cantidad));
+                $stmt->bindValue(':costototal', $producto->subtotal);
                 $stmt->bindValue(':usuario', $_SESSION["usuarioRUC".APP_UNIQUE_KEY]);
                 $stmt->bindValue(':pcid', php_uname('n'));
                 $stmt->bindValue(':factor', $producto->factor);
