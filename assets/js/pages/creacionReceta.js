@@ -405,10 +405,12 @@ const app = new Vue({
                                         console.error(error);
                                     });  
 
-            if (response) {
-                console.log(response);
+            if (response.commit) {
+                console.log();
+                alert('Se ha geneado exitosamente: STK' + STK_secuencia);
+            }else {
                 alert(response.transaction.message);
-            }
+            }  
 
             
         }

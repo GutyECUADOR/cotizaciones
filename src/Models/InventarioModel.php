@@ -892,26 +892,29 @@ class InventarioModel extends Conexion  {
         try{
             $this->instancia->beginTransaction();
             
-
             // Creacion de NextID STK
             $stmt = $this->instancia->prepare("exec Sp_Contador 'INV','99','','STK',''"); 
             $stmt->execute();
+            $stmt->nextRowset();
+            $newCodLimpio = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $nextID =  $newCodLimpio['NExtID'];
             
-            $nextID = $stmt->fetchColumn();
             $STK_secuencia =  str_pad($nextID, 8, '0', STR_PAD_LEFT);
            
             // Creacion de NextID DSK
             $stmt = $this->instancia->prepare("exec Sp_Contador 'CNT','99','','DSK',''"); 
             $stmt->execute();
-           
-            $nextID = $stmt->fetchColumn();
+            $stmt->nextRowset();
+            $newCodLimpio = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $nextID =  $newCodLimpio['NExtID'];
             $DSK_secuencia =  str_pad($nextID, 8, '0', STR_PAD_LEFT);
 
             // Creacion de NextID DEK
             $stmt = $this->instancia->prepare("exec Sp_Contador 'CNT','99','','DSK',''"); 
             $stmt->execute();
-           
-            $nextID = $stmt->fetchColumn();
+            
+            $newCodLimpio = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $nextID = $newCodLimpio['NExtID'];
             $DEK_secuencia =  str_pad($nextID, 8, '0', STR_PAD_LEFT);
            
         
@@ -992,7 +995,7 @@ class InventarioModel extends Conexion  {
             $stmt->bindValue(':num_cnt', '992020DEK'.$STK_secuencia);
             $stmt->execute();
 
-            // Ejecuta Sp_INVgrmov ETK (Ingresos)
+           /*  // Ejecuta Sp_INVgrmov ETK (Ingresos)
             $producto = $documento->kit;
             $query = "
                 Sp_invgraMOV 'I','99','2020','ETK', :secuencia, :fecha, :bodega_ingreso,'E', :codproducto, :unidadproducto, :cantidadproducto, :costoproducto,'', :costototal,''
@@ -1041,8 +1044,8 @@ class InventarioModel extends Conexion  {
                 $stmt->bindValue(':factor', $documento->kit->factor);
                 $stmt->bindValue(':glosa', '[Inv] - 992020STK'.$STK_secuencia);
                 $stmt->bindValue(':idDOC', '992020STK'.$STK_secuencia);
-                $stmt->execute();
-
+                $stmt->execute(); */
+ 
                 
             $commit = $this->instancia->commit();
             return array('status' => 'ok', 
