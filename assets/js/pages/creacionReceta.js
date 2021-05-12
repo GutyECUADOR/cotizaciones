@@ -72,7 +72,7 @@ class Kit {
       this.unidades = 0
       this.tipoArticulo = tipoArticulo || ''
       this.cantidad = parseFloat(cantidad) || 1;
-      this.precio = precio;
+      this.precio = parseFloat(precio).toFixed(4) || 0;
       this.peso = parseFloat(peso) || 0;
       this.descuento = parseInt(descuento) || 0 ;
       this.stock = parseFloat(stock) || 0 ;
@@ -83,6 +83,14 @@ class Kit {
       this.vendedor = null;
       this.descripcion = '';
       this.observacion = '';
+    }
+
+    getPrecio() {
+        const precio = this.composicion.reduce( (total, producto) => {
+            return total + producto.getSubtotal();
+        }, 0);
+        this.precio = parseFloat(precio.toFixed(2));
+        return this.precio;
     }
 
     getIVA(){
@@ -202,8 +210,7 @@ const app = new Vue({
 
                     console.log(productosComposicion);
                     this.documento.kit.setComposicion(productosComposicion);
-                    let costo = this.getCostoProductoByComposicion(this.documento.kit);
-                    console.log(costo);
+                   
                 }else{
                     new PNotify({
                         title: 'Item no disponible',
@@ -260,15 +267,6 @@ const app = new Vue({
                 }
             return producto;
                 
-        },
-        getCostoProductoByComposicion(kit) {
-            console.log(kit);
-            const costo = kit.composicion.reduce( (total, producto) => {
-                console.log(producto);
-                return total + producto.cantidad();
-            }, 0);
-        
-            kit.setPrecio(costo);
         },
         async getProductos() {
             this.search_producto.isloading = true;
