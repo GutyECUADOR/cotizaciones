@@ -101,7 +101,7 @@ class Kit {
                 return (producto.stock < res.stock) ? producto : res;
             });
            
-            return minimoProducto.stock / minimoProducto.cantidad;
+            return parseInt((minimoProducto.stock / minimoProducto.cantidad).toFixed(1));
         }else{
             return 0;
         }
