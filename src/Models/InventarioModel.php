@@ -1063,6 +1063,38 @@ class InventarioModel extends Conexion  {
                 $stmt->bindValue(':glosa', '[Inv] - 992020STK'.$STK_secuencia);
                 $stmt->bindValue(':idDOC', '992020STK'.$STK_secuencia);
                 $stmt->execute();
+
+            // Save Sp_cntgramov CREDITO
+            foreach ($documento->kit->composicion as $producto) {
+                $query = "
+                Sp_cntgramov'I','99','2020','DSK',:secuencia,'1.1.08.01.001', :detalle,'0.0000', :credito,'','STK', :numref,'','','','','INV','DOL', :factor, :fecha
+                ";  
+                    $stmt = $this->instancia->prepare($query);
+                    $stmt->bindValue(':secuencia', $STK_secuencia);
+                    $stmt->bindValue(':detalle', '[Inv] - 992020STK'.$STK_secuencia);
+                    $stmt->bindValue(':credito', $producto->subtotal);
+                    $stmt->bindValue(':numref', $STK_secuencia);
+                    $stmt->bindValue(':factor', $producto->factor);
+                    $stmt->bindValue(':fecha', date('Ymd'));
+                $stmt->execute();
+            }
+
+            // Save Sp_cntgramov DEBITO
+            foreach ($documento->kit->composicion as $producto) {
+                $query = "
+                Sp_cntgramov'I','99','2020','DSK',:secuencia,'1.1.08.01.001', :detalle, :debito, '0.0000','','STK', :numref,'','','','','INV','DOL', :factor, :fecha
+                ";  
+                    $stmt = $this->instancia->prepare($query);
+                    $stmt->bindValue(':secuencia', $STK_secuencia);
+                    $stmt->bindValue(':detalle', '[Inv] - 992020STK'.$STK_secuencia);
+                    $stmt->bindValue(':debito', $producto->subtotal);
+                    $stmt->bindValue(':numref', $STK_secuencia);
+                    $stmt->bindValue(':factor', $producto->factor);
+                    $stmt->bindValue(':fecha', date('Ymd'));
+                $stmt->execute();
+            }
+
+
  
                 
             $commit = $this->instancia->commit();
