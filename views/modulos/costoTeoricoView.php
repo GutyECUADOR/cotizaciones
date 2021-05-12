@@ -210,6 +210,11 @@ $bodegas = $cotizacion->getBodegas();
                                             <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Stock</th>
                                             <th style="width: 5%; min-width: 100px;" class="text-center headerTablaProducto">Costo</th>
                                             <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Costo Total</th>
+                                            <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Costo Teórico</th>
+                                            <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">% Merma</th>
+                                            <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Valor Merma</th>
+                                            <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Costo Unitario Teórico</th>
+                                            <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Costo Total Teórico</th>
                                             <th style="width: 5%" class="text-center headerTablaProducto">Eliminar</th>
                                         </tr>
                                     </thead>
@@ -231,6 +236,17 @@ $bodegas = $cotizacion->getBodegas();
                                             </td>
                                             <td>
                                                 <input type="text" class="form-control text-center input-sm" v-model="producto.getSubtotal()" readonly></td>
+                                            </td>
+                                            <td><input type="number" class="form-control text-center input-sm" @change="producto.setCostoTeorico($event.target.value)" :value="producto.costoTeorico" step=".0001" min="0" oninput="validity.valid||(value=1);"></td>
+                                            <td><input type="number" class="form-control text-center input-sm" @change="producto.setPorcentMerma($event.target.value)" :value="producto.porcentajeMerma" step=".01" min="0" oninput="validity.valid||(value=1);"></td>
+                                            <td>
+                                                <input type="text" class="form-control text-center input-sm" v-model="producto.getValorMerma()" readonly></td>
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control text-center input-sm" v-model="producto.getCostoTeoricoUnitario()" readonly></td>
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control text-center input-sm" v-model="producto.getCostoTeoricoTotal()" readonly></td>
                                             </td>
                                             <td>
                                                 <button type="button" @click="removeEgresoItem(producto.codigo)" class="btn btn-danger btn-sm btn-block"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Eliminar</button>

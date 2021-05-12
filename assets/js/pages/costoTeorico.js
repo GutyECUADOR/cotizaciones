@@ -1,23 +1,28 @@
 class Producto {
     constructor(codigo, nombre, unidad, tipoArticulo, cantidad, precio=0, peso, descuento, stock, tipoIVA, valorIVA) {
-      this.codigo = codigo || '';
-      this.nombre = nombre || '';
-      this.unidad = unidad || '';
-      this.factor = 1;
-      this.unidades = 0
-      this.tipoArticulo = tipoArticulo || ''
       this.cantidad = parseFloat(cantidad) || 1;
-      this.precio = parseFloat(precio).toFixed(4) || 0;
-      this.peso = parseFloat(peso) || 0;
+      this.codigo = codigo || '';
+      this.costoTeorico = 0;
+      this.costoTeoricoUnitario = 0;
+      this.descripcion = '';
       this.descuento = parseInt(descuento) || 0 ;
+      this.esKit = false;
+      this.factor = 1;
+      this.nombre = nombre || '';
+      this.observacion = '';
+      this.peso = parseFloat(peso) || 0;
+      this.porcentajeMerma = 0;
+      this.valorMerma = 0;
+      this.precio = parseFloat(precio).toFixed(4) || 0;
       this.stock = parseFloat(stock) || 0 ;
       this.subtotal = 0;
+      this.tipoArticulo = tipoArticulo || ''
       this.tipoIVA = tipoIVA || 'T00';
+      this.unidad = unidad || '';
+      this.unidades = 0
       this.unidades_medida = [],
       this.valorIVA = parseFloat(0); // IVA al 0 en inventario
       this.vendedor = null;
-      this.descripcion = '';
-      this.observacion = '';
     }
 
     getIVA(){
@@ -35,6 +40,20 @@ class Producto {
     getSubtotal(){
         this.subtotal = parseFloat(((this.cantidad * this.precio) - this.getDescuento(this.descuento)).toFixed(4));
         return this.subtotal;
+    }
+
+    getValorMerma (){
+        this.valorMerma = parseFloat((this.costoTeorico * this.porcentajeMerma/100).toFixed(4));
+        return this.valorMerma
+    }
+
+    getCostoTeoricoUnitario(){
+        this.costoTeoricoUnitario = parseFloat((this.costoTeorico - this.valorMerma).toFixed(4));
+        return this.costoTeoricoUnitario;
+    }
+
+    getCostoTeoricoTotal(){
+        return parseFloat((this.costoTeoricoUnitario * this.cantidad).toFixed(4));
     }
 
     setDescripcion(descripcion){
@@ -60,6 +79,15 @@ class Producto {
     setPrecio(precio){
         this.precio = precio;
     }
+
+    setCostoTeorico(costoTeorico){
+        this.costoTeorico = costoTeorico;
+    }
+
+    setPorcentMerma(porcentajeMerma){
+        this.porcentajeMerma = porcentajeMerma;
+    }
+
 }
 
 class Kit {
