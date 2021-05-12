@@ -223,7 +223,6 @@ const app = new Vue({
                         }
                     });
 
-                    console.log(productosComposicion);
                     this.documento.kit.setComposicion(productosComposicion);
                    
                 }else{
@@ -258,7 +257,8 @@ const app = new Vue({
         async getCostoProducto(producto) {
             let codigo = producto.codigo;
             let unidad = producto.unidad;
-            let busqueda = JSON.stringify({codigo, unidad});
+            let bodega = this.documento.bodega_egreso;
+            let busqueda = JSON.stringify({codigo, unidad, bodega});
             
             const response = await fetch(`./api/inventario/index.php?action=getCostoProducto&busqueda=${busqueda}`)
             .then(response => {
