@@ -33,7 +33,7 @@ class Producto {
     }
 
     getSubtotal(){
-        this.subtotal = parseFloat(((this.cantidad * this.precio) - this.getDescuento(this.descuento)).toFixed(2));
+        this.subtotal = parseFloat(((this.cantidad * this.precio) - this.getDescuento(this.descuento)).toFixed(4));
         return this.subtotal;
     }
 
@@ -90,7 +90,7 @@ class Kit {
         const precio = this.composicion.reduce( (total, producto) => {
             return total + producto.getSubtotal();
         }, 0);
-        this.precio = parseFloat(precio.toFixed(2));
+        this.precio = parseFloat(precio.toFixed(4));
         return this.precio;
     }
 
@@ -423,6 +423,18 @@ const app = new Vue({
             $('#modalPreparacion').modal('show');
         },
         validateSaveDocument(){
+
+            if (this.documento.kit.codigo == '') {
+                alert('No se ha indicado un KIT.');
+                return false;
+            }
+
+            if (this.documento.kit.cantidad > this.documento.kit.getMaximaProduccion()) {
+                alert(`Segun el stock de los componentes del KIT, no se puede producir más de:
+                     ${this.documento.kit.getMaximaProduccion()} ${this.documento.kit.unidad} de ${this.documento.kit.nombre}`);
+                return false;
+            }
+
             return true;
         },
         async saveReceta(){
@@ -469,15 +481,16 @@ const app = new Vue({
             
         },
         async saveDocumento(){
-            const confirmar = confirm('Confirma guardar el egreso por producion?');
+            const confirmar = confirm('Confirma guardar el egreso por producción?');
             if (!confirmar) {
                 return;
             }
 
-            if (this.documento.kit.codigo == '') {
-                alert('No se ha indicado un KIT.');
-                return
+            if (!this.validateSaveDocument()) {
+                return;
             }
+
+            
 
             console.log(this.documento);
             let formData = new FormData();

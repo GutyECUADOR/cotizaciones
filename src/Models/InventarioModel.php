@@ -1050,7 +1050,7 @@ class InventarioModel extends Conexion  {
                 $stmt->execute();
 
 
-            // Ejecuta Sp_cntgracab ETK (Ingresos)
+            // Ejecuta Sp_cntgracab DSK (Ingresos)
             $query = "
             Sp_cntgracab'I',:usuario, :pcid,'99','2020','DSK', :secuencia, :fecha,'DOL', :factor, :glosa,'','INV','','','',:idDOC
             ";  
@@ -1095,8 +1095,44 @@ class InventarioModel extends Conexion  {
             }
 
 
- 
-                
+            // Ejecuta Sp_cntgracab DEK (Egresos)
+            $query = "
+                Sp_cntgracab'I', :usuario, :pcid,'99','2020','DEK', :secuencia, :fecha,'DOL', :factor,'','','INV','','','', :idDOC
+            ";  
+                $stmt = $this->instancia->prepare($query);
+                $stmt->bindValue(':usuario', $_SESSION["usuarioRUC".APP_UNIQUE_KEY]);
+                $stmt->bindValue(':pcid', php_uname('n'));
+                $stmt->bindValue(':secuencia', $DEK_secuencia);
+                $stmt->bindValue(':fecha', date('Ymd'));
+                $stmt->bindValue(':factor', $documento->kit->factor);
+                $stmt->bindValue(':idDOC', '992020ETK'.$STK_secuencia);
+                $stmt->execute();
+
+                // Save Sp_cntgramov DEBITO
+                $query = "
+                    Sp_cntgramov'I','99','2020','DEK', :secuencia,'1.1.08.01.001','', :debito,'0.0000','','ETK', :numref,'','','','','INV','DOL', :factor, :fecha
+                ";  
+                    $stmt = $this->instancia->prepare($query);
+                    $stmt->bindValue(':secuencia', $DEK_secuencia);
+                    $stmt->bindValue(':debito', $documento->kit->subtotal);
+                    $stmt->bindValue(':numref', $STK_secuencia);
+                    $stmt->bindValue(':factor', $documento->kit->factor);
+                    $stmt->bindValue(':fecha', date('Ymd'));
+                $stmt->execute();
+
+                 // Save Sp_cntgramov CREDITO
+                $query = "
+                    Sp_cntgramov'I','99','2020','DEK', :secuencia,'1.1.08.01.001','','0.0000', :credito,'','ETK', :numref,'','','','','INV','DOL', :factor, :fecha
+                ";  
+                    $stmt = $this->instancia->prepare($query);
+                    $stmt->bindValue(':secuencia', $DEK_secuencia);
+                    $stmt->bindValue(':credito', $documento->kit->subtotal);
+                    $stmt->bindValue(':numref', $STK_secuencia);
+                    $stmt->bindValue(':factor', $documento->kit->factor);
+                    $stmt->bindValue(':fecha', date('Ymd'));
+                $stmt->execute();
+
+            
             $commit = $this->instancia->commit();
             return array('status' => 'ok', 
                         'commit' => $commit,
