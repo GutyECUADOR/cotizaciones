@@ -108,7 +108,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                             <div class="form-group">
                             <label>Se puede producir: </label>
                                 <div class="well text-center wellextra" >
-                                    <span id="welltotal_produccion">0</span>
+                                    <span id="welltotal_produccion">{{ documento.kit.getMaximaProduccion() }}</span>
                                 </div>
                             </div>
                             

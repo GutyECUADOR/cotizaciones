@@ -81,6 +81,7 @@ class Kit {
       this.unidades_medida = [],
       this.valorIVA = parseFloat(0); // IVA al 0 en inventario
       this.vendedor = null;
+      this.maximaProduccion = 0;
       this.descripcion = '';
       this.observacion = '';
     }
@@ -91,6 +92,20 @@ class Kit {
         }, 0);
         this.precio = parseFloat(precio.toFixed(2));
         return this.precio;
+    }
+
+    getMaximaProduccion(){
+
+        if (this.composicion.length > 0) {
+            const minimoProducto = this.composicion.reduce((res, producto) => {
+                return (producto.stock < res.stock) ? producto : res;
+            });
+           
+            return minimoProducto.stock / minimoProducto.cantidad;
+        }else{
+            return 0;
+        }
+        
     }
 
     getIVA(){
