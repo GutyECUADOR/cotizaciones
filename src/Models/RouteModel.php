@@ -23,6 +23,10 @@ class RouteModel {
                 $contenido = "views/modulos/creacionRecetaView.php";
                 break;
 
+            case 'costoTeorico':
+                $contenido = "views/modulos/costoTeoricoView.php";
+                break;
+
             /* Shared Options */
 
             case 'login':

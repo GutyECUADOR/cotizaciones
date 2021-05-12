@@ -24,6 +24,12 @@
                 <label for='c3' title='Punto de Venta - Cotizaciones'><i class="fa fa-shopping-cart fa-3x" aria-hidden="true"></i></i></label>   
               </a>
             </li>
+
+            <li onclick="location.href='?action=costoTeorico';">
+                <input id='c4' type='checkbox' />
+                <label for='c4' title='Costo Teórico'><i class="fa fa-area-chart fa-3x" aria-hidden="true"></i></i></label>   
+              </a>
+            </li>
           
 
 <!-- 
