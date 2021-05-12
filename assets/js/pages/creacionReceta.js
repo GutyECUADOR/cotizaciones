@@ -3,7 +3,6 @@ class Producto {
       this.codigo = codigo || '';
       this.nombre = nombre || '';
       this.unidad = unidad || '';
-      this.composicion = []
       this.factor = 1;
       this.unidades = 0
       this.tipoArticulo = tipoArticulo || ''
@@ -19,7 +18,6 @@ class Producto {
       this.vendedor = null;
       this.descripcion = '';
       this.observacion = '';
-      this.archivos = null;
     }
 
     getIVA(){
@@ -64,11 +62,80 @@ class Producto {
     }
 }
 
+class Kit {
+    constructor(codigo, nombre, unidad, tipoArticulo, cantidad, precio=0, peso, descuento, stock, tipoIVA, valorIVA) {
+      this.codigo = codigo || '';
+      this.nombre = nombre || '';
+      this.unidad = unidad || '';
+      this.composicion = []
+      this.factor = 1;
+      this.unidades = 0
+      this.tipoArticulo = tipoArticulo || ''
+      this.cantidad = parseFloat(cantidad) || 1;
+      this.precio = precio;
+      this.peso = parseFloat(peso) || 0;
+      this.descuento = parseInt(descuento) || 0 ;
+      this.stock = parseFloat(stock) || 0 ;
+      this.subtotal = 0;
+      this.tipoIVA = tipoIVA || 'T00';
+      this.unidades_medida = [],
+      this.valorIVA = parseFloat(0); // IVA al 0 en inventario
+      this.vendedor = null;
+      this.descripcion = '';
+      this.observacion = '';
+    }
+
+    getIVA(){
+        return parseFloat(((this.getSubtotal() * this.valorIVA) / 100).toFixed(4));
+    }
+
+    getDescuento(){
+        return parseFloat((((this.cantidad * this.precio)* this.descuento)/100).toFixed(4));
+    }
+
+    getPeso(){
+        return parseFloat((this.peso *this.cantidad).toFixed(4));
+    }
+
+    getSubtotal(){
+        this.subtotal = parseFloat(((this.cantidad * this.precio) - this.getDescuento(this.descuento)).toFixed(2));
+        return this.subtotal;
+    }
+
+    setDescripcion(descripcion){
+        this.descripcion = descripcion;
+    }
+
+    setPeso(peso){
+        this.peso = parseFloat(peso);
+    }
+
+    setCantidad(cantidad){
+        this.cantidad = parseFloat(cantidad);
+    }
+
+    setStock(stock){
+        this.stock = parseFloat(stock);
+    }
+
+    setFactor(factor){
+        this.factor = factor;
+    }
+
+    setPrecio(precio){
+        this.precio = precio;
+    }
+
+    setComposicion(composicion){
+        this.composicion = composicion;
+    }
+}
+
 class Documento {
     constructor() {
         this.bodega_egreso = 'B01',
         this.bodega_ingreso = 'B02',
-        this.kit = new Producto()
+        this.kit = new Kit()
     }
 
 }
@@ -104,10 +171,10 @@ const app = new Vue({
             const response = await this.getProducto(codigo);  
             if (response.data.producto) {
                 const producto = response.data.producto;
-                const kit = new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, 1, producto.PrecA, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
+                this.documento.kit = new Kit(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, 1, producto.PrecA, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
                
-                kit.unidades_medida = response.data.unidades_medida;
-                const responseComposicion = await this.getComposicionProducto(kit.codigo);
+                this.documento.kit.unidades_medida = response.data.unidades_medida;
+                const responseComposicion = await this.getComposicionProducto(this.documento.kit.codigo);
 
                 if (responseComposicion.data) {
                     let productosComposicion = [];
@@ -118,10 +185,10 @@ const app = new Vue({
                             const producto = productoComposicion.data.producto;
                             
                             const newProduct = new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, productoDB.Cantidad, producto.Costo, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
-                            const prodcutoCostoActualizado = await this.getCostoProducto(newProduct);
-                            prodcutoCostoActualizado.unidades_medida = productoComposicion.data.unidades_medida;
+                            const productoCostoActualizado = await this.getCostoProducto(newProduct);
+                            productoCostoActualizado.unidades_medida = productoComposicion.data.unidades_medida;
                             this.documento.kit.descripcion = productoDB.Preparacion;
-                            productosComposicion.push(prodcutoCostoActualizado);
+                            productosComposicion.push(productoCostoActualizado);
                         }else{   
                             new PNotify({
                                 title: 'Item no disponible',
@@ -133,10 +200,10 @@ const app = new Vue({
                         }
                     });
 
-                    this.documento.kit = kit;
-                    this.documento.kit.composicion = productosComposicion;
-                    
-                //this.getCostoProducto(this.documento.kit);
+                    console.log(productosComposicion);
+                    this.documento.kit.setComposicion(productosComposicion);
+                    let costo = this.getCostoProductoByComposicion(this.documento.kit);
+                    console.log(costo);
                 }else{
                     new PNotify({
                         title: 'Item no disponible',
@@ -147,9 +214,6 @@ const app = new Vue({
                     });
                 }
                 
-
-               
-               
             }else{   
                 new PNotify({
                     title: 'Item no disponible',
@@ -196,6 +260,15 @@ const app = new Vue({
                 }
             return producto;
                 
+        },
+        getCostoProductoByComposicion(kit) {
+            console.log(kit);
+            const costo = kit.composicion.reduce( (total, producto) => {
+                console.log(producto);
+                return total + producto.cantidad();
+            }, 0);
+        
+            kit.setPrecio(costo);
         },
         async getProductos() {
             this.search_producto.isloading = true;

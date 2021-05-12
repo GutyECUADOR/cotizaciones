@@ -162,7 +162,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                         <td><input type="text" class="form-control text-center input-sm" v-model="documento.kit.stock" disabled></td>
                                         <td><input type="number" class="form-control text-center input-sm" @change="documento.kit.setCantidad($event.target.value)" :value="documento.kit.cantidad" step=".0001" min="0" oninput="validity.valid||(value='0');"></td>
                                         <td>
-                                            <select v-model='documento.kit.unidad' @change="getCostoProducto(documento.kit)" class="form-control input-sm">
+                                            <select v-model='documento.kit.unidad' @change="getCostoProductoByComposicion(documento.kit)" class="form-control input-sm">
                                                 <option v-for="unidad in documento.kit.unidades_medida" :value="unidad.Unidad.trim()">
                                                 {{unidad.Unidad}}
                                                 </option>
