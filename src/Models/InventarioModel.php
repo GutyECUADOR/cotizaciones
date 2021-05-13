@@ -898,6 +898,7 @@ class InventarioModel extends Conexion  {
         try{
             $this->instancia->beginTransaction();
 
+            // Registramos en tabla WSSP.INV_ARTICULOS_EXTRA_DATA
             $query = "
                 IF EXISTS(SELECT codigo FROM wssp.dbo.INV_ARTICULOS_EXTRA_DATA WHERE codigo= :codigoSelect)
                     UPDATE wssp.dbo.INV_ARTICULOS_EXTRA_DATA 

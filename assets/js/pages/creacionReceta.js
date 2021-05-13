@@ -67,9 +67,10 @@ class Kit {
       this.codigo = codigo || '';
       this.nombre = nombre || '';
       this.unidad = unidad || '';
-      this.composicion = []
+      this.composicion = [];
+      this.fechaCaducidad = '';
       this.factor = 1;
-      this.unidades = 0
+      this.unidades = 0;
       this.tipoArticulo = tipoArticulo || ''
       this.cantidad = parseFloat(cantidad) || 1;
       this.precio = parseFloat(precio).toFixed(4) || 0;
@@ -195,7 +196,9 @@ const app = new Vue({
             if (response.data.producto) {
                 const producto = response.data.producto;
                 this.documento.kit = new Kit(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, 1, producto.PrecA, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
-               
+                this.documento.kit.observacion = producto.observacion;
+                this.documento.kit.fechaCaducidad = producto.fechaCaducidad;
+
                 this.documento.kit.unidades_medida = response.data.unidades_medida;
                 const responseComposicion = await this.getComposicionProducto(this.documento.kit.codigo);
 
@@ -208,6 +211,8 @@ const app = new Vue({
                             const producto = productoComposicion.data.producto;
                             
                             const newProduct = new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, productoDB.Cantidad, producto.Costo, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
+                            newProduct.observacion = producto.observacion;
+                            newProduct.fechaCaducidad = producto.fechaCaducidad;
                             const productoCostoActualizado = await this.getCostoProducto(newProduct);
                             productoCostoActualizado.unidades_medida = productoComposicion.data.unidades_medida;
                             this.documento.kit.descripcion = productoDB.Preparacion;

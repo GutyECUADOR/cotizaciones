@@ -235,7 +235,7 @@ $bodegas = $cotizacion->getBodegas();
                                                 <input type="text" class="form-control text-center input-sm" v-model="producto.getSubtotal()" readonly></td>
                                             </td>
                                             <td>
-                                                <button type="button" @click="removeEgresoItem(producto.codigo)" class="btn btn-danger btn-sm btn-block"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Eliminar</button>
+                                                <button type="button" @click="removeEgresoItem(producto.codigo)" class="btn btn-danger btn-sm btn-block"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
                                             </td>
                                         </tr>
                                     </tbody>
