@@ -170,9 +170,6 @@ $bodegas = $cotizacion->getBodegas();
                                             <input type="text" v-model="documento.kit.getSubtotal()" class="form-control text-center input-sm importe_linea" readonly>
                                         </td>
                                     </tr>
-
-                                    
-                                    
                                 </tbody>
                             </table>
                                 
@@ -205,9 +202,9 @@ $bodegas = $cotizacion->getBodegas();
                                         <tr>
                                             <th style="width: 5%; min-width: 80px;" class="text-center headerTablaProducto">Codigo</th>
                                             <th style="width: 10%; min-width: 170px;" class="text-center headerTablaProducto">Nombre del Articulo</th>
-                                            <th style="width: 2%; min-width: 80px;" class="text-center headerTablaProducto">Unidad</th>
-                                            <th style="width: 3%; min-width: 90px;" class="text-center headerTablaProducto">Cantidad</th>
                                             <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Stock</th>
+                                            <th style="width: 3%; min-width: 90px;" class="text-center headerTablaProducto">Cantidad</th>
+                                            <th style="width: 2%; min-width: 80px;" class="text-center headerTablaProducto">Unidad</th>
                                             <th style="width: 5%; min-width: 100px;" class="text-center headerTablaProducto">Costo</th>
                                             <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Costo Total</th>
                                             <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Costo Teórico</th>
@@ -222,6 +219,9 @@ $bodegas = $cotizacion->getBodegas();
                                         <tr v-for="producto in documento.kit.composicion">
                                             <td><input type="text" class="form-control text-center input-sm" v-model="producto.codigo" disabled></td>
                                             <td><input type="text" class="form-control text-center input-sm"  v-model="producto.nombre" readonly></td>
+                                            <td><input type="text" class="form-control text-center input-sm" v-model="producto.stock" readonly></td>
+                                            <td><input type="number" class="form-control text-center input-sm" @change="producto.setCantidad($event.target.value)" :value="producto.cantidad" step=".0001" min="0" oninput="validity.valid||(value=1);" readonly></td>
+                                            
                                             <td>
                                                 <select v-model="producto.unidad" @change="getCostoProducto(producto)" class="form-control input-sm" disabled>
                                                     <option v-for="unidad in producto.unidades_medida" :value="unidad.Unidad.trim()" readonly>
@@ -229,8 +229,7 @@ $bodegas = $cotizacion->getBodegas();
                                                     </option>
                                                 </select>
                                             </td>
-                                            <td><input type="number" class="form-control text-center input-sm" @change="producto.setCantidad($event.target.value)" :value="producto.cantidad" step=".0001" min="0" oninput="validity.valid||(value=1);" readonly></td>
-                                            <td><input type="text" class="form-control text-center input-sm" v-model="producto.stock" readonly></td>
+                                            
                                             <td>
                                                 <input type="text" class="form-control text-center input-sm" v-model="producto.precio" readonly>
                                             </td>
@@ -253,6 +252,18 @@ $bodegas = $cotizacion->getBodegas();
                                             </td>
                                         </tr>
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="3" class="text-center" style="vertical-align: middle;"><b>Total</b></td>
+                                            <td><input type="text"  class="form-control text-center" readonly></td>
+                                            <td><input type="text"  class="form-control text-center" readonly></td>
+                                            <td><input type="text"  class="form-control text-center" readonly></td>
+                                            <td colspan="2">
+                                                <input type="text"  class="form-control text-center" readonly></td>
+                                            </td>
+                                        </tr>
+
+                                    </tfoot>
                                 </table>
                             </div>
                             <button type="button"  data-toggle="modal" data-target="#modalPreparacion" class="btn btn-primary btn-block btn-sm"><span class="glyphicon glyphicon-pencil"></span> Preparación</button>
