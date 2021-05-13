@@ -205,7 +205,7 @@ $bodegas = $cotizacion->getBodegas();
                                             <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Stock</th>
                                             <th style="width: 3%; min-width: 90px;" class="text-center headerTablaProducto">Cantidad</th>
                                             <th style="width: 2%; min-width: 80px;" class="text-center headerTablaProducto">Unidad</th>
-                                            <th style="width: 5%; min-width: 100px;" class="text-center headerTablaProducto">Costo</th>
+                                            <th style="width: 5%; min-width: 110px;" class="text-center headerTablaProducto">Costo</th>
                                             <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Costo Total</th>
                                             <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Costo Teórico</th>
                                             <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">% Merma</th>
@@ -231,7 +231,7 @@ $bodegas = $cotizacion->getBodegas();
                                             </td>
                                             
                                             <td>
-                                                <input type="text" class="form-control text-center input-sm" v-model="producto.precio" readonly>
+                                                <input type="number" class="form-control text-center input-sm" v-model="producto.precio" readonly>
                                             </td>
                                             <td>
                                                 <input type="text" class="form-control text-center input-sm" v-model="producto.getSubtotal()" readonly></td>
@@ -253,17 +253,20 @@ $bodegas = $cotizacion->getBodegas();
                                         </tr>
                                     </tbody>
                                     <tfoot>
+                                        <!-- FILA DE TOTALES-->
                                         <tr>
                                             <td colspan="3" class="text-center" style="vertical-align: middle;"><b>Total</b></td>
                                             <td><input type="text" v-model="documento.kit.getCantidadItems_Composicion()"  class="form-control text-center" readonly></td>
                                             <td><input type="text" v-model="documento.kit.getCantidadUnidades_Composicion()" class="form-control text-center" readonly></td>
                                             <td><input type="text" v-model="documento.kit.getPrecio()" class="form-control text-center" readonly></td>
-                                            <td><input type="text" v-model="documento.kit.getSubtotal()" class="form-control text-center" readonly></td>
+                                            <td><input type="text" v-model="documento.kit.getSubtotal()" style="background-color: #d9f7d9;" class="form-control text-center" readonly></td>
                                             <td><input type="text" v-model="documento.kit.getTotalCostoTeorico_Composicion()" class="form-control text-center" readonly></td>
                                             <td><input type="text" v-model="documento.kit.getTotalPorcentajeMerma_Composicion()" class="form-control text-center" readonly></td>
                                             <td><input type="text" v-model="documento.kit.getTotalValorMerma_Composicion()" class="form-control text-center" readonly></td>
                                             <td><input type="text" v-model="documento.kit.getTotalCostoUnitario_Composicion()" class="form-control text-center" readonly></td>
-                                            <td colspan="2"><input type="text" v-model="documento.kit.getTotalCostoTeoricoTotal_Composicion()" class="form-control text-center" readonly></td>
+                                            <td colspan="2">
+                                                <input type="text" v-model="documento.kit.getTotalCostoTeoricoTotal_Composicion()" style="background-color: #d9f7d9;" class="form-control text-center" readonly>
+                                            </td>
                                         </tr>
 
                                     </tfoot>

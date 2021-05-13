@@ -141,6 +141,15 @@ class Kit {
         return this.totalItemsComposicion;
     }
 
+     /* TOTALES - SUMA DEL COSTO SIN REDONDEO */
+    getTotalPrecio_Composicion() {
+        const precio = this.composicion.reduce( (total, producto) => {
+            return total + producto.getSubtotal();
+        }, 0);
+        this.precio = parseFloat(precio.toFixed(4));
+        return this.precio;
+    }
+
     /* TOTALES - CANTIDAD DE UNIDADES */
     getCantidadUnidades_Composicion() {
         this.totalUnidadesComposicion = this.composicion.reduce( (total, producto) => {
@@ -151,33 +160,38 @@ class Kit {
 
     /* TOTALES - CANTIDAD DE UNIDADES */
      getTotalCostoTeorico_Composicion() {
-        this.totalTeorico = this.composicion.reduce( (total, producto) => {
+        const totalTeorico = this.composicion.reduce( (total, producto) => {
             return total + producto.costoTeorico;
         }, 0);
+        this.totalTeorico = parseFloat(totalTeorico.toFixed(4));
         return this.totalTeorico;
     }
 
     /* TOTALES - PORCENTAJE DE MERMA */
     getTotalPorcentajeMerma_Composicion() {
-        this.totalPorcentajeMerma = this.composicion.reduce( (total, producto) => {
+        const totalPorcentajeMerma = this.composicion.reduce( (total, producto) => {
             return total + producto.porcentajeMerma;
         }, 0);
+        this.totalPorcentajeMerma = parseFloat(totalPorcentajeMerma.toFixed(2));
         return this.totalPorcentajeMerma;
     }
 
     /* TOTALES - VALORES SEGUN EL PORCENTAJE DE MERMA */
     getTotalValorMerma_Composicion() {
-        this.totalValorMerma = this.composicion.reduce( (total, producto) => {
+        const totalValorMerma = this.composicion.reduce( (total, producto) => {
             return total + producto.getValorMerma();
         }, 0);
+        
+        this.totalValorMerma = parseFloat(totalValorMerma.toFixed(2));
         return this.totalValorMerma;
     }
 
     /* TOTALES - VALOR UNITARIO DEL COSTO TEORICO */
     getTotalCostoUnitario_Composicion() {
-        this.totalCostoUnitario = this.composicion.reduce( (total, producto) => {
+        const totalCostoUnitario = this.composicion.reduce( (total, producto) => {
             return total + producto.getCostoTeoricoUnitario();
         }, 0);
+        this.totalCostoUnitario = parseFloat(totalCostoUnitario.toFixed(2));
         return this.totalCostoUnitario;
     }
 
@@ -186,7 +200,7 @@ class Kit {
         const totalCostoTeorico = this.composicion.reduce( (total, producto) => {
             return total + producto.getCostoTeoricoTotal();
         }, 0);
-        this.totalCostoTeorico = parseFloat(totalCostoTeorico.toFixed(4));
+        this.totalCostoTeorico = parseFloat(totalCostoTeorico.toFixed(2));
         return this.totalCostoTeorico;
     }
 
