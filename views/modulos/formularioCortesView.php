@@ -279,7 +279,6 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                             <td><button type="button" @click="showDescriptionModal(producto)" class="btn btn-primary btn-sm btn-block"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
                                             <td><button type="button" @click="removeIngresoItem(producto.codigo)" class="btn btn-danger btn-sm btn-block"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
                                            
-                                            
                                                 <div class="modal fade" :id="'modalAddExtraDetail_'+producto.codigo" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog">
                                                     <div class="modal-dialog modal-lg" role="document">
                                                         <div class="modal-content">

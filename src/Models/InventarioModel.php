@@ -729,12 +729,13 @@ class InventarioModel extends Conexion  {
                     $query = "
                         IF EXISTS(SELECT codigo FROM wssp.dbo.INV_ARTICULOS_EXTRA_DATA WHERE codigo= :codigoSelect)
                             UPDATE wssp.dbo.INV_ARTICULOS_EXTRA_DATA 
-                                SET fechaCaducidad = :fechaCaducidad_update, observacion = :observacion_update  
+                                SET fechaCaducidad = :fechaCaducidad_update, 
+                                    observacion = :observacion_update  
                             WHERE codigo= :codigo_update
                         ELSE
                             INSERT INTO 
-                                wssp.dbo.INV_ARTICULOS_EXTRA_DATA (codigo, fechaCaducidad,observacion)
-                            VALUES ( :codigo, :fechaCaducidad, :observacion)
+                                wssp.dbo.INV_ARTICULOS_EXTRA_DATA (dbname, codigo, fechaCaducidad, observacion)
+                            VALUES ( :dbname, :codigo, :fechaCaducidad, :observacion)
                     ";  
                         $stmt = $this->instancia->prepare($query);
                         $stmt->bindParam(':codigoSelect', $producto->codigo);
@@ -743,6 +744,7 @@ class InventarioModel extends Conexion  {
                         $stmt->bindParam(':observacion_update', $producto->observacion);
                         $stmt->bindParam(':codigo_update', $producto->codigo);
 
+                        $stmt->bindParam(':dbname', $_SESSION["empresaAUTH".APP_UNIQUE_KEY]);
                         $stmt->bindParam(':codigo',  $producto->codigo);
                         $stmt->bindParam(':fechaCaducidad', $producto->fechaCaducidad);
                         $stmt->bindParam(':observacion', $producto->observacion);

@@ -137,6 +137,7 @@ $bodegas = $cotizacion->getBodegas();
                                     <th style="width: 5%; min-width: 80px;"  class="text-center headerTablaProducto">Unidad</th>
                                     <th style="width: 5%; min-width: 120px;" class="text-center headerTablaProducto">Costo</th>
                                     <th style="width: 5%; min-width: 120px;" class="text-center headerTablaProducto">Subtotal</th>
+                                    <th style="width: 5%" class="text-center headerTablaProducto">Observ.</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -169,6 +170,7 @@ $bodegas = $cotizacion->getBodegas();
                                         <td>
                                             <input type="text" v-model="documento.kit.getSubtotal()" class="form-control text-center input-sm importe_linea" readonly>
                                         </td>
+                                        <td><button type="button" @click="showDescriptionModal(documento.kit)" class="btn btn-primary btn-sm btn-block"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
                                     </tr>
 
                                     
@@ -281,6 +283,31 @@ $bodegas = $cotizacion->getBodegas();
                         <div class="form-group">
                             <label for="comment">Detalle:</label>
                             <textarea class="form-control" rows="5" @keyup="setPreparacionToProducts()" v-model="documento.kit.descripcion"></textarea>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" :id="'modalAddExtraDetail'" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title"> Observacion del Producto: {{documento.kit.nombre}}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="comment">Fecha de Caducidad:</label>
+                            <input type="date" class="form-control text-center input-sm" v-model="documento.kit.fechaCaducidad">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="comment">Observacion:</label>
+                            <textarea class="form-control" rows="5" maxlength="250" v-model="documento.kit.observacion"></textarea>
                         </div>
 
                     </div>
