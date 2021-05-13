@@ -880,12 +880,7 @@ class InventarioModel extends Conexion  {
                 $stmt->execute();
             }
           
-            /* $query = "DELETE INV_KITOBS  WHERE CodigoKit = :codigoKit";
-            $stmt = $this->instancia->prepare($query); 
-            $stmt->bindValue(':codigoKit', $kit->codigo);
-            $stmt->execute(); */
-
-                
+           
             $commit = $this->instancia->commit();
             return array('status' => 'ok', 'commit' => $commit, 'kit' => $kit->codigo);
             
@@ -902,6 +897,32 @@ class InventarioModel extends Conexion  {
 
         try{
             $this->instancia->beginTransaction();
+
+            $query = "
+                IF EXISTS(SELECT codigo FROM wssp.dbo.INV_ARTICULOS_EXTRA_DATA WHERE codigo= :codigoSelect)
+                    UPDATE wssp.dbo.INV_ARTICULOS_EXTRA_DATA 
+                        SET fechaCaducidad = :fechaCaducidad_update, 
+                            observacion = :observacion_update  
+                    WHERE codigo= :codigo_update
+                ELSE
+                    INSERT INTO 
+                        wssp.dbo.INV_ARTICULOS_EXTRA_DATA (dbname, codigo, fechaCaducidad, observacion)
+                    VALUES ( :dbname, :codigo, :fechaCaducidad, :observacion)
+            ";  
+                $stmt = $this->instancia->prepare($query);
+                $stmt->bindParam(':codigoSelect', $kit->codigo);
+
+                $stmt->bindParam(':fechaCaducidad_update', $kit->fechaCaducidad);
+                $stmt->bindParam(':observacion_update', $kit->observacion);
+                $stmt->bindParam(':codigo_update', $kit->codigo);
+
+                $stmt->bindParam(':dbname', $_SESSION["empresaAUTH".APP_UNIQUE_KEY]);
+                $stmt->bindParam(':codigo',  $kit->codigo);
+                $stmt->bindParam(':fechaCaducidad', $kit->fechaCaducidad);
+                $stmt->bindParam(':observacion', $kit->observacion);
+                
+            $stmt->execute();
+
             
             // Creacion de NextID STK
             $stmt = $this->instancia->prepare("SET NOCOUNT ON; exec Sp_Contador :gestion,'99','', :tipoDOC,''"); 
