@@ -123,18 +123,73 @@ class Kit {
     }
 
     getMaximaProduccion(){
-
         if (this.composicion.length > 0) {
             const minimoProducto = this.composicion.reduce((res, producto) => {
                 return (producto.stock < res.stock) ? producto : res;
             });
-           
             return parseInt((minimoProducto.stock / minimoProducto.cantidad).toFixed(1));
         }else{
             return 0;
-        }
-        
+        } 
     }
+
+    /* TOTALES - CANTIDAD DE ITEMS */
+    getCantidadItems_Composicion() {
+        this.totalItemsComposicion = this.composicion.reduce( (total, producto) => {
+            return total + producto.cantidad;
+        }, 0);
+        return this.totalItemsComposicion;
+    }
+
+    /* TOTALES - CANTIDAD DE UNIDADES */
+    getCantidadUnidades_Composicion() {
+        this.totalUnidadesComposicion = this.composicion.reduce( (total, producto) => {
+            return total + (producto.cantidad * producto.factor);
+        }, 0);
+        return this.totalUnidadesComposicion;
+    }
+
+    /* TOTALES - CANTIDAD DE UNIDADES */
+     getTotalCostoTeorico_Composicion() {
+        this.totalTeorico = this.composicion.reduce( (total, producto) => {
+            return total + producto.costoTeorico;
+        }, 0);
+        return this.totalTeorico;
+    }
+
+    /* TOTALES - PORCENTAJE DE MERMA */
+    getTotalPorcentajeMerma_Composicion() {
+        this.totalPorcentajeMerma = this.composicion.reduce( (total, producto) => {
+            return total + producto.porcentajeMerma;
+        }, 0);
+        return this.totalPorcentajeMerma;
+    }
+
+    /* TOTALES - VALORES SEGUN EL PORCENTAJE DE MERMA */
+    getTotalValorMerma_Composicion() {
+        this.totalValorMerma = this.composicion.reduce( (total, producto) => {
+            return total + producto.getValorMerma();
+        }, 0);
+        return this.totalValorMerma;
+    }
+
+    /* TOTALES - VALOR UNITARIO DEL COSTO TEORICO */
+    getTotalCostoUnitario_Composicion() {
+        this.totalCostoUnitario = this.composicion.reduce( (total, producto) => {
+            return total + producto.getCostoTeoricoUnitario();
+        }, 0);
+        return this.totalCostoUnitario;
+    }
+
+     /* TOTALES DEL COSTO TEORICO MENOS MERMA*/
+     getTotalCostoTeoricoTotal_Composicion() {
+        const totalCostoTeorico = this.composicion.reduce( (total, producto) => {
+            return total + producto.getCostoTeoricoTotal();
+        }, 0);
+        this.totalCostoTeorico = parseFloat(totalCostoTeorico.toFixed(4));
+        return this.totalCostoTeorico;
+    }
+
 
     getIVA(){
         return parseFloat(((this.getSubtotal() * this.valorIVA) / 100).toFixed(4));
