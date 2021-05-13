@@ -510,6 +510,8 @@ class InventarioModel extends Conexion  {
                 INV_ARTICULOS.TipoIva,
                 RTRIM(IVA.VALOR) as VALORIVA,
                 extraData.fechaCaducidad,
+                ISNULL(extraData.costoTeorico, 0) as costoTeorico,
+                ISNULL( extraData.porcentajeMerma, 0) as porcentajeMerma,
 	            extraData.observacion
             FROM INV_ARTICULOS 
             INNER JOIN dbo.INV_IVA AS IVA on IVA.CODIGO = INV_ARTICULOS.TipoIva
@@ -890,6 +892,48 @@ class InventarioModel extends Conexion  {
             return array('status' => 'error', 'message' => $exception->getMessage());
         }
    
+    }
+
+    public function WSSP_SaveCostoTeorico (object $documento){
+     
+        try{
+            $this->instancia->beginTransaction();
+            
+            foreach ($documento->kit->composicion as $producto) {
+                $query = "
+                    IF EXISTS(SELECT codigo FROM wssp.dbo.INV_ARTICULOS_EXTRA_DATA WHERE codigo= :codigoSelect)
+                        UPDATE wssp.dbo.INV_ARTICULOS_EXTRA_DATA 
+                            SET costoTeorico = :costoTeorico_update, 
+                            porcentajeMerma = :porcentajeMerma_update  
+                        WHERE codigo= :codigo_update
+                    ELSE
+                        INSERT INTO 
+                            wssp.dbo.INV_ARTICULOS_EXTRA_DATA (dbname, codigo, costoTeorico, porcentajeMerma)
+                        VALUES ( :dbname, :codigo, :costoTeorico, :porcentajeMerma)
+                ";  
+                    $stmt = $this->instancia->prepare($query);
+                    $stmt->bindParam(':codigoSelect', $producto->codigo);
+
+                    $stmt->bindParam(':costoTeorico_update', $producto->costoTeorico);
+                    $stmt->bindParam(':porcentajeMerma_update', $producto->porcentajeMerma);
+                    $stmt->bindParam(':codigo_update', $producto->codigo);
+
+                    $stmt->bindParam(':dbname', $_SESSION["empresaAUTH".APP_UNIQUE_KEY]);
+                    $stmt->bindParam(':codigo',  $producto->codigo);
+                    $stmt->bindParam(':costoTeorico', $producto->costoTeorico);
+                    $stmt->bindParam(':porcentajeMerma', $producto->porcentajeMerma);
+                   
+                $stmt->execute();
+            }
+
+            $commit = $this->instancia->commit();
+            return array('status' => 'OK', 'commit' => $commit ,'message' => 'Costo Teórico y Porcentaje de merma registrados');
+            
+        }catch(\PDOException $exception){
+            $this->instancia->rollBack();
+            http_response_code(400);
+            return array('status' => 'error', 'message' => $exception->getMessage() );
+        }
     }
 
     public function Winfenix_saveTransformacionKITS (object $documento) {

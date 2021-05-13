@@ -81,11 +81,11 @@ class Producto {
     }
 
     setCostoTeorico(costoTeorico){
-        this.costoTeorico = costoTeorico;
+        this.costoTeorico = parseFloat(costoTeorico);
     }
 
     setPorcentMerma(porcentajeMerma){
-        this.porcentajeMerma = porcentajeMerma;
+        this.porcentajeMerma = parseFloat(porcentajeMerma);
     }
 
 }
@@ -236,6 +236,9 @@ const app = new Vue({
                             const producto = productoComposicion.data.producto;
                             
                             const newProduct = new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, productoDB.Cantidad, producto.Costo, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
+                            newProduct.setCostoTeorico(producto.costoTeorico);
+                            newProduct.setPorcentMerma(producto.porcentajeMerma);
+                            
                             const productoCostoActualizado = await this.getCostoProducto(newProduct);
                             productoCostoActualizado.unidades_medida = productoComposicion.data.unidades_medida;
                             this.documento.kit.descripcion = productoDB.Preparacion;
@@ -457,12 +460,6 @@ const app = new Vue({
                 return false;
             }
 
-            if (this.documento.kit.cantidad > this.documento.kit.getMaximaProduccion()) {
-                alert(`Segun el stock de los componentes del KIT, no se puede producir más de:
-                     ${this.documento.kit.getMaximaProduccion()} ${this.documento.kit.unidad} de ${this.documento.kit.nombre}`);
-                return false;
-            }
-
             return true;
         },
         async saveReceta(){
@@ -509,7 +506,7 @@ const app = new Vue({
             
         },
         async saveDocumento(){
-            const confirmar = confirm('Confirma guardar el egreso por producción?');
+            const confirmar = confirm('Confirma guardar los Costo Teórico & Merma?');
             if (!confirmar) {
                 return;
             }
@@ -518,13 +515,11 @@ const app = new Vue({
                 return;
             }
 
-            
-
             console.log(this.documento);
             let formData = new FormData();
             formData.append('documento', JSON.stringify(this.documento)); 
              
-            const response = await fetch(`./api/inventario/index.php?action=saveTransformacionKITS`, {
+            const response = await fetch(`./api/inventario/index.php?action=saveCostoTeorico`, {
                             method: 'POST',
                             body: formData
                             })
@@ -547,7 +542,7 @@ const app = new Vue({
                     closeOnConfirm: false
                     },
                     function(){
-                        window.location = './index.php?action=creacionReceta'
+                        window.location = './index.php?action=costoTeorico'
                     });
             }else {
                 console.log(response);

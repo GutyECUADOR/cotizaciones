@@ -66,6 +66,11 @@ class InventarioController  {
         return $response;
     }
 
+    function saveCostoTeorico(object $documento) {
+        $response = $this->inventarioModel->WSSP_SaveCostoTeorico($documento);
+        return $response;
+    }
+
     function saveTransformacionKITS(object $documento) {
         $response = $this->inventarioModel->Winfenix_saveTransformacionKITS($documento);
         return $response;

@@ -200,7 +200,7 @@ $bodegas = $cotizacion->getBodegas();
                                 <table class="table table-bordered tableExtras">
                                     <thead>
                                         <tr>
-                                            <th style="width: 5%; min-width: 80px;" class="text-center headerTablaProducto">Codigo</th>
+                                            <th style="width: 5%; min-width: 100px;" class="text-center headerTablaProducto">Codigo</th>
                                             <th style="width: 10%; min-width: 170px;" class="text-center headerTablaProducto">Nombre del Articulo</th>
                                             <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Stock</th>
                                             <th style="width: 3%; min-width: 90px;" class="text-center headerTablaProducto">Cantidad</th>
@@ -278,7 +278,7 @@ $bodegas = $cotizacion->getBodegas();
                     
 
                         <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-primary btn-lg" @click="saveDocumento" id="btnGuardar"><span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"></span> Registrar</button>
+                            <button type="button" class="btn btn-primary btn-lg" @click="saveDocumento" id="btnGuardar"><span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"></span> Registrar {{ title }}</button>
                         </div>
 
                         <div class="btn-group" role="group">
