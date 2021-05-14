@@ -48,7 +48,7 @@ class Producto {
     }
 
     getCostoTeoricoUnitario(){
-        this.costoTeoricoUnitario = parseFloat((this.costoTeorico - this.valorMerma).toFixed(4));
+        this.costoTeoricoUnitario = parseFloat((this.costoTeorico + this.valorMerma).toFixed(4));
         return this.costoTeoricoUnitario;
     }
 
@@ -163,7 +163,7 @@ class Kit {
         const totalTeorico = this.composicion.reduce( (total, producto) => {
             return total + producto.costoTeorico;
         }, 0);
-        this.totalTeorico = parseFloat(totalTeorico.toFixed(4));
+        this.totalTeorico = parseFloat(totalTeorico.toFixed(2));
         return this.totalTeorico;
     }
 

@@ -157,7 +157,7 @@ $bodegas = $cotizacion->getBodegas();
                                         <td><input type="text" class="form-control text-center input-sm" v-model="documento.kit.stock" disabled></td>
                                         <td><input type="number" class="form-control text-center input-sm" @change="documento.kit.setCantidad($event.target.value)" :value="documento.kit.cantidad" step=".0001" min="0" oninput="validity.valid||(value='0');"></td>
                                         <td>
-                                            <select v-model='documento.kit.unidad' @change="documento.kit.getPrecio()" class="form-control input-sm" disabled>
+                                            <select v-model='documento.kit.unidad' @change="documento.kit.getPrecio()" class="form-control input-sm">
                                                 <option v-for="unidad in documento.kit.unidades_medida" :value="unidad.Unidad.trim()">
                                                 {{unidad.Unidad}}
                                                 </option>
@@ -223,8 +223,8 @@ $bodegas = $cotizacion->getBodegas();
                                             <td><input type="number" class="form-control text-center input-sm" @change="producto.setCantidad($event.target.value)" :value="producto.cantidad" step=".0001" min="0" oninput="validity.valid||(value=1);" readonly></td>
                                             
                                             <td>
-                                                <select v-model="producto.unidad" @change="getCostoProducto(producto)" class="form-control input-sm" disabled>
-                                                    <option v-for="unidad in producto.unidades_medida" :value="unidad.Unidad.trim()" readonly>
+                                                <select v-model="producto.unidad" @change="getCostoProducto(producto)" class="form-control input-sm">
+                                                    <option v-for="unidad in producto.unidades_medida" :value="unidad.Unidad.trim()">
                                                     {{unidad.Unidad}}
                                                     </option>
                                                 </select>
@@ -236,8 +236,8 @@ $bodegas = $cotizacion->getBodegas();
                                             <td>
                                                 <input type="text" class="form-control text-center input-sm" v-model="producto.getSubtotal()" readonly></td>
                                             </td>
-                                            <td><input type="number" class="form-control text-center input-sm" @change="producto.setCostoTeorico($event.target.value)" :value="producto.costoTeorico" step=".0001" min="0" oninput="validity.valid||(value=1);"></td>
-                                            <td><input type="number" class="form-control text-center input-sm" @change="producto.setPorcentMerma($event.target.value)" :value="producto.porcentajeMerma" step=".01" min="0" oninput="validity.valid||(value=1);"></td>
+                                            <td><input type="number" class="form-control text-center input-sm" @change="producto.setCostoTeorico($event.target.value)" :value="producto.costoTeorico" step=".0001" min="0" ></td>
+                                            <td><input type="number" class="form-control text-center input-sm" @change="producto.setPorcentMerma($event.target.value)" :value="producto.porcentajeMerma" step=".01" min="0"></td>
                                             <td>
                                                 <input type="text" class="form-control text-center input-sm" v-model="producto.getValorMerma()" readonly></td>
                                             </td>

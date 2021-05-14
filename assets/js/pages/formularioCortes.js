@@ -95,7 +95,7 @@ class Producto {
     }
 
     setPrecio(precio){
-        this.precio = precio;
+        this.precio = parseFloat(precio).toFixed(4) || 0;
     }
 }
 
@@ -191,7 +191,14 @@ class Documento {
         return  this.productos_ingreso.peso
     }
 
-    /* Subtotales  */
+    /* Retorna el subtotal sin considerar la cantidad  */
+    getCostoTotal_Egresos(){
+        this.productos_egreso.totalCosto = this.productos_egreso.items.reduce( (total, producto) => { 
+            return total + producto.precio; 
+        }, 0);
+        return this.productos_egreso.totalCosto;
+    }
+
 
     getSubTotal_Egresos(){
         this.productos_egreso.subtotal = this.productos_egreso.items.reduce( (total, producto) => { 
@@ -357,6 +364,37 @@ const app = new Vue({
             }); 
                 
         },
+        getCostoProductoByCostoEgresos(producto) {
+            let codigo = producto.codigo;
+            let unidad = producto.unidad;
+            let busqueda = JSON.stringify({codigo, unidad});
+           
+            fetch(`./api/inventario/index.php?action=getCostoProducto&busqueda=${busqueda}`)
+            .then(response => {
+                return response.json();
+            })
+            .then(response => {
+              console.log(response);
+                if (response.data) {
+                    producto.setStock(response.data.Stock);
+                    producto.setFactor(response.data.factor);
+                    //producto.setPrecio(this.documento.getCostoTotal_Egresos() / producto.factor);
+                }else{
+                    new PNotify({
+                        title: 'Costo no calculado',
+                        text: `No se ha podido calcular el costo para el con el codigo: ' ${codigo}`,
+                        delay: 3000,
+                        type: 'error',
+                        styling: 'bootstrap3'
+                    });
+                }
+
+             
+            }).catch( error => {
+                console.error(error);
+            }); 
+                
+        },
         getCantidadByFactor(producto) {
             const codigo = producto.codigo;
             const unidad = producto.unidad;
@@ -475,6 +513,7 @@ const app = new Vue({
             });
 
             if (existeInArray === -1  && this.nuevo_producto.codigo.length > 0) {
+                this.nuevo_producto.setPrecio(this.documento.getCostoTotal_Egresos());
                 this.nuevo_producto.unidades_medida = this.unidades_medida; // Se añade para que luego en lista se pueda editar las medidas KG, GR
                 this.documento.productos_ingreso.items.push(this.nuevo_producto);
                 //this.updatePrecioProductosIngresoIguales();
