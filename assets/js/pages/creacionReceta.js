@@ -68,7 +68,8 @@ class Kit {
       this.nombre = nombre || '';
       this.unidad = unidad || '';
       this.composicion = [];
-      this.fechaCaducidad = '';
+      this.diasCaducidad= 0;
+      this.fechaCaducidad = new Date().toISOString().slice(0,10);
       this.factor = 1;
       this.unidades = 0;
       this.tipoArticulo = tipoArticulo || ''
@@ -106,7 +107,14 @@ class Kit {
         }else{
             return 0;
         }
-        
+    }
+
+    getFechaCaducidad(){
+        let startdate = moment();
+        startdate = startdate.add(this.diasCaducidad, "days");
+        startdate = startdate.format("YYYY-MM-DD");
+        this.fechaCaducidad = startdate;
+        return this.fechaCaducidad;
     }
 
     getIVA(){
