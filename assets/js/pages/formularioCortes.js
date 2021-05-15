@@ -42,7 +42,8 @@ class Producto {
       this.nombre = nombre || '';
       this.unidad = unidad || '';
       this.factor = 1;
-      this.fechaCaducidad = ''
+      this.diasCaducidad= 0;
+      this.fechaCaducidad = new Date().toISOString().slice(0,10);
       this.unidades = 0
       this.tipoArticulo = tipoArticulo || ''
       this.cantidad = parseFloat(cantidad) || 1;
@@ -56,6 +57,14 @@ class Producto {
       this.vendedor = null;
       this.descripcion = null;
       this.observacion = '';
+    }
+
+    getFechaCaducidad(){
+        let startdate = moment();
+        startdate = startdate.add(this.diasCaducidad, "days");
+        startdate = startdate.format("YYYY-MM-DD");
+        this.fechaCaducidad = startdate;
+        return this.fechaCaducidad;
     }
 
     getIVA(){

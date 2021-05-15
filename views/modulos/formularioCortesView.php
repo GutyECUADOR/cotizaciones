@@ -286,9 +286,10 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                                             <h4 class="modal-title"> Observacion del Producto: {{producto.nombre}}</h4>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <div class="form-group">
-                                                                <label for="comment">Fecha de Caducidad:</label>
-                                                                <input type="date" class="form-control text-center input-sm" v-model="producto.fechaCaducidad">
+                                                            <label for="comment">Fecha de Caducidad:</label>
+                                                            <div class="input-group w-100">
+                                                                <input type="number" class="w-50 form-control text-center input-sm" @change="producto.getFechaCaducidad()" v-model="producto.diasCaducidad">
+                                                                <input type="date" class="w-50 form-control text-center input-sm" format="YYYY-MM-DD" v-model="producto.fechaCaducidad" >
                                                             </div>
                                                             
                                                             <div class="form-group">
@@ -393,5 +394,6 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\datepicker.js"></script>
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\xlsx.full.min.js"></script>
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets/js/sweetalert.min.js"></script>
+    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\moment.min.js"></script>
     
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\pages\formularioCortes.js?<?php echo date('Ymdhiiss')?>"></script>
