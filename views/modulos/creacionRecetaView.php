@@ -144,7 +144,7 @@ $bodegas = $cotizacion->getBodegas();
                                     <tr>
                                         <td>
                                             <div class="input-group">
-                                            <input type="text" @change="setKit(search_producto.busqueda.texto)" v-model="search_producto.busqueda.texto" class="form-control text-center input-sm" placeholder="Codigo de Producto">
+                                            <input type="text" @change="setKit(search_producto.busqueda.texto); setKit_obs(search_producto.busqueda.texto)" v-model="search_producto.busqueda.texto" class="form-control text-center input-sm" placeholder="Codigo de Producto">
                                             <span class="input-group-btn">
                                                 <button id="btnSeachProductos" class="btn btn-default input-sm" type="button" data-toggle="modal" data-target="#modalBuscarProducto">
                                                     <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
@@ -153,24 +153,24 @@ $bodegas = $cotizacion->getBodegas();
                                             </div><!-- /input-group -->
                                         </td>
                                         <td>
-                                            <input type="text" v-model="documento.kit.nombre" class="form-control text-center input-sm" readonly>
+                                            <input type="text" v-model="documento.kit_obs.nombre" class="form-control text-center input-sm" readonly>
                                         </td>
-                                        <td><input type="text" class="form-control text-center input-sm" v-model="documento.kit.stock" disabled></td>
-                                        <td><input type="number" class="form-control text-center input-sm" @change="documento.kit.setCantidad($event.target.value)" :value="documento.kit.cantidad" step=".0001" min="0" oninput="validity.valid||(value='0');"></td>
+                                        <td><input type="text" class="form-control text-center input-sm" v-model="documento.kit_obs.stock" disabled></td>
+                                        <td><input type="number" class="form-control text-center input-sm" @change="documento.kit_obs.setCantidad($event.target.value)" :value="documento.kit_obs.cantidad" step=".0001" min="0" oninput="validity.valid||(value='0');"></td>
                                         <td>
-                                            <select v-model='documento.kit.unidad' @change="documento.kit.getPrecio()" class="form-control input-sm" disabled>
-                                                <option v-for="unidad in documento.kit.unidades_medida" :value="unidad.Unidad.trim()">
+                                            <select v-model='documento.kit_obs.unidad' @change="documento.kit_obs.getPrecio()" class="form-control input-sm" disabled>
+                                                <option v-for="unidad in documento.kit_obs.unidades_medida" :value="unidad.Unidad.trim()">
                                                 {{unidad.Unidad}}
                                                 </option>
                                             </select>
                                         </td>
                                         <td>
-                                            <input type="number" v-model="documento.kit.getPrecio()" class="form-control text-center input-sm" min="0" value="0" readonly>
+                                            <input type="number" v-model="documento.kit_obs.getPrecio()" class="form-control text-center input-sm" min="0" value="0" data-toggle="tooltip" data-placement="top" title="Costo es autocalculado segun sus componentes." readonly>
                                         </td>
                                         <td>
-                                            <input type="text" v-model="documento.kit.getSubtotal()" class="form-control text-center input-sm importe_linea" readonly>
+                                            <input type="text" v-model="documento.kit_obs.getSubtotal()" class="form-control text-center input-sm importe_linea" readonly>
                                         </td>
-                                        <td><button type="button" @click="showDescriptionModal(documento.kit)" class="btn btn-primary btn-sm btn-block"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
+                                        <td><button type="button" @click="showDescriptionModal(documento.kit_obs)" class="btn btn-primary btn-sm btn-block"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
                                     </tr>
 
                                     
@@ -194,7 +194,7 @@ $bodegas = $cotizacion->getBodegas();
                         <div class="panel-heading clearfix">
                         <h4 class="panel-title pull-left" style="padding-top: 7.5px; padding-bottom: 7.5px;"><i class="fa fa-list" aria-hidden="true"></i> Detalle del KIT (Composición)</h4>
                             <div class="btn-group pull-right">
-                                <button type="button" @click="setKit(documento.kit.codigo)" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-refresh"></span> Recargar Composicion</button>
+                                <button type="button" @click="setKit(documento.kit.codigo); setKit_obs(documento.kit_obs.codigo)" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-refresh"></span> Recargar Composicion</button>
                                 <button type="button" @click="saveReceta" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar cambios en Receta</button>
                                 <button type="button"  data-toggle="modal" data-target="#modal_producto_composicion" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-search"></span> Agregar Item a Composicion</button>
                             </div>
@@ -216,14 +216,14 @@ $bodegas = $cotizacion->getBodegas();
                                         </tr>
                                     </thead>
                                     <tbody id="tablaProductos">
-                                        <tr v-for="producto in documento.kit.composicion">
+                                        <tr v-for="producto in documento.kit_obs.composicion">
                                             <td><input type="text" class="form-control text-center input-sm" v-model="producto.codigo" disabled></td>
                                             <td><input type="text" class="form-control text-center input-sm"  v-model="producto.nombre" readonly></td>
                                             <td><input type="text" class="form-control text-center input-sm" v-model="producto.stock" readonly></td>
                                             <td><input type="number" class="form-control text-center input-sm" @change="producto.setCantidad($event.target.value)" :value="producto.cantidad" step=".0001" min="0" oninput="validity.valid||(value=1);" readonly></td>
                                            
                                             <td>
-                                                <select v-model="producto.unidad" @change="getCostoProducto(producto)" class="form-control input-sm" disabled>
+                                                <select v-model="producto.unidad" @change="getCostoProducto(producto)" class="form-control input-sm">
                                                     <option v-for="unidad in producto.unidades_medida" :value="unidad.Unidad.trim()" readonly>
                                                     {{unidad.Unidad}}
                                                     </option>

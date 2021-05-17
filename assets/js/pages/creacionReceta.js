@@ -167,7 +167,8 @@ class Documento {
     constructor() {
         this.bodega_egreso = 'B01',
         this.bodega_ingreso = 'B02',
-        this.kit = new Kit()
+        this.kit = new Kit(),
+        this.kit_obs = new Kit()
     }
 
 }
@@ -237,6 +238,65 @@ const app = new Vue({
                     });
 
                     this.documento.kit.setComposicion(productosComposicion);
+                   
+                }else{
+                    new PNotify({
+                        title: 'Item no disponible',
+                        text: `No se ha encontrado la composicion del KIT ${codigo}`,
+                        delay: 3000,
+                        type: 'warn',
+                        styling: 'bootstrap3'
+                    });
+                }
+                
+            }else{   
+                new PNotify({
+                    title: 'Item no disponible',
+                    text: `No se ha encontrado el producto con el codigo: ' ${codigo}`,
+                    delay: 3000,
+                    type: 'warn',
+                    styling: 'bootstrap3'
+                });
+            }
+        },
+        async setKit_obs(codigo){
+            const response = await this.getProducto(codigo);  
+            if (response.data.producto) {
+                const producto = response.data.producto;
+                this.documento.kit_obs = new Kit(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, 1, producto.PrecA, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
+                this.documento.kit_obs.observacion = producto.observacion;
+                this.documento.kit_obs.fechaCaducidad = producto.fechaCaducidad;
+
+                this.documento.kit_obs.unidades_medida = response.data.unidades_medida;
+                const responseComposicion = await this.getComposicionProducto(this.documento.kit_obs.codigo);
+
+                if (responseComposicion.data) {
+                    let productosComposicion = [];
+                    responseComposicion.data.forEach( async productoDB => {
+                       
+                        let productoComposicion = await this.getProducto(productoDB.Codigo.trim());
+                        if (productoComposicion.data) {
+                            const producto = productoComposicion.data.producto;
+                            
+                            const newProduct = new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, productoDB.Cantidad, producto.Costo, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
+                            newProduct.observacion = producto.observacion;
+                            newProduct.fechaCaducidad = producto.fechaCaducidad;
+                            const productoCostoActualizado = await this.getCostoProducto(newProduct);
+                            productoCostoActualizado.unidades_medida = productoComposicion.data.unidades_medida;
+                            this.documento.kit_obs.descripcion = productoDB.Preparacion;
+                            productosComposicion.push(productoCostoActualizado);
+                        }else{   
+                            new PNotify({
+                                title: 'Item no disponible',
+                                text: `No se ha encontrado el producto con el codigo: ' ${producto.Codigo}`,
+                                delay: 3000,
+                                type: 'warn',
+                                styling: 'bootstrap3'
+                            });
+                        }
+                    });
+
+                    this.documento.kit_obs.setComposicion(productosComposicion);
                    
                 }else{
                     new PNotify({
@@ -336,6 +396,7 @@ const app = new Vue({
         selectProduct(codigo){
             this.search_producto.busqueda.texto = codigo.trim();
             this.setKit(codigo);
+            this.setKit_obs(codigo);
             $('#modalBuscarProducto').modal('hide');
         },
         addToList(codigo){
@@ -396,6 +457,10 @@ const app = new Vue({
         },
         setPreparacionToProducts(){
             this.documento.kit.composicion.forEach( producto => {
+                producto.descripcion = this.documento.kit.descripcion;
+            });
+
+            this.documento.kit_obs.composicion.forEach( producto => {
                 producto.descripcion = this.documento.kit.descripcion;
             });
         },
@@ -553,7 +618,9 @@ const app = new Vue({
         
     },
     mounted(){
-
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+          })
     }
  
 })
