@@ -271,8 +271,8 @@ const app = new Vue({
     },
     search_documentos: {
         busqueda: {
-            fechaINI: '',
-            fechaFIN: '',
+            fechaINI: moment().format("YYYY-MM-DD"),
+            fechaFIN: moment().format("YYYY-MM-DD"),
             texto: '',
             cantidad: 25
         },
@@ -295,25 +295,27 @@ const app = new Vue({
       documento : new Documento()
     },
     methods:{
-        getDocumentos() {
+        async getDocumentos() {
             this.search_documentos.isloading = true;
             let texto = this.search_documentos.busqueda.texto;
             let fechaINI = this.search_documentos.busqueda.fechaINI;
             let fechaFIN = this.search_documentos.busqueda.fechaFIN;
             let busqueda = JSON.stringify({ texto, fechaINI, fechaFIN});
-            fetch(`./api/inventario/index.php?action=getDocumentos&busqueda=${busqueda}`)
-            .then(response => {
-                return response.json();
-            })
-            .then(productos => {
-              console.log(productos);
-              this.search_documentos.isloading = false;
-              this.search_documentos.results = productos.data;
-             
-            }).catch( error => {
-                console.error(error);
-            }); 
+            const documentos = await fetch(`./api/inventario/index.php?action=searchDocumentos&busqueda=${busqueda}`)
+                .then(response => {
+                    this.search_documentos.isloading = false;
+                    return response.json();
+                }).catch( error => {
+                    console.error(error);
+                }); 
+
+            console.log(documentos);
+            this.search_documentos.results = documentos;
             
+        },
+        generaPDF(ID){
+            alert('Generando PDF' + ID);
+            window.open(`./api/documentos/index.php?action=generaReportePDF_IngresosEgresos&ID=${ID}`, '_blank').focus();
         },
         async getProducto() {
             const busqueda = this.search_producto.busqueda.texto;

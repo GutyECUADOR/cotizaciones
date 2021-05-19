@@ -18,6 +18,11 @@ class InventarioController  {
         $this->winfenixModel->conectarDB();
     }
 
+    public function searchDocumentos_EgresosIngresos(object $busqueda){
+        $response  = $this->winfenixModel->sql_getIngresosEgresos($busqueda);
+        return $response;
+    }
+
     public function searchProductos(object $busqueda){
         $response = $this->winfenixModel->Sp_INVCONARTWAN($busqueda);
         return $response;

@@ -18,6 +18,17 @@ $InventarioController = new InventarioController();
 
     switch ($HTTPaction) {
 
+      case 'searchDocumentos':
+        if (isset($_GET['busqueda'])) {
+          $busqueda = json_decode($_GET['busqueda']);
+          $rawdata = $InventarioController->searchDocumentos_EgresosIngresos($busqueda);
+        }else{
+          http_response_code(400);
+          $rawdata = array('status' => 'error', 'mensaje' => 'No se ha indicado parámetros.');
+        }
+        echo json_encode($rawdata);
+      break;
+
         case 'searchProductos':
           if (isset($_GET['busqueda'])) {
             $busqueda = json_decode($_GET['busqueda']);
@@ -29,6 +40,8 @@ $InventarioController = new InventarioController();
           }
           echo json_encode($rawdata);
         break;
+
+
 
         case 'getProducto':
           if (isset($_GET['busqueda'])) {

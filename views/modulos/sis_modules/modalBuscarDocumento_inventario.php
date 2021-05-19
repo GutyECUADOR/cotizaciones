@@ -26,29 +26,33 @@
             </div>
 
             <div class="panel panel-default"> 
-                <div class="panel-heading">Resultados</div> 
+                <div class="panel-heading">Resultados: <b>{{ search_documentos.results.length}}</b> documentos</div> 
                     <div class="responsibetable"> 
                         <table class="table"> 
                             <thead>
                                 <tr> 
-                                    <th>Codigo</th> 
-                                    <th>Empresa</th> 
+                                    <th>ID</th> 
+                                    <th>Tipo</th> 
+                                    <th>Numero</th> 
                                     <th>Fecha</th> 
-                                    <th>Número</th>
-                                    <th>Opciones</th>
+                                    <th>Bodega</th>
+                                    <th>Total</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </thead> 
                             
                             <tbody>
                             <tr v-for="documento in search_documentos.results">
-                                <td>{{documento.codigo}}</td>
-                                <td>{{documento.empresa}}</td>
-                                <td>{{documento.fecha}}</td>
-                                <td>{{documento.placa}}</td>
-                                <td>{{documento.observacion.substring(20,0)+  '...'}}</td>
+                                <td>{{documento.ID}}</td>
+                                <td>{{documento.TIPO}}</td>
+                                <td>{{documento.NUMERO}}</td>
+                                <td>{{documento.FECHA}}</td>
+                                <td>{{documento.BODEGA}}</td>
+                                <td>{{documento.total}}</td>
+                                
                                 <td>
-                                    <button type="button" class="btn btn-primary btn-sm btn-block">
-                                        <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                                    <button type="button" @click="generaPDF(documento.ID)" class="btn btn-primary btn-sm btn-block">
+                                        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
                                     </button>
                                 </td>
                                 

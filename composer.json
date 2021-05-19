@@ -1,6 +1,6 @@
 {
     "name": "vidiasoft/cotizaciones",
-    "description": "Proyecto de cotizaciones de winfenix",
+    "description": "Proyecto de WebForms de winfenix",
     "type": "project",
     "license": "MIT",
     "authors": [
@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "mpdf/mpdf": "6.1.0",
+        "mpdf/mpdf": "8.0.4",
         "phpmailer/phpmailer": "^6.0",
         "vlucas/phpdotenv": "^5.3"
     },

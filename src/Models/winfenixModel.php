@@ -26,7 +26,7 @@ class WinfenixModel extends Conexion  {
         return $resulset;  
 
     }
-
+    
     /* Retorna lista de proveedores */
     public function Sp_PAGCONPRO(object $busqueda){
 
@@ -35,6 +35,33 @@ class WinfenixModel extends Conexion  {
         $stmt->bindValue(1, $busqueda->termino); 
         $stmt->bindValue(2, $busqueda->campo); 
       
+            if($stmt->execute()){
+                $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+            }else{
+                $resulset = false;
+            }
+        return $resulset;  
+    }
+
+
+    public function sql_getIngresosEgresos (object $busqueda) {
+        $query = "
+        SELECT 
+            TIPO,
+            NUMERO,
+            CONVERT(CHAR(10),FECHA,102) as FECHA, 
+            Doc_Relacion = ISNULL(Numrel,''''),
+            BODEGA,total,
+            DIVISA,
+            OFI,
+            (CASE ANULADO WHEN 1 THEN 'AN' ELSE '' END) AS ANULADO,
+            ID FROM INV_CAB WITH(NOLOCK)  
+        WHERE TIPO IN ('EPC','IPC') AND fecha BETWEEN :fechaINI  AND :fechaFIN  order by fecha,tipo,numero,doc_relacion
+        ";
+        $stmt = $this->instancia->prepare($query);
+        $stmt->bindValue(':fechaINI', date("Ymd", strtotime($busqueda->fechaINI))); 
+        $stmt->bindValue(':fechaFIN', date("Ymd", strtotime($busqueda->fechaFIN))); 
+       
             if($stmt->execute()){
                 $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
             }else{
