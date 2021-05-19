@@ -70,6 +70,38 @@ class WinfenixModel extends Conexion  {
         return $resulset;  
     }
 
+    public function sql_getINV_CAB(string $ID) {
+        //Query de consulta con parametros para bindear si es necesario.
+        $query = "
+            SELECT * FROM INV_CAB WITH (NOLOCK) WHERE ID= :id
+            ";  // Final del Query SQL 
+
+        $stmt = $this->instancia->prepare($query);
+        $stmt->bindParam(':id', $ID); 
+      
+            if($stmt->execute()){
+                $resulset = $stmt->fetch( \PDO::FETCH_ASSOC );
+            }else{
+                $resulset = false;
+            }
+        return $resulset;  
+    }
+
+    public function SP_INVSelectMov(string $ID){
+
+        $query = "exec SP_INVSelectMov ?";
+        $stmt = $this->instancia->prepare($query);
+        $stmt->bindValue(1, $ID); 
+      
+            if($stmt->execute()){
+                $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+            }else{
+                $resulset = false;
+            }
+        return $resulset;  
+    }
+    
+
     
 }
 

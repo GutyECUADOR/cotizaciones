@@ -1,6 +1,5 @@
 <?php namespace App\Models;
 
-use PDO;
 use App\Models\Conexion;
 use App\Models\VenCabClass;
 use App\Models\VenMovClass;
@@ -314,7 +313,7 @@ class InventarioModel extends Conexion  {
    
     }
 
-    /*Retorna array con informacion de la empresa que se indique*/
+  
     public function getDatosEmpresaFromWINFENIX ($dataBaseName='wssp'){
        
         $query = "SELECT NomCia, Oficina, Ejercicio FROM dbo.DatosEmpresa";
@@ -329,7 +328,7 @@ class InventarioModel extends Conexion  {
 
     }
     
-    /*Retorna array asociativo con informacion del cliente que se indique*/
+   
     public function getDatosClienteWINFENIXByRUC ($clienteRUC, $dataBaseName='wssp'){
         
         $query = "SELECT * FROM COB_CLIENTES WHERE RUC = '$clienteRUC'";
@@ -343,7 +342,7 @@ class InventarioModel extends Conexion  {
         }
     }
 
-    /*Retorna array asociativo con informacion del cliente que se indique*/
+   
     public function getDatosDocumentsWINFENIXByTypo ($tipoDOC){
         
         $query = "SELECT CODIGO, NOMBRE, Serie FROM dbo.VEN_TIPOS WHERE CODIGO = '$tipoDOC'";
@@ -1217,6 +1216,7 @@ class InventarioModel extends Conexion  {
    
     }
 
+    
 
     
     

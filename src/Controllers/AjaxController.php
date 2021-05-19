@@ -5,7 +5,7 @@ use App\Models\VenCabClass;
 use App\Models\VenMovClass;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-use mPDF;
+use Mpdf\Mpdf;
 
 class AjaxController  {
 
@@ -346,7 +346,7 @@ class AjaxController  {
         //==============================================================
 
         /* require_once '../../../vendor/autoload.php'; */
-        $mpdf = new mPDF('c','A4');
+        $mpdf = new mPDF();
 
         // LOAD a stylesheet
         $stylesheet = file_get_contents('../../../assets/css/reportesStyles.css');
@@ -1001,7 +1001,7 @@ class AjaxController  {
                 $pcID = php_uname('n'); // Obtiene el nombre del PC
                 $log  = "User: ".$ip.' - '.date("F j, Y, g:i a").PHP_EOL.
                 "PCid: ".$pcID.PHP_EOL.
-                "Detail: ".$mail->ErrorInfo .' No se pudo enviar correo a: ' . $correoCliente . PHP_EOL.
+                "Detail: ".$mail->ErrorInfo .' No se pudo enviar correo a: ' . $arrayCorreos . PHP_EOL.
                 "-------------------------".PHP_EOL;
                 //Save string to log, use FILE_APPEND to append.
                 file_put_contents('../../../logs/logMailError.txt', $log, FILE_APPEND);
@@ -1014,16 +1014,6 @@ class AjaxController  {
 
 
     /* INVENTARIO */
-
-    function getProveedor(string $busqueda) {
-        $response = $this->ajaxModel->getProveedor($busqueda);
-        return $response;
-    }
-
-    function getProveedores(object $busqueda) {
-        $response = $this->ajaxModel->getProveedores($busqueda);
-        return $response;
-    }
 
     function getProducto(string $busqueda) {
         $producto = $this->ajaxModel->getProducto($busqueda);
