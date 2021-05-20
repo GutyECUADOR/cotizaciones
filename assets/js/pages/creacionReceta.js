@@ -177,6 +177,16 @@ const app = new Vue({
     el: '#app',
     data: {
       title: 'Creación de Recetas',
+      search_documentos: {
+        busqueda: {
+            fechaINI: moment().format("YYYY-MM-DD"),
+            fechaFIN: moment().format("YYYY-MM-DD"),
+            texto: '',
+            cantidad: 25
+        },
+        isloading: false,
+        results: []
+    },
       search_producto: {
           busqueda: {
             texto: '',
@@ -200,6 +210,28 @@ const app = new Vue({
       documento : new Documento()
     },
     methods:{
+        async getDocumentos() {
+            this.search_documentos.isloading = true;
+            let texto = this.search_documentos.busqueda.texto;
+            let fechaINI = this.search_documentos.busqueda.fechaINI;
+            let fechaFIN = this.search_documentos.busqueda.fechaFIN;
+            let busqueda = JSON.stringify({ texto, fechaINI, fechaFIN});
+            const documentos = await fetch(`./api/inventario/index.php?action=searchDocumentos_CreacionReceta&busqueda=${busqueda}`)
+                .then(response => {
+                    this.search_documentos.isloading = false;
+                    return response.json();
+                }).catch( error => {
+                    console.error(error);
+                }); 
+
+            console.log(documentos);
+            this.search_documentos.results = documentos;
+            
+        },
+        generaPDF(ID){
+            alert('Generando PDF' + ID);
+            window.open(`./api/documentos/index.php?action=generaReportePDF_CreacionReceta&ID=${ID}`, '_blank').focus();
+        },
         async setKit(codigo){
             const response = await this.getProducto(codigo);  
             if (response.data.producto) {

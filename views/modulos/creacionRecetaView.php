@@ -39,8 +39,9 @@ $bodegas = $cotizacion->getBodegas();
                                 <span class="input-group-addon">Número</span>
                                 <input type="text" class="form-control">
                                 <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#modal_buscardocumento">
-                                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#modalBuscarDocumento">
+                                        <span class="glyphicon glyphicon-search" aria-hidden="true">
+                                        </span>
                                     </button>
                                 </span>
                                 
@@ -265,9 +266,13 @@ $bodegas = $cotizacion->getBodegas();
                     </div>
                 </div>
             </div>    
+            
 
             <!-- Modal Info sesion -->
             <?php require_once 'sis_modules/modal_info_session.php'?>
+
+            <!-- Modal Buscar Documento -->
+            <?php require_once 'sis_modules/modalBuscarDocumento_inventario.php'?>
 
             <!-- Modal Producto -->
             <?php require_once 'sis_modules/modal_producto.php'?>

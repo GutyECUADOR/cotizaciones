@@ -27,7 +27,7 @@ class WinfenixModel extends Conexion  {
 
     }
     
-    /* Retorna lista de proveedores */
+   
     public function Sp_PAGCONPRO(object $busqueda){
 
         $query = "exec Sp_PAGCONPRO ?,'',?";
@@ -57,6 +57,37 @@ class WinfenixModel extends Conexion  {
             (CASE ANULADO WHEN 1 THEN 'AN' ELSE '' END) AS ANULADO,
             ID FROM INV_CAB WITH(NOLOCK)  
         WHERE TIPO IN ('EPC','IPC') AND fecha BETWEEN :fechaINI  AND :fechaFIN  order by fecha,tipo,numero,doc_relacion
+        ";
+        $stmt = $this->instancia->prepare($query);
+        $stmt->bindValue(':fechaINI', date("Ymd", strtotime($busqueda->fechaINI))); 
+        $stmt->bindValue(':fechaFIN', date("Ymd", strtotime($busqueda->fechaFIN))); 
+       
+            if($stmt->execute()){
+                $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+            }else{
+                $resulset = false;
+            }
+        return $resulset;  
+    }
+
+    public function sql_getCreacionReceta (object $busqueda) {
+        $query = "
+        SELECT 
+            TIPO,
+            NUMERO,
+            CONVERT(CHAR(10),FECHA,102) AS FECHA,
+            Doc_Relacion = ISNULL(Numrel,''),
+            BODEGA,
+            total,
+            DIVISA,OFI,
+            (CASE ANULADO WHEN 1 THEN 'AN' ELSE '' END) AS ANULADO,
+            ID FROM INV_CAB WITH(NOLOCK) 
+        WHERE TIPO = 'STK' AND fecha BETWEEN :fechaINI AND :fechaFIN
+        order by 
+        fecha,
+        tipo,
+        numero,
+        doc_relacion
         ";
         $stmt = $this->instancia->prepare($query);
         $stmt->bindValue(':fechaINI', date("Ymd", strtotime($busqueda->fechaINI))); 

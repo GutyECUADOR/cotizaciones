@@ -23,6 +23,11 @@ class InventarioController  {
         return $response;
     }
 
+    public function searchDocumentos_CreacionReceta(object $busqueda){
+        $response  = $this->winfenixModel->sql_getCreacionReceta($busqueda);
+        return $response;
+    }
+
     public function searchProductos(object $busqueda){
         $response = $this->winfenixModel->Sp_INVCONARTWAN($busqueda);
         return $response;

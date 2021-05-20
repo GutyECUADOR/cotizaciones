@@ -301,7 +301,7 @@ const app = new Vue({
             let fechaINI = this.search_documentos.busqueda.fechaINI;
             let fechaFIN = this.search_documentos.busqueda.fechaFIN;
             let busqueda = JSON.stringify({ texto, fechaINI, fechaFIN});
-            const documentos = await fetch(`./api/inventario/index.php?action=searchDocumentos&busqueda=${busqueda}`)
+            const documentos = await fetch(`./api/inventario/index.php?action=searchDocumentos_IngresosEgresos&busqueda=${busqueda}`)
                 .then(response => {
                     this.search_documentos.isloading = false;
                     return response.json();
