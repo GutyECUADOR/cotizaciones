@@ -696,7 +696,7 @@ class InventarioModel extends Conexion  {
                         $stmt = $this->instancia->prepare($query);
                         $stmt->bindValue(':secuencia', $NextIDWithFormat);
                         $stmt->bindValue(':fecha', date('Ymd'));
-                        $stmt->bindValue(':bodega', $documento->productos_egreso->bodega);
+                        $stmt->bindValue(':bodega', $documento->productos_ingreso->bodega);
                         $stmt->bindValue(':codproducto', $producto->codigo);
                         $stmt->bindValue(':unidadproducto', $producto->unidad);
                         $stmt->bindValue(':cantidadproducto', $producto->cantidad);
@@ -716,7 +716,7 @@ class InventarioModel extends Conexion  {
                         $stmt->bindValue(':pcid', php_uname('n'));
                         $stmt->bindValue(':secuencia', $NextIDWithFormat);
                         $stmt->bindValue(':fecha', date('Ymd'));
-                        $stmt->bindValue(':bodega', $documento->productos_egreso->bodega);
+                        $stmt->bindValue(':bodega', $documento->productos_ingreso->bodega);
                         $stmt->bindValue(':codproducto', $producto->codigo);
                         $stmt->bindValue(':unidadproducto', $producto->unidad);
                         $stmt->bindValue(':cantidadproducto', $producto->cantidad);
