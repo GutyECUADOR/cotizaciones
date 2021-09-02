@@ -489,6 +489,33 @@ const app = new Vue({
             
         },
         addToIngresoList(){
+           
+            if (this.documento.productos_egreso.items[0].unidad != this.nuevo_producto.unidad) {
+                swal({
+                    title: "Unidades de medida distintas!",
+                    text: `Unidad de medida del egreso ${this.documento.productos_egreso.items[0].unidad} es diferente a la del producto que se intenta ingresar ${this.nuevo_producto.unidad}`,
+                    type: "warning",
+                    showCancelButton: false,
+                    confirmButtonClass: "btn-success",
+                    confirmButtonText: "Aceptar",
+                    closeOnConfirm: false
+                    });
+                return
+            }
+            
+            if (this.documento.productos_egreso.items.length < 1) {
+                swal({
+                    title: "Ops!",
+                    text: `No se ha indicado el item de egreso, registre primero el item que va a egresar.`,
+                    type: "warning",
+                    showCancelButton: false,
+                    confirmButtonClass: "btn-success",
+                    confirmButtonText: "Aceptar",
+                    closeOnConfirm: false
+                    });
+                return
+            }
+
             if (this.documento.productos_egreso.items.length < 1) {
                 swal({
                     title: "Ops!",
