@@ -157,19 +157,19 @@ $bodegas = $cotizacion->getBodegas();
                                             <input type="text" v-model="documento.kit_obs.nombre" class="form-control text-center input-sm" readonly>
                                         </td>
                                         <td><input type="text" class="form-control text-center input-sm" v-model="documento.kit_obs.stock" disabled></td>
-                                        <td><input type="number" class="form-control text-center input-sm" @change="documento.kit_obs.setCantidad($event.target.value)" :value="documento.kit_obs.cantidad" step=".0001" min="0" oninput="validity.valid||(value='0');"></td>
+                                        <td><input type="text" class="form-control text-center input-sm" @change="documento.kit.setCantidad($event.target.value); documento.kit_obs.setCantidad($event.target.value); updateComposicion()" :value="documento.kit_obs.cantidad" step=".0001" min="0" oninput="validity.valid||(value='0');"></td>
                                         <td>
-                                            <select v-model='documento.kit_obs.unidad' @change="documento.kit_obs.getPrecio()" class="form-control input-sm" disabled>
+                                            <select v-model='documento.kit_obs.unidad' @change="documento.kit.getPrecio()" class="form-control input-sm" disabled>
                                                 <option v-for="unidad in documento.kit_obs.unidades_medida" :value="unidad.Unidad.trim()">
                                                 {{unidad.Unidad}}
                                                 </option>
                                             </select>
                                         </td>
                                         <td>
-                                            <input type="number" v-model="documento.kit_obs.getPrecio()" class="form-control text-center input-sm" min="0" value="0" data-toggle="tooltip" data-placement="top" title="Costo es autocalculado segun sus componentes." readonly>
+                                            <input type="text" v-model="documento.kit.getPrecio()" class="form-control text-center input-sm" min="0" value="0" data-toggle="tooltip" data-placement="top" title="Costo es autocalculado segun sus componentes." readonly>
                                         </td>
                                         <td>
-                                            <input type="text" v-model="documento.kit_obs.getSubtotal()" class="form-control text-center input-sm importe_linea" readonly>
+                                            <input type="text" v-model="documento.kit.getSubtotal()" class="form-control text-center input-sm importe_linea" readonly>
                                         </td>
                                         <td><button type="button" @click="showDescriptionModal(documento.kit_obs)" class="btn btn-primary btn-sm btn-block"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
                                     </tr>
@@ -212,7 +212,7 @@ $bodegas = $cotizacion->getBodegas();
                                             <th style="width: 3%; min-width: 90px;" class="text-center headerTablaProducto">Cantidad</th>
                                             <th style="width: 2%; min-width: 80px;" class="text-center headerTablaProducto">Unidad</th>
                                             <th style="width: 5%; min-width: 100px;" class="text-center headerTablaProducto">Costo</th>
-                                            <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Costo Total</th>
+                                            <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Sub Total</th>
                                             <th style="width: 5%" class="text-center headerTablaProducto">Eliminar</th>
                                         </tr>
                                     </thead>
@@ -221,7 +221,7 @@ $bodegas = $cotizacion->getBodegas();
                                             <td><input type="text" class="form-control text-center input-sm" v-model="producto.codigo" disabled></td>
                                             <td><input type="text" class="form-control text-center input-sm"  v-model="producto.nombre" readonly></td>
                                             <td><input type="text" class="form-control text-center input-sm" v-model="producto.stock" readonly></td>
-                                            <td><input type="number" class="form-control text-center input-sm" @change="producto.setCantidad($event.target.value)" :value="producto.cantidad" step=".0001" min="0" oninput="validity.valid||(value=1);" readonly></td>
+                                            <td><input type="text" class="form-control text-center input-sm" @change="producto.setCantidad($event.target.value)" :value="producto.cantidad" step=".0001" min="0" oninput="validity.valid||(value=1);" readonly></td>
                                            
                                             <td>
                                                 <select v-model="producto.unidad" @change="getCostoProducto(producto)" class="form-control input-sm">

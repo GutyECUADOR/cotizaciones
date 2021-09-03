@@ -936,7 +936,7 @@ class InventarioModel extends Conexion  {
     }
 
     public function Winfenix_saveTransformacionKITS (object $documento) {
-        $kit = $documento->kit;
+        $kit = $documento->kit_obs;
 
         try{
             $this->instancia->beginTransaction();
@@ -1014,15 +1014,15 @@ class InventarioModel extends Conexion  {
             $stmt->bindValue(':fecha', date('Ymd'));
             $stmt->bindValue(':bodega_egreso', $documento->bodega_egreso);
             $stmt->bindValue(':bodega_ingreso', $documento->bodega_ingreso);
-            $stmt->bindValue(':factor', $documento->kit->factor);
-            $stmt->bindValue(':precio', $documento->kit->precio);
+            $stmt->bindValue(':factor', $documento->kit_obs->factor);
+            $stmt->bindValue(':precio', $documento->kit_obs->precio);
             $stmt->bindValue(':num_cnt', '992020DSK'.$STK_secuencia);
             $stmt->bindValue(':num_rel', '992020ETK'.$STK_secuencia);
             $stmt->execute();
             // Ejecuta Sp_invgraMOV STK
 
             //Save inv_gramov
-            foreach ($documento->kit->composicion as $producto) {
+            foreach ($documento->kit_obs->composicion as $producto) {
                 $query = "
                     Sp_invgraMOV 'I','99','2020','STK', :secuencia, :fecha, :bodega_egreso,'S', :codproducto, :unidadproducto, :cantidadproducto, :costoproducto,'0', :costototal,'','','','','', :codKIT
                 ";  
@@ -1035,12 +1035,12 @@ class InventarioModel extends Conexion  {
                     $stmt->bindValue(':cantidadproducto', $producto->cantidad);
                     $stmt->bindValue(':costoproducto', $producto->precio);
                     $stmt->bindValue(':costototal', $producto->subtotal);
-                    $stmt->bindValue(':codKIT', $documento->kit->codigo);
+                    $stmt->bindValue(':codKIT', $documento->kit_obs->codigo);
                     
                 $stmt->execute();
             }
             // Save mov_kardex
-            foreach ($documento->kit->composicion as $producto) {
+            foreach ($documento->kit_obs->composicion as $producto) {
                 $query = "
                 Sp_invgraKardex 'I','99','2020','STK', :secuencia,'INV', :fecha,' ',' ',' ', :bodega_egreso,'S', :codproducto, :unidadproducto, :cantidadproducto, :costoproducto, :costototal, :usuario, :pcid,'DOL', :factor
 
@@ -1074,13 +1074,13 @@ class InventarioModel extends Conexion  {
             $stmt->bindValue(':fecha', date('Ymd'));
             $stmt->bindValue(':bodega_egreso', $documento->bodega_egreso);
             $stmt->bindValue(':bodega_ingreso', $documento->bodega_ingreso);
-            $stmt->bindValue(':factor', $documento->kit->factor);
+            $stmt->bindValue(':factor', $documento->kit_obs->factor);
             $stmt->bindValue(':precio', $producto->subtotal);
             $stmt->bindValue(':num_cnt', '992020DEK'.$STK_secuencia);
             $stmt->execute();
 
             // Ejecuta Sp_INVgrmov ETK (Ingresos)
-            $producto = $documento->kit;
+            $producto = $documento->kit_obs;
             $query = "
                 Sp_invgraMOV 'I','99','2020','ETK', :secuencia, :fecha, :bodega_ingreso,'E', :codproducto, :unidadproducto, :cantidadproducto, :costoproducto,'', :costototal,''
             ";  
@@ -1126,13 +1126,13 @@ class InventarioModel extends Conexion  {
                 $stmt->bindValue(':pcid', php_uname('n'));
                 $stmt->bindValue(':secuencia', $DSK_secuencia);
                 $stmt->bindValue(':fecha', date('Ymd'));
-                $stmt->bindValue(':factor', $documento->kit->factor);
+                $stmt->bindValue(':factor', $documento->kit_obs->factor);
                 $stmt->bindValue(':glosa', '[Inv] - 992020STK'.$STK_secuencia);
                 $stmt->bindValue(':idDOC', '992020STK'.$STK_secuencia);
                 $stmt->execute();
 
             // Save Sp_cntgramov CREDITO
-            foreach ($documento->kit->composicion as $producto) {
+            foreach ($documento->kit_obs->composicion as $producto) {
                 $query = "
                 Sp_cntgramov'I','99','2020','DSK',:secuencia,'1.1.08.01.001', :detalle,'0.0000', :credito,'','STK', :numref,'','','','','INV','DOL', :factor, :fecha
                 ";  
@@ -1147,7 +1147,7 @@ class InventarioModel extends Conexion  {
             }
 
             // Save Sp_cntgramov DEBITO
-            foreach ($documento->kit->composicion as $producto) {
+            foreach ($documento->kit_obs->composicion as $producto) {
                 $query = "
                 Sp_cntgramov'I','99','2020','DSK',:secuencia,'1.1.08.01.001', :detalle, :debito, '0.0000','','STK', :numref,'','','','','INV','DOL', :factor, :fecha
                 ";  
@@ -1171,7 +1171,7 @@ class InventarioModel extends Conexion  {
                 $stmt->bindValue(':pcid', php_uname('n'));
                 $stmt->bindValue(':secuencia', $DEK_secuencia);
                 $stmt->bindValue(':fecha', date('Ymd'));
-                $stmt->bindValue(':factor', $documento->kit->factor);
+                $stmt->bindValue(':factor', $documento->kit_obs->factor);
                 $stmt->bindValue(':idDOC', '992020ETK'.$STK_secuencia);
                 $stmt->execute();
 
@@ -1181,9 +1181,9 @@ class InventarioModel extends Conexion  {
                 ";  
                     $stmt = $this->instancia->prepare($query);
                     $stmt->bindValue(':secuencia', $DEK_secuencia);
-                    $stmt->bindValue(':debito', $documento->kit->subtotal);
+                    $stmt->bindValue(':debito', $documento->kit_obs->subtotal);
                     $stmt->bindValue(':numref', $STK_secuencia);
-                    $stmt->bindValue(':factor', $documento->kit->factor);
+                    $stmt->bindValue(':factor', $documento->kit_obs->factor);
                     $stmt->bindValue(':fecha', date('Ymd'));
                 $stmt->execute();
 
