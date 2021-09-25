@@ -26,8 +26,7 @@ class WinfenixModel extends Conexion  {
         return $resulset;  
 
     }
-    
-   
+
     public function Sp_PAGCONPRO(object $busqueda){
 
         $query = "exec Sp_PAGCONPRO ?,'',?";
@@ -130,6 +129,47 @@ class WinfenixModel extends Conexion  {
                 $resulset = false;
             }
         return $resulset;  
+    }
+
+    public function sql_buscarDocumentos(object $busqueda) {
+
+        $fechaINI = date('Ymd', strtotime($busqueda->fechaINI));
+        $fechaFIN = date('Ymd', strtotime($busqueda->fechaFIN));
+        //Query de consulta con parametros para bindear si es necesario.
+        $query = "
+            SELECT 
+                VEN.TIPO,
+                VEN.NUMERO,
+                RTRIM(VEN.SERIE)+'-'+RTRIM(LTRIM(VEN.SECUENCIA)) AS NFIS,
+                CONVERT(CHAR(10),
+                VEN.FECHA,102) AS FECHA,
+                RTRIM(CLI.NOMBRE) AS CLIENTE,
+                VEN.BODEGA,
+                VEN.total,
+                VEN.DIVISA,(
+                CASE VEN.ANULADO WHEN 1 THEN 'AN' ELSE '' END) AS ANULADO,
+                ven.id, 
+                CANCELADA = ISNULL((SELECT TOP 1 mov.tipo+'-'+MOV.NUMERO FROM COB_MOV MOV WITH (NOLOCK) INNER JOIN COB_CAB CAB WITH (NOLOCK) ON (cab.ofi=mov.ofi and cab.eje=mov.eje and cab.tipo=mov.tipo and cab.numero=mov.numero) 
+            WHERE LEFT(MOV.IDDOC,17) = VEN.ID AND ISNULL(CAB.ANULADO,0)=0 ORDER BY MOV.CREADODATE DESC),'')	
+            FROM VEN_CAB VEN LEFT OUTER JOIN  COB_CLIENTES CLI ON (CLI.CODIGO = VEN.CLIENTE)  WHERE VEN.TIPO IN (:tipoDOC) AND VEN.OFI = '99'  AND Ven.fecha BETWEEN :fechaINI  AND :fechaFIN
+            ORDER BY VEN.TIPO,VEN.NUMERO,VEN.FECHA
+
+        ";
+        $stmt = $this->instancia->prepare($query); 
+        $stmt->bindParam(':fechaINI', $fechaINI);
+        $stmt->bindParam(':fechaFIN', $fechaFIN);
+        $stmt->bindParam(':tipoDOC', $busqueda->tipoDOC);
+       
+        $stmt->execute();
+
+            if($stmt->execute()){
+                return $stmt->fetchAll( \PDO::FETCH_ASSOC );
+            }else{
+                $resulset = false;
+            }
+        return $resulset;  
+
+   
     }
     
 

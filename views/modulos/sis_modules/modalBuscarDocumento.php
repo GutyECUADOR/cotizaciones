@@ -6,16 +6,15 @@
             <h4 class="modal-title"> Buscar Documento </h4>
         </div>
         <div class="modal-body">
-            
             <div class="input-group input-daterange">
-                <input type="text" id="fechaINIDoc" class="form-control" value="<?php echo date('Y-m-01');?>">
+                <input type="date" v-model="search_documentos.busqueda.fechaINI" class="form-control">
                 <div class="input-group-addon">hasta</div>
-                <input type="text" id="fechaFINDoc" class="form-control" value="<?php echo date('Y-m-d');?>">
+                <input type="date" v-model="search_documentos.busqueda.fechaFIN" class="form-control">
             </div>
 
             <div class="input-group select-group">
                 <input type="text" id="terminoBusquedaModalDocument" placeholder="Termino de busqueda..." class="form-control" value="%" style="width: 75%;"/>
-                <select id="tipoBusquedaModalProducto" class="form-control input-group-addon" style="width: 25%;">
+                <select v-model="search_documentos.busqueda.tipoDOC" class="form-control input-group-addon" style="width: 25%;">
                     <?php
                     foreach ($tiposDOC as $grupo => $row) {
 
@@ -28,19 +27,18 @@
                     ?>
                 </select>
                 <div class="input-group-btn">
-                    <button id="searchDocumentModal" type="button" class="btn btn-primary" aria-label="Help">
-                        <span class="glyphicon glyphicon-search"></span> Buscar
+                    <button @click="getDocumentos" type="button" class="btn btn-primary" :disabled="search_documentos.isloading"  >
+                        <i class="fa" :class="[{'fa-spin fa-refresh': search_documentos.isloading}, {  'fa-search' : !search_documentos.isloading  }]" ></i> Buscar
                     </button>
                 </div> 
             </div>
 
             <div class="panel panel-default"> 
                 <div class="panel-heading">Resultados</div> 
-                    <div class="">  
-                        <table id="tblResultadosBusquedaDocumentos" class="table"> 
+                    <div class="responsibetable">  
+                        <table class="table"> 
                             <thead>
                                 <tr> 
-                                    <th>#</th> 
                                     <th>Tipo</th>
                                     <th>Fecha</th>
                                     <th>Cliente</th>
@@ -52,13 +50,20 @@
                             </thead> 
                             
                             <tbody>
-                                <!-- Los resultados de la busqueda se desplegaran aqui-->
-                                <div id="loaderDocumentos">
-                                    <div class="loader" id="loader-4">
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>        
-                                </div>
+                                <tr v-for="documento in search_documentos.results">
+                                    <td>{{documento.TIPO}}</td>
+                                    <td>{{documento.FECHA}}</td>
+                                    <td>{{documento.CLIENTE}}</td>
+                                    <td>{{documento.BODEGA}}</td>
+                                    <td>{{documento.total}}</td>
+                                    <td>{{documento.id}}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary btn-sm btn-block">
+                                            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                                        </button>
+                                    </td>
+                                    
+                                </tr>
                             </tbody>
                         </table>
 

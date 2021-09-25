@@ -7,6 +7,7 @@ class InventarioController  {
 
     public $defaulDataBase;
     public $inventarioModel;
+    public $winfenixModel;
 
     public function __construct() {
         $this->defaulDataBase = (!isset($_SESSION["empresaAUTH".APP_UNIQUE_KEY])) ? DEFAULT_DBName : $_SESSION["empresaAUTH".APP_UNIQUE_KEY] ;

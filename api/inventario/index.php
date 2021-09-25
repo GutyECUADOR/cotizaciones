@@ -14,7 +14,7 @@ $dotenv->load();
 $InventarioController = new InventarioController();
 
   try{
-    $HTTPaction = $_GET["action"];
+    $HTTPaction = isset($_GET["action"]) ? $_GET["action"] : '';
 
     switch ($HTTPaction) {
 
@@ -195,6 +195,7 @@ $InventarioController = new InventarioController();
         break;
 
         default:
+          http_response_code(404);
             $rawdata = array('status' => 'error', 'mensaje' =>'El API no ha podido responder la solicitud, revise el tipo de action');
             echo json_encode($rawdata);
         break;
