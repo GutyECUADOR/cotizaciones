@@ -67,7 +67,6 @@ class AjaxModel extends Conexion  {
 
     public function getInfoClienteModel($RUC) {
 
-        //Query de consulta con parametros para bindear si es necesario.
         $query = " 
             
         SELECT 

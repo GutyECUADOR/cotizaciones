@@ -21,7 +21,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
 
  <?php include 'sis_modules/header_main.php'?>
 
-    <form id="app" v-on:submit.prevent="saveDocumento">
+    <form id="app" v-on:submit.prevent="saveDocumento" >
         <div class="container">
             <ol class="breadcrumb">
                 <li><a href="?action=inicio">Inicio</a></li>
@@ -119,8 +119,8 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                         <div class="panel-heading">Datos del Cliente</div>
                         <div class="panel-body">
                             <div class="input-group input-group-sm">
-                                <span class="input-group-addon">Cliente</span>
-                                <input type="text" class="form-control" id="inputRUC">
+                                <span class="input-group-addon">Cliente RUC</span>
+                                <input type="text" class="form-control" @keyup="getCliente" v-model="search_cliente.busqueda.texto">
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button" data-toggle="modal" data-target="#modalBuscarCliente">
                                         <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
@@ -132,35 +132,34 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                         <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
                                     </button>
                                 </span>
-                                <input type="text" class="form-control" id="inputCodigo" readonly>
-                                
+                               
                             </div>
 
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon" id="sizing-addon3">Nombre</span>
-                                <input type="text" class="form-control" placeholder="Nombre Cliente" id="inputNombre" readonly>
+                                <input type="text" class="form-control" placeholder="Nombre Cliente" v-model="documento.cliente.nombre" readonly>
                             </div>
 
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon" id="sizing-addon3">Razon Social</span>
-                                <input type="text" class="form-control" placeholder="Razon Social" id="inputRSocial" readonly>
+                                <input type="text" class="form-control" placeholder="Razon Social" v-model="documento.cliente.empresa" readonly>
                             </div>
 
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon" id="sizing-addon3">Correo</span>
-                                <input type="mail" class="form-control" placeholder="Correo" id="inputCorreo" readonly>
+                                <input type="mail" class="form-control" placeholder="Correo" v-model="documento.cliente.email" readonly>
                             </div>
 
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon"><span class="glyphicon glyphicon-earphone" aria-hidden="true"></span> Telf.</span>
-                                <input type="text" class="form-control text-center" placeholder="Telefono" id="inputTelefono" readonly>
+                                <input type="text" class="form-control text-center" placeholder="Telefono" v-model="documento.cliente.telefono" readonly>
                                 <span class="input-group-addon">Dias Pago</span>
-                                <input type="text" class="form-control" placeholder="DiasPago" id="inputDiasPago" readonly>
+                                <input type="text" class="form-control" placeholder="DiasPago" v-model="documento.cliente.diasPago" readonly>
                             </div>
 
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon" id="sizing-addon3">Vendedor</span>
-                                <input type="text" class="form-control" placeholder="Vendedor" id="inputVendedor" readonly>
+                                <input type="text" class="form-control" placeholder="Vendedor" :value="documento.cliente.codVendedor + '-' + documento.cliente.vendedor" readonly>
                             </div>
                         </div>
                     </div>
@@ -173,7 +172,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                             
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon">Forma Pago</span>
-                                <select id='formaPago' class="form-control input-sm">
+                                <select v-model="documento.formaPago" class="form-control input-sm">
                                         <?php
                                         foreach ($formasPago as $grupo => $row) {
 
@@ -189,7 +188,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
 
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon">Condiciones Pago</span>
-                                <select id='condicionPago' class="form-control input-sm">
+                                <select v-model="documento.condicionPago" class="form-control input-sm">
                                         <?php
                                         foreach ($tiposTarjeta as $grupo => $row) {
 
@@ -206,25 +205,15 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                             
                         </div>
                     </div>
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Detalle / Observacion del documento</div>
-                        <div class="panel-body">
-                            <div class="form-group">
-                                <textarea class="form-control" rows="2" id="comment" name="comment" maxlength="100" placeholder="Comentario de hasta maximo 100 caracteres..."></textarea>
-                            </div>
-
-                        </div>
-                    </div>
+                    
                 </div>
                 
                 <div class="col-lg-4 col-md-12">
-                    
-
                     <div class="panel panel-default">
-                        <div class="panel-heading">Detalle extras del envio</div>
+                        <div class="panel-heading">Detalle extras</div>
                         <div class="panel-body">
                             <div class="form-group">
-                                <textarea class="form-control" rows="5" id="comment_envio" name="comment_envio" maxlength="300" placeholder="Comentario de hasta maximo 300 caracteres..." disabled></textarea>
+                                <textarea class="form-control" rows="2" v-model="documento.comentario" name="comment" maxlength="100" placeholder="Comentario de hasta maximo 100 caracteres..."></textarea>
                             </div>
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon" id="sizing-addon3">Tipo Precio Cliente</span>

@@ -29,6 +29,20 @@ class CotizacionesController  {
         $response = $this->winfenixModel->SP_COBCONCLI($busqueda);
         return $response;
     }
+
+    public function getCliente(string $RUC){
+        $response = $this->model->SQL_getCliente($RUC);
+        return $response;
+    }
+
+    public function saveNuevoCliente(object $nuevoCliente){
+        $newCodigo = $this->model->getNextNumClienteWF();
+        return $this->model->insertNuevoCliente($nuevoCliente, $newCodigo);
+    }
+
+    public function getProductos(object $busqueda){
+        return $this->winfenixModel->Sp_INVCONARTWAN($busqueda);
+    }
     
 
 

@@ -9,7 +9,7 @@
 
         <div class="modal-body">
             <div class="input-group select-group">
-            <input type="text"  @keyup.enter.prevent="getClientes" v-model="search_cliente.busqueda.texto" placeholder="RUC o Nombre del cliente" class="form-control"/>
+            <input type="text" @keyup.enter="getClientes" v-model="search_cliente.busqueda.texto" placeholder="RUC o Nombre del cliente" class="form-control"/>
                 <select id="tipoBusquedaModalCliente" class="form-control input-group-addon">
                     <option value="NO">Nombre</option>
                     <option value="RU">Cedula / RUC</option>
@@ -36,13 +36,13 @@
                         </thead> 
                         
                         <tbody>
-                            <tr v-for="documento in search_cliente.results">
-                                <td>{{documento.Codigo}}</td>
-                                <td>{{documento.Nombre}}</td>
-                                <td>{{documento.Ruc}}</td>
+                            <tr v-for="cliente in search_cliente.results">
+                                <td>{{cliente.Codigo}}</td>
+                                <td>{{cliente.Nombre}}</td>
+                                <td>{{cliente.Ruc}}</td>
                                 <td>
-                                    <button type="button" @click="generaPDF(documento.ID)" class="btn btn-primary btn-sm btn-block">
-                                        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                    <button type="button" @click="setRucCliente(cliente.Ruc)" class="btn btn-primary btn-sm btn-block">
+                                        <i class="fa fa-arrow-down" aria-hidden="true"></i>
                                     </button>
                                 </td>
                                 

@@ -6,7 +6,6 @@
             <h4 class="modal-title"> Buscar Documento </h4>
         </div>
         <div class="modal-body">
-            
             <div class="input-group input-daterange">
                 <input type="date" v-model="search_documentos.busqueda.fechaINI" class="form-control">
                 <div class="input-group-addon">hasta</div>

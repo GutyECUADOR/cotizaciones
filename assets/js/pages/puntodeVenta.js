@@ -1,13 +1,15 @@
 class Cliente {
-    constructor({RUC, nombre, email, telefono, vendedor, tipoPrecio, diasPago, formaPago}) {
-      this.RUC = RUC;
-      this.nombre = nombre;
-      this.email = email;
-      this.telefono = telefono;
-      this.vendedor = vendedor;
-      this.tipoPrecio = tipoPrecio;
-      this.diasPago = diasPago;
-      this.formaPago = formaPago;
+    constructor({RUC, nombre, email, empresa, telefono, codVendedor, vendedor, tipoPrecio, diasPago, formaPago}) {
+      this.RUC = RUC || '';
+      this.nombre = nombre || '';
+      this.email = email || '';
+      this.empresa = empresa || '';
+      this.telefono = telefono || '';
+      this.codVendedor = codVendedor || '';
+      this.vendedor = vendedor || '';
+      this.tipoPrecio = tipoPrecio || 'A';
+      this.diasPago = diasPago || 0;
+      this.formaPago = formaPago || 'EFE';
       
     }
 
@@ -58,7 +60,7 @@ class Producto {
 class NuevoCliente {
     constructor({RUC, tipoIdentificacion, nombre, grupo, tipo, email, canton, direccion, telefono, vendedor}) {
         this.RUC = RUC;
-        this.tipoIdentificacion = tipoIdentificacion
+        this.tipoIdentificacion = tipoIdentificacion || 'C'
         this.nombre = nombre;
         this.grupo = grupo;
         this.tipo = tipo;
@@ -72,13 +74,13 @@ class NuevoCliente {
 
 class Documento {
     constructor() {
-        this.cliente = null,
+        this.cliente = new Cliente({}),
         this.bodega = 'B01',
         this.fecha = moment().format("YYYY-MM-DD"),
         this.productos = [],
         this.formaPago = 'CON',
-        
-        this.comentario = 'proforma'
+        this.condicionPago = 'EFE',
+        this.comentario = 'Proforma/Cotización'
     }
 
     
@@ -196,6 +198,7 @@ const app = new Vue({
             isloading: false,
             results: []
         },
+        nuevoCliente: new NuevoCliente({}),
         documento : new Documento()
     },
     methods:{
@@ -249,6 +252,107 @@ const app = new Vue({
 
             
 
+        },
+        setRucCliente(RUC){
+            this.search_cliente.busqueda.texto = RUC;
+            $('#modalBuscarCliente').modal('hide')
+            this.getCliente();
+        },
+        async getCliente() {
+            let RUC = this.search_cliente.busqueda.texto;
+            console.log(RUC);
+            const response = await fetch(`./api/ventas/index.php?action=getCliente&RUC=${RUC.trim()}`)
+            .then(response => {
+                return response.json();
+            }).catch( error => {
+                console.error(error);
+            }); 
+
+            console.log(response);
+            if (response.data) {
+                const newCliente = new Cliente({
+                    RUC: response.data.RUC,
+                    nombre: response.data.NOMBRE,
+                    empresa: response.data.EMPRESA,
+                    email: response.data.EMAIL,
+                    telefono: response.data.TELEFONO,
+                    codVendedor: response.data.VENDEDOR,
+                    vendedor: response.data.VENDEDORNAME,
+                    tipoPrecio: response.data.TIPOPRECIO,
+                    diasPago: response.data.DIASPAGO,
+                    formaPago: response.data.FORMAPAGO
+                });
+                console.log(newCliente);
+                this.documento.cliente = newCliente;
+            }
+            
+        },
+        async createNuevoCliente(){
+            switch (this.nuevoCliente.tipoIdentificacion) {
+                case 'R':
+                    let reg_ruc = /^([0-9]){13}$/;  
+                    if (!reg_ruc.test(this.nuevoCliente.RUC)) {
+                        alert('El RUC del nuevo cliente no cumple el formato esperado, 13 digitos.');
+                        return false;
+                    }
+                    break;
+
+                case 'P':
+                        let reg_pass = /^([0-9]){3,13}$/;  
+                        if (!reg_pass.test(this.nuevoCliente.RUC)) {
+                            alert('El Pasporte del nuevo cliente no cumple el formato esperado, minimo 3 digitos maximo 13');
+                            return false;
+                        }
+                        break;
+            
+                default:
+                    let reg_cedula = /^([0-9]){10}$/;  
+                    if (!reg_cedula.test(this.nuevoCliente.RUC)) {
+                        alert('La cedula del nuevo cliente no cumple el formato esperado, 10 digitos');
+                        return false;
+                    }
+                    break;
+            }
+
+            let reg_nombre = /^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]+$/; 
+            if (!reg_nombre.test(this.nuevoCliente.nombre)) {
+                alert('El nombre del nuevo cliente no cumple el formato esperado, no se admiten ACENTOS ni Ñ');
+                return false;
+            }
+
+            let reg_email = /^[^@]+@[^@]+\.[a-zA-Z]{2,}$/;
+            if (!reg_email.test(this.nuevoCliente.email)) {
+                alert('El correo del nuevo cliente no es valido');
+                return false;
+            }
+
+            if (this.nuevoCliente.RUC && this.nuevoCliente.nombre && this.nuevoCliente.grupo && this.nuevoCliente.email && this.nuevoCliente.telefono && this.nuevoCliente.vendedor) {
+                console.log(this.nuevoCliente);
+             
+                let formData = new FormData();
+                formData.append('nuevoCliente', JSON.stringify(this.nuevoCliente)); 
+             
+                const response = await fetch(`./api/ventas/index.php?action=saveNuevoCliente`, {
+                    method: 'POST',
+                    body: formData
+                    })
+                    .then(response => {
+                        return response.json();
+                    })
+                    .catch(function(error) {
+                        console.error(error);
+                    });  
+                
+                console.log(response);
+                alert(`${response.message}`);
+
+                if (response.status == 'OK') {
+                    this.nuevoCliente = new NuevoCliente({});
+                }
+
+            }else{
+                alert('Complete todos los campos para realizar el registro.');
+            }
         },
         async getProductos() {
             this.search_producto.isloading = true;
@@ -408,7 +512,14 @@ const app = new Vue({
     mounted(){
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
-          })
+            $("form").keypress(function(e) {
+                if (e.which == 13) {
+                    return false;
+                }
+            });
+        });
+
+          
     }
     
 })

@@ -31,12 +31,13 @@ $cotizacionesController = new CotizacionesController();
 
         break;
 
-         case 'getClientes':
+        case 'getClientes':
           if (isset($_GET['busqueda'])) {
             $busqueda = json_decode($_GET['busqueda']);
             $respuesta = $cotizacionesController->getClientes($busqueda);
             $rawdata = array('status' => 'OK', 'message' => 'respuesta correcta', 'clientes' => $respuesta);
           }else{
+            http_response_code(400);
             $rawdata = array('status' => 'ERROR', 'message' => 'No se ha indicado parámetros de búsqueda..');
           }
           
@@ -44,11 +45,10 @@ $cotizacionesController = new CotizacionesController();
 
         break;
 
-        case 'getProductos':
-          if (isset($_GET['terminoBusqueda']) && isset($_GET['tipoBusqueda'])) {
-            $terminoBusqueda = $_GET['terminoBusqueda'];
-            $tipoBusqueda = $_GET['tipoBusqueda'];
-            $respuesta = $ajax->getAllProductos($terminoBusqueda,  $tipoBusqueda);
+        case 'getCliente':
+          if (isset($_GET['RUC'])) {
+            $RUC = $_GET['RUC'];
+            $respuesta = $cotizacionesController->getCliente($RUC);
             $rawdata = array('status' => 'OK', 'message' => 'respuesta correcta', 'data' => $respuesta);
           }else{
             http_response_code(400);
@@ -59,42 +59,12 @@ $cotizacionesController = new CotizacionesController();
 
         break;
 
-       
-        case 'saveCotizacion':
-          if (isset($_POST['formData'])) {
-            $formData = json_decode($_POST['formData']);
-            $respuesta = $ajax->saveCotizacion($formData);
-            $rawdata = array('status' => 'OK', 'message' => 'Realizado', 'data' => $respuesta, 'formDataSended' => $formData);
-            
-          }else{
-            $rawdata = array('status' => 'ERROR', 'message' => 'No se ha indicado parámetros.');
-          }
-        
-          echo json_encode($rawdata);
-
-        break;
-
-        case 'saveCotizacionMultiple':
-          if (isset($_POST['formData'])) {
-            $formData = json_decode($_POST['formData']);
-            $respuesta = $ajax->saveCotizacionMultiple($formData);
-            $rawdata = array('status' => 'OK', 'message' => 'Realizado', 'data' => $respuesta, 'formDataSended' => $formData);
-            
-          }else{
-            $rawdata = array('status' => 'ERROR', 'message' => 'No se ha indicado parámetros.');
-          }
-        
-          echo json_encode($rawdata);
-
-        break;
-
         case 'saveNuevoCliente':
-          if (isset($_POST['formData'])) {
-            $formData = json_decode($_POST['formData']);
-            $respuesta = $ajax->saveNuevoCliente($formData);
-            $rawdata = array('status' => 'success', 'message' => 'Cliente registrado con éxito', 'data' => $respuesta, 'formDataSended' => $formData);
-            
+          if (isset($_POST['nuevoCliente'])) {
+            $nuevoCliente = json_decode($_POST['nuevoCliente']);
+            $rawdata = $cotizacionesController->saveNuevoCliente($nuevoCliente);
           }else{
+            http_response_code(400);
             $rawdata = array('status' => 'ERROR', 'message' => 'No se ha indicado parámetros.');
           }
         
@@ -102,27 +72,44 @@ $cotizacionesController = new CotizacionesController();
 
         break;
 
-        /* Obtiene array de informacion del cliente*/ 
-        case 'getInfoCliente':
-          if (isset($_GET['ruc'])) {
-            $RUC = $_GET['ruc'];
-            $respuesta = $ajax->getInfoCliente($RUC);
+        case 'getProductos':
+          if (isset($_GET['busqueda'])) {
+            $busqueda = json_decode($_GET['busqueda']);
+            $respuesta = $cotizacionesController->getProductos($terminoBusqueda,  $tipoBusqueda);
             $rawdata = array('status' => 'OK', 'message' => 'respuesta correcta', 'data' => $respuesta);
           }else{
-            $rawdata = array('status' => 'ERROR', 'message' => 'No se ha indicado parámetros.');
+            http_response_code(400);
+            $rawdata = array('status' => 'ERROR', 'message' => 'No se ha indicado parámetros de búsqueda.');
           }
           
           echo json_encode($rawdata);
 
         break;
 
-        /* Obtiene array de informacion del cliente*/ 
+       
+        case 'saveCotizacion':
+          if (isset($_POST['formData'])) {
+            $formData = json_decode($_POST['formData']);
+            $respuesta = $cotizacionesController->saveCotizacion($formData);
+            $rawdata = array('status' => 'OK', 'message' => 'Realizado', 'data' => $respuesta, 'formDataSended' => $formData);
+            
+          }else{
+            http_response_code(400);
+            $rawdata = array('status' => 'ERROR', 'message' => 'No se ha indicado parámetros.');
+          }
+        
+          echo json_encode($rawdata);
+
+        break;
+
+       
         case 'getInfoVENCAB':
           if (isset($_GET['IDDocument'])) {
             $IDDocument = $_GET['IDDocument'];
             $respuesta = $ajax->getInfoVENCAB($IDDocument);
             $rawdata = array('status' => 'OK', 'message' => 'respuesta correcta', 'data' => $respuesta);
           }else{
+            http_response_code(400);
             $rawdata = array('status' => 'ERROR', 'message' => 'No se ha indicado parámetros.');
           }
           
@@ -137,6 +124,7 @@ $cotizacionesController = new CotizacionesController();
             $respuesta = $ajax->getInfoVENMOV($IDDocument);
             $rawdata = array('status' => 'OK', 'message' => 'respuesta correcta', 'data' => $respuesta);
           }else{
+            http_response_code(400);
             $rawdata = array('status' => 'ERROR', 'message' => 'No se ha indicado parámetros.');
           }
           
