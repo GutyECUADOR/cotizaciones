@@ -58,8 +58,8 @@
                                     <td>{{documento.total}}</td>
                                     <td>{{documento.id}}</td>
                                     <td>
-                                        <button type="button" class="btn btn-primary btn-sm btn-block">
-                                            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                                        <button type="button" @click="generaPDF(documento.id)" class="btn btn-primary btn-sm btn-block">
+                                            <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
                                         </button>
                                     </td>
                                     

@@ -73,7 +73,8 @@ class NuevoCliente {
 class Documento {
     constructor() {
         this.cliente = null,
-        this.bodega = null,
+        this.bodega = 'B01',
+        this.fecha = moment().format("YYYY-MM-DD"),
         this.productos = [],
         this.formaPago = 'CON',
         
@@ -204,7 +205,7 @@ const app = new Vue({
             let fechaINI = this.search_documentos.busqueda.fechaINI;
             let fechaFIN = this.search_documentos.busqueda.fechaFIN;
             let busqueda = JSON.stringify({ tipoDOC, fechaINI, fechaFIN});
-            const response = await fetch(`./api/cotizaciones/index.php?action=getDocumentos&busqueda=${busqueda}`)
+            const response = await fetch(`./api/ventas/index.php?action=getDocumentos&busqueda=${busqueda}`)
                             .then(response => {
                                 this.search_documentos.isloading = false;
                                 return response.json();
@@ -220,27 +221,34 @@ const app = new Vue({
             
         },
         generaPDF(ID){
-            alert('Generando PDF' + ID);
+            alert('Generando PDF: ' + ID);
             window.open(`./api/documentos/index.php?action=generaReportePDF_CreacionReceta&ID=${ID}`, '_blank').focus();
         },
-        
         async getClientes() {
-            this.search_producto.isloading = true;
-            let busqueda = JSON.stringify(this.search_cliente.busqueda);
-            const response = await fetch(`./api/inventario/index.php?action=searchClientes&busqueda=${busqueda}`)
-            .then(response => {
-                return response.json();
-            }).catch( error => {
-                console.error(error);
-            }); 
+            let texto = this.search_cliente.busqueda.texto;
+          
+            if (texto.length > 0) {
+                this.search_cliente.isloading = true;
+                let busqueda = JSON.stringify({ texto });
+                const response = await fetch(`./api/ventas/index.php?action=getClientes&busqueda=${busqueda}`)
+                .then(response => {
+                    this.search_cliente.isloading = false;
+                    return response.json();
+                }).catch( error => {
+                    console.error(error);
+                }); 
+    
+                if (response.status == 'ERROR') {
+                    alert(`${response.message}`);
+                }
+               
+                this.search_cliente.results = response.clientes;
+            }else{
+                alert('No se ha indicado término de busqueda');
+            }
 
-            this.search_producto.isloading = false;
-            const productosKit = response.data.filter( producto => {
-              return producto.Eskit == "1";
-            });
-
-            this.search_producto.results = productosKit;
             
+
         },
         async getProductos() {
             this.search_producto.isloading = true;

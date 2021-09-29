@@ -171,6 +171,22 @@ class WinfenixModel extends Conexion  {
 
    
     }
+
+    public function SP_COBCONCLI(object $busqueda){
+      
+        $query = "exec Sp_COBCONCLI :texto, '','NO'";
+        $stmt = $this->instancia->prepare($query);
+        $stmt->bindValue(':texto', $busqueda->texto); 
+      
+            if($stmt->execute()){
+                $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+            }else{
+                $resulset = false;
+            }
+        return $resulset;  
+    }
+
+
     
 
     

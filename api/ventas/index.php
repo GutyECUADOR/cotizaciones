@@ -25,11 +25,40 @@ $cotizacionesController = new CotizacionesController();
             $rawdata = array('status' => 'OK', 'message' => 'respuesta correcta', 'documentos' => $respuesta);
           }else{
             http_response_code(400);
-            $rawdata = array('status' => 'ERROR', 'message' => 'No se ha indicado parámetros.');
+            $rawdata = array('status' => 'ERROR', 'message' => 'No se ha indicado parámetros de búsqueda.');
           }
           echo json_encode($rawdata);
 
         break;
+
+         case 'getClientes':
+          if (isset($_GET['busqueda'])) {
+            $busqueda = json_decode($_GET['busqueda']);
+            $respuesta = $cotizacionesController->getClientes($busqueda);
+            $rawdata = array('status' => 'OK', 'message' => 'respuesta correcta', 'clientes' => $respuesta);
+          }else{
+            $rawdata = array('status' => 'ERROR', 'message' => 'No se ha indicado parámetros de búsqueda..');
+          }
+          
+          echo json_encode($rawdata);
+
+        break;
+
+        case 'getProductos':
+          if (isset($_GET['terminoBusqueda']) && isset($_GET['tipoBusqueda'])) {
+            $terminoBusqueda = $_GET['terminoBusqueda'];
+            $tipoBusqueda = $_GET['tipoBusqueda'];
+            $respuesta = $ajax->getAllProductos($terminoBusqueda,  $tipoBusqueda);
+            $rawdata = array('status' => 'OK', 'message' => 'respuesta correcta', 'data' => $respuesta);
+          }else{
+            http_response_code(400);
+            $rawdata = array('status' => 'ERROR', 'message' => 'No se ha indicado parámetros.');
+          }
+          
+          echo json_encode($rawdata);
+
+        break;
+
        
         case 'saveCotizacion':
           if (isset($_POST['formData'])) {
@@ -115,37 +144,7 @@ $cotizacionesController = new CotizacionesController();
 
         break;
 
-        /* Obtiene array de los cliente*/ 
-        case 'searchClientes':
-          if (isset($_GET['terminoBusqueda']) && isset($_GET['tipoBusqueda'])) {
-            $terminoBusqueda = $_GET['terminoBusqueda'];
-            $tipoBusqueda = $_GET['tipoBusqueda'];
-            $respuesta = $ajax->getAllClientes($terminoBusqueda,  $tipoBusqueda);
-            $rawdata = array('status' => 'OK', 'message' => 'respuesta correcta', 'data' => $respuesta);
-          }else{
-            $rawdata = array('status' => 'ERROR', 'message' => 'No se ha indicado parámetros.');
-          }
-          
-          echo json_encode($rawdata);
-
-        break;
-
-        /* Obtiene array de los productos*/ 
-        case 'searchProductos':
-          if (isset($_GET['terminoBusqueda']) && isset($_GET['tipoBusqueda'])) {
-            $terminoBusqueda = $_GET['terminoBusqueda'];
-            $tipoBusqueda = $_GET['tipoBusqueda'];
-            $respuesta = $ajax->getAllProductos($terminoBusqueda,  $tipoBusqueda);
-            $rawdata = array('status' => 'OK', 'message' => 'respuesta correcta', 'data' => $respuesta);
-          }else{
-            http_response_code(400);
-            $rawdata = array('status' => 'ERROR', 'message' => 'No se ha indicado parámetros.');
-          }
-          
-          echo json_encode($rawdata);
-
-        break;
-
+       
         
 
           /* Obtiene array de los documentos SP Winfenix*/ 

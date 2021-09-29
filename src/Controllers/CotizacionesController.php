@@ -24,6 +24,11 @@ class CotizacionesController  {
         $response = $this->winfenixModel->sql_buscarDocumentos($busqueda);
         return $response;
     }
+
+    public function getClientes(object $busqueda) {
+        $response = $this->winfenixModel->SP_COBCONCLI($busqueda);
+        return $response;
+    }
     
 
 

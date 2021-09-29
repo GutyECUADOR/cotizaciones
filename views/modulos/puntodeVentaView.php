@@ -37,10 +37,6 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
             <!-- Row de cabecera-->
             <div class="row">
             
-                <div class="form-group formextra text-center col-lg-12">
-                    <h4>COTIZACION PUNTO DE VENTA</h4>
-                </div>
-
                 <div class="form-group formextra col-lg-6">
                     <div class="input-group">
                             <span class="input-group-addon"  id="testButton">Tipo Doc</span>
@@ -60,7 +56,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
 
             <!-- Row Modal Buscar Documento-->
             <div class="row">
-                <div class="form-group formextra col-lg-3">
+                <div class="form-group formextra col-lg-4">
                     <span class="input-group-addon bordederecho">Buscar</span>
                     <div class="input-group input-group-sm">
                         <input type="text" class="form-control">
@@ -80,19 +76,14 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                     </div>
                 </div>
 
-                <div class="form-group formextra col-lg-2 hidden-md hidden-sm hidden-xs">
-                    <span class="input-group-addon bordederecho">Numero</span>
-                    <input type="text" class="form-control text-center" value="0" readonly>
+                <div class="form-group formextra col-lg-2">
+                    <span class="input-group-addon bordederecho">Fecha Emisión</span>
+                    <input type="date" class="form-control text-center" v-model="documento.fecha">
                 </div>
 
                 <div class="form-group formextra col-lg-2">
-                    <span class="input-group-addon bordederecho">Fecha Emision</span>
-                    <input type="text" class="form-control text-center pickyDate" value="<?php echo date('Y-m-d');?>">
-                </div>
-
-                <div class="form-group formextra col-lg-2">
-                    <span class="input-group-addon bordederecho">Almacen</span>
-                    <select class="form-control input-sm text-center" disabled>
+                    <span class="input-group-addon bordederecho">Bodega/Almacen</span>
+                    <select class="form-control input-sm" v-model="documento.bodega">
                         <?php
                             $bodega_default = $_SESSION["bodegaDefault".APP_UNIQUE_KEY];
                             foreach ($bodegas as $bodega => $row) {
@@ -113,7 +104,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                     </select>
                 </div>
                     
-                <div class="form-group formextra col-lg-3 col-md-12">
+                <div class="form-group formextra col-lg-4 col-md-12">
                     <div class="well text-center wellextra" >
                         <span id="welltotal">$ 0.00</span>
                     </div>
@@ -502,11 +493,9 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
     
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\pnotify.custom.min.js"></script>
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\sweetalert2@8.js"></script>
-    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\bootstrap-datepicker.es.min.js"></script>
-    <script src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=ubmvgme7f7n7likjbniglty12b9m92um98w9m75mdtnphwqp"></script>
-    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\tinymce.js"></script>
-    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\datepicker.js"></script>
-    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\xlsx.full.min.js"></script>
+
+    
+
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\moment.min.js"></script>
     
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\pages\puntodeVenta.js"></script>
