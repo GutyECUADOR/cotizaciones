@@ -37,7 +37,7 @@
                             <tr v-for="producto in search_producto.results">
                                 <td>{{producto.Codigo}}</td>
                                 <td>{{producto.Nombre.trim()}}</td>
-                                <td>{{parseFloat(producto.PreaA.trim()).toFixed(2)}}</td>
+                                <td>{{parseFloat(producto.PrecA.trim()).toFixed(2)}}</td>
                                 <td>{{parseFloat(producto.Stock.trim())}}</td>
                                 <td>
                                     <button type="button" class="btn btn-primary btn-sm btn-block" @click="selectProduct(producto.Codigo)">

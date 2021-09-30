@@ -19,7 +19,7 @@ class Cliente {
 }
 
 class Producto {
-    constructor({codigo, nombre, tipoArticulo, cantidad, precio, peso, descuento, stock, tipoIVA, valorIVA}) {
+    constructor({codigo, nombre, tipoArticulo, cantidad, precio, peso, descuento, stock, tipoIVA, unidad, valorIVA}) {
       this.codigo = codigo;
       this.nombre = nombre;
       this.tipoArticulo = tipoArticulo
@@ -29,6 +29,7 @@ class Producto {
       this.descuento = descuento;
       this.stock = stock;
       this.tipoIVA = tipoIVA;
+      this.unidad = unidad;
       this.valorIVA = parseFloat(valorIVA);
       this.vendedor = null;
       this.descripcion = null;
@@ -50,6 +51,14 @@ class Producto {
 
     getSubtotal(){
         return (this.cantidad * this.precio) - this.getDescuento(this.descuento);
+    }
+
+    setCantidad(cantidad){
+        this.cantidad = parseFloat(cantidad);
+    }
+
+    setStock(stock){
+        this.stock = parseFloat(stock);
     }
 
     setDescripcion(descripcion){
@@ -80,6 +89,11 @@ class Documento {
         this.productos = [],
         this.formaPago = 'CON',
         this.condicionPago = 'EFE',
+        this.cantidad = 0;
+        this.peso = 0;
+        this.subtotal = 0;
+        this.IVA = 0;
+        this.total = 0
         this.comentario = 'Proforma/Cotización'
     }
 
@@ -91,8 +105,12 @@ class Documento {
         }, 0);
     }
 
-    
-    /* Subtotal General*/
+    getCantidadItems() {
+        this.productos.cantidad = this.productos.reduce( (total, producto) => {
+            return total + producto.cantidad;
+        }, 0);
+        return this.productos.cantidad;
+    }
 
     getTotalFactura(){
         return this.productos.reduce( (total, producto) => { 
@@ -118,7 +136,7 @@ class Documento {
         }, 0); 
     }
 
-  /* Subtotal de productos */
+
     getSubTotalProductos(){
         return this.productos.filter(({tipoArticulo}) => tipoArticulo == '1')
         .reduce( (total, producto) => { 
@@ -137,28 +155,7 @@ class Documento {
         return this.getSubTotalProductos() + this.getIVAProductos();
     }
 
-    /* Subtotal de envio */
-    getSubTotalEnvio(){
-        return this.productos.filter(({tipoArticulo}) => tipoArticulo == '5')
-        .reduce( (total, producto) => { 
-        return total + producto.getSubtotal(); 
-        }, 0); 
-    }
-
-    getIVAEnvio(){
-        return this.productos.filter(({tipoArticulo}) => tipoArticulo == '5')
-        .reduce( (total, producto) => { 
-        return total + producto.getIVA(); 
-        }, 0); 
-    }
-
-    getTotalEnvio(){
-        return this.getSubTotalEnvio() + this.getIVAEnvio();
-    }
-
-    getTotalSeguroEnvio(){
-        return (this.getSubTotalProductos() + this.getIVAProductos() ) * 0.01;
-    }
+  
 
 }
 
@@ -199,6 +196,7 @@ const app = new Vue({
             results: []
         },
         nuevoCliente: new NuevoCliente({}),
+        nuevoProducto: new Producto({}),
         documento : new Documento()
     },
     methods:{
@@ -357,7 +355,7 @@ const app = new Vue({
         async getProductos() {
             this.search_producto.isloading = true;
             let busqueda = JSON.stringify(this.search_producto.busqueda);
-            const response = await fetch(`./api/inventario/index.php?action=searchProductos&busqueda=${busqueda}`)
+            const response = await fetch(`./api/ventas/index.php?action=getProductos&busqueda=${busqueda}`)
             .then(response => {
                 return response.json();
             }).catch( error => {
@@ -365,66 +363,68 @@ const app = new Vue({
             }); 
 
             this.search_producto.isloading = false;
-            const productosKit = response.data.filter( producto => {
-              return producto.Eskit == "1";
-            });
-
-            this.search_producto.results = productosKit;
+            this.search_producto.results = response.productos;
             
         },
-        async getProducto(codigo) {
-            return await fetch(`./api/inventario/index.php?action=getProducto&busqueda=${codigo.trim()}`)
+        validaFormaPago(){
+            if (this.documento.formaPago == 'CRE') {
+                this.documento.condicionPago = 'EFE'
+                return true;
+            }
+            return false;
+            
+        },
+        selectProduct(codigo){
+            this.search_producto.busqueda.texto = codigo.trim();
+            this.getProducto();
+            $('#modalBuscarProducto').modal('hide');
+        },
+        async getProducto() {
+            let codigo = this.search_producto.busqueda.texto;
+            const response = await fetch(`./api/ventas/index.php?action=getProducto&busqueda=${codigo.trim()}`)
             .then(response => {
                 return response.json();
             }).catch( error => {
                 console.error(error);
-            }); 
+            });
+            
+            console.log(response);
+            if (response.data) {
+                this.nuevoProducto = new Producto({
+                    codigo: response.data.Codigo.trim(),
+                    nombre: response.data.Nombre.trim(),
+                    tipoArticulo: response.data.TipoArticulo,
+                    cantidad: 1,
+                    precio: response.data.PrecA,
+                    peso: parseFloat(response.data.Peso),
+                    descuento: 0,
+                    stock: response.data.Stock,
+                    tipoIVA: response.data.TipoIVA,
+                    valorIVA: parseFloat(response.data.ValorIVA),
+                    unidad: response.data.Unidad
+                });
+            }else{
+                this.nuevoProducto = new Producto({});
+            }
            
         },
-        selectProduct(codigo){
-            this.search_producto.busqueda.texto = codigo.trim();
-            this.setKit(codigo);
-            this.setKit_obs(codigo);
-            $('#modalBuscarProducto').modal('hide');
-        },
-        addToList(codigo){
-            let existeInArray = this.documento.kit.composicion.findIndex( productoEnArray => {
-                return productoEnArray.codigo.trim() == codigo.trim();
+        addToListProductos(){
+            let existeInArray = this.documento.productos.findIndex((productoEnArray) => {
+                return productoEnArray.codigo === this.nuevoProducto.codigo;
             });
 
-            if (existeInArray === -1) {
-                this.getProducto(codigo).then( response => {
-                    if (response.data) {
-                        const producto = response.data.producto;
-                        console.log(producto);
-                        const newProduct = new Producto(producto.Codigo?.trim(), producto.Nombre?.trim(), producto.Unidad?.trim(), producto.TipoArticulo, 1, producto.PrecA, producto.Peso, 0, producto.Stock, producto.TipoIva, producto.VALORIVA);
-                        this.getCostoProducto(newProduct);
-                        newProduct.unidades_medida = response.data.unidades_medida;
-                        
-                        this.documento.kit.composicion.push(newProduct);
-                        new PNotify({
-                            title: 'Item agregado',
-                            text: `Se agrego a la composicion el item: ' ${newProduct.nombre}`,
-                            delay: 3000,
-                            type: 'success',
-                            styling: 'bootstrap3'
-                        });
-                    }else{   
-                        new PNotify({
-                            title: 'Item no disponible',
-                            text: `No se ha encontrado el producto con el codigo: ' ${codigo}`,
-                            delay: 3000,
-                            type: 'warn',
-                            styling: 'bootstrap3'
-                        });
-                    }
-                });
-                
-                
+            if (existeInArray === -1 && this.nuevoProducto.codigo.length > 0) {
+                if (this.nuevoProducto.precio <= 0) {
+                    alert('Precio del producto en cero.');
+                    return
+                }
+                this.documento.productos.push(this.nuevoProducto);
+                this.nuevoProducto = new Producto({});
+                this.search_producto.text = '';
             }else{
                 swal({
                     title: "Ops!",
-                    text: `El item ya existe en la lista de ingredientes o no es un producto válido.`,
+                    text: `El item ${this.nuevoProducto.codigo} ya existe en la lista de egresos o no es un producto válido.`,
                     type: "warning",
                     showCancelButton: false,
                     confirmButtonClass: "btn-success",
@@ -459,8 +459,6 @@ const app = new Vue({
             if (!this.validateSaveDocument()) {
                 return;
             }
-
-            
 
             console.log(this.documento);
             let formData = new FormData();

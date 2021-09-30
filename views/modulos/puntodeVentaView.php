@@ -106,7 +106,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                     
                 <div class="form-group formextra col-lg-4 col-md-12">
                     <div class="well text-center wellextra" >
-                        <span id="welltotal">$ 0.00</span>
+                        <span id="welltotal">$ {{ documento.getTotalFactura() }}</span>
                     </div>
                 </div>
             </div>
@@ -172,7 +172,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                             
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon">Forma Pago</span>
-                                <select v-model="documento.formaPago" class="form-control input-sm">
+                                <select v-model="documento.formaPago" @change="validaFormaPago" class="form-control input-sm">
                                         <?php
                                         foreach ($formasPago as $grupo => $row) {
 
@@ -188,7 +188,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
 
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon">Condiciones Pago</span>
-                                <select v-model="documento.condicionPago" class="form-control input-sm">
+                                <select v-model="documento.condicionPago" class="form-control input-sm" :disabled="validaFormaPago()">
                                         <?php
                                         foreach ($tiposTarjeta as $grupo => $row) {
 
@@ -216,8 +216,8 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                 <textarea class="form-control" rows="2" v-model="documento.comentario" name="comment" maxlength="100" placeholder="Comentario de hasta maximo 100 caracteres..."></textarea>
                             </div>
                             <div class="input-group input-group-sm">
-                                <span class="input-group-addon" id="sizing-addon3">Tipo Precio Cliente</span>
-                                <input type="text" id="inputTipoPrecioCli" class="form-control" disabled>
+                                <span class="input-group-addon">Tipo Precio Cliente</span>
+                                <input type="text" :value="documento.cliente.tipoPrecio" class="form-control" disabled>
                             </div>
             
 
@@ -227,15 +227,13 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                 </div>
             </div>
             
-            <!-- agregar productos-->
-            
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default">
                     <!-- Default panel contents -->
                 
                     <div class="panel-heading clearfix">
-                        <h4 class="panel-title pull-left" style="padding-top: 7.5px;"><i class="fa fa-plus-circle" aria-hidden="true"></i> Nuevo Item</h4>
+                        <h4 class="panel-title pull-left" style="padding-top: 7.5px;"><i class="fa fa-address-book" aria-hidden="true"></i></i> Búsqueda de nuevo item</h4>
                         
                     </div>
                                         
@@ -244,16 +242,12 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                             <table id="tablaAgregaNuevo" class="table table-bordered tableExtras">
                                 <thead>
                                 <tr>
-                                    <th style="width: 5%; min-width: 170px;" class="text-center headerTablaProducto">Codigo</th>
+                                    <th style="width: 5%; min-width: 150px;" class="text-center headerTablaProducto">Codigo</th>
                                     <th style="width: 10%; min-width: 200px;" class="text-center headerTablaProducto">Nombre del Articulo</th>
+                                    <th style="width: 5%; min-width: 100px;" class="text-center headerTablaProducto">Stock</th>
                                     <th style="width: 2%; min-width: 80px;"  class="text-center headerTablaProducto">Cantidad</th>
-                                    <th style="width: 2%; min-width: 80px;"  class="text-center headerTablaProducto">Vendedor</th>
-                                    <th style="width: 5%; min-width: 80px;" class="text-center headerTablaProducto">Precio</th>
-                                    <th style="width: 5%; min-width: 80px;" class="text-center headerTablaProducto">Peso (Kg)</th>
-                                    <th style="width: 5%; min-width: 80px;" class="text-center headerTablaProducto">Sotck local</th>
-                                    <th style="width: 5%; min-width: 110px;" class="text-center headerTablaProducto">Cod. Promocion</th>
-                                    <th style="width: 5%; min-width: 100px;" class="text-center headerTablaProducto">Fecha Validez</th>
-                                    <th style="width: 5%; min-width: 60px;" class="text-center headerTablaProducto">% Desc</th>
+                                    <th style="width: 2%; min-width: 80px;"  class="text-center headerTablaProducto">Unidad</th>
+                                    <th style="width: 5%; min-width: 120px;" class="text-center headerTablaProducto">Costo / {{ nuevoProducto.unidad }}</th>
                                     <th style="width: 5%; min-width: 120px;" class="text-center headerTablaProducto">Subtotal</th>
                                 </tr>
                                 </thead>
@@ -261,7 +255,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                     <tr>
                                         <td>
                                             <div class="input-group">
-                                            <input type="text" id="inputNuevoCodProducto" class="form-control text-center input-sm" placeholder="Cod Producto...">
+                                            <input type="text" @change="getProducto" v-model="search_producto.busqueda.texto" class="form-control text-center input-sm" placeholder="Codigo de Producto">
                                             <span class="input-group-btn">
                                                 <button id="btnSeachProductos" class="btn btn-default input-sm" type="button" data-toggle="modal" data-target="#modalBuscarProducto">
                                                     <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
@@ -270,48 +264,30 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                             </div><!-- /input-group -->
                                         </td>
                                         <td>
-                                            <input type="text" id="inputNuevoProductoNombre" class="form-control text-center input-sm" readonly>
+                                            <input type="text" v-model="nuevoProducto.nombre" class="form-control text-center input-sm" readonly>
                                         </td>
                                         <td>
-                                            <input type="number" id="inputNuevoProductoCantidad" class="form-control text-center input-sm" value="1"  min="1" oninput="validity.valid||(value='1');"></td>
+                                            <input type="text" v-model="nuevoProducto.stock" class="form-control text-center input-sm" readonly>
                                         </td>
                                         <td>
-                                            <input type="number" id="inputNuevoVendedor" class="form-control text-center input-sm" min="0" value="0" readonly></td>
-                                        <td>
-                                            <input type="text" id="inputNuevoProductoPrecioUnitario" class="form-control text-center input-sm" readonly>
+                                            <input type="number" @change="nuevoProducto.setCantidad($event.target.value);" :value="nuevoProducto.cantidad" class="form-control text-center input-sm" step=".0001" min="0" oninput="validity.valid||(value=1);"></td>
                                         </td>
                                         <td>
-                                            <input type="text" id="inputNuevoProductoPesoUnitario" class="form-control text-center input-sm" readonly>
+                                            <input type="text" v-model="nuevoProducto.unidad" class="form-control text-center input-sm" readonly>
                                         </td>
                                         <td>
-                                            <input type="text" id="inputNuevoProductoStockLocal" class="form-control text-center input-sm" readonly>
+                                            <input type="number" v-model="nuevoProducto.precio" class="form-control text-center input-sm" min="0" value="0" step=".0001" >
                                         </td>
                                         <td>
-                                            <div class="input-group">
-                                            <input type="text" id="inputNuevoProductoCodProm" class="form-control text-center input-sm" readonly>
-                                            <span class="input-group-btn">
-                                                <button id="btnDetallePromo" class="btn btn-default input-sm" type="button">
-                                                    <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
-                                                </button>
-                                            </span>
-                                            </div><!-- /input-group -->
+                                            <input type="text" v-model="nuevoProducto.getSubtotal()" class="form-control text-center input-sm importe_linea" readonly>
                                         </td>
-                                        <td>
-                                            <input type="text" id="inputNuevoProductoValidezProm" class="form-control text-center input-sm" readonly>
-                                        </td>
-                                        <td>
-                                            <input type="text" id="inputNuevoProductoDesc" class="form-control text-center input-sm" readonly>
-                                        </td>
-                                        <td>
-                                            <input type="text"  id="inputNuevoProductoSubtotal" class="form-control text-center input-sm importe_linea" readonly></td>
-                                        </>
                                     </tr>
 
                                     
                                     
                                 </tbody>
                             </table>
-                            <button type="button" class="btn btn-primary btn-sm" id="btnAgregarProdToList"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Agregar item</button>
+                            <button type="button" class="btn btn-primary btn-sm" @click="addToListProductos"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Agregar item</button>
                             </div>
                         </div>
                     </div>
@@ -336,42 +312,52 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                 <table class="table table-bordered tableExtras">
                                     <thead>
                                         <tr>
-                                            <th style="width: 10%; min-width: 110px;" class="text-center headerTablaProducto">Codigo</th>
-                                            <th style="width: 20%; min-width: 250px;" class="text-center headerTablaProducto">Nombre del Articulo</th>
-                                            <th style="width: 3%"  class="text-center headerTablaProducto">Cantidad</th>
-                                            <th style="width: 3%"  class="text-center headerTablaProducto">Vendedor</th>
-                                            <th style="width: 5%; min-width: 70px;" class="text-center headerTablaProducto">Precio</th>
-                                            <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Peso (Kg)</th>
+                                            <th style="width: 10%;" class="text-center headerTablaProducto">Codigo</th>
+                                            <th style="width: 20%; min-width: 200px;" class="text-center headerTablaProducto">Nombre del Articulo</th>
                                             <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">Stock</th>
-                                            <th style="width: 5%; min-width: 70px;" class="text-center headerTablaProducto">% Desc</th>
-                                            <th style="width: 10%; min-width: 70px;" class="text-center headerTablaProducto">Subtotal</th>
-                                            <th style="width: 5%; min-width: 70px;" class="text-center headerTablaProducto">IVA</th>
+                                            <th style="width: 3%" class="text-center headerTablaProducto">Cantidad</th>
+                                            <th style="width: 5%; min-width: 80px;" class="text-center headerTablaProducto">Unidad</th>
+                                            <th style="width: 5%; min-width: 100px;" class="text-center headerTablaProducto">Costo</th>
+                                            <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Subtotal</th>
                                             <th style="width: 5%" class="text-center headerTablaProducto">Eliminar</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tablaProductos">
-                                        <!--Resultados de busqueda aqui -->
+                                        <tr v-for="producto in documento.productos">
+                                            <td><input type="text" class="form-control text-center input-sm" v-model="producto.codigo" disabled></td>
+                                            <td><input type="text" class="form-control text-center input-sm"  v-model="producto.nombre" readonly></td>
+                                            <td><input type="text" class="form-control text-center input-sm" v-model="producto.stock" disabled></td>
+                                            <td><input type="number" class="form-control text-center input-sm" @change="producto.setCantidad($event.target.value)" :value="producto.cantidad" step=".0001" min="0" oninput="validity.valid||(value=1);"></td>
+                                            <td><input type="text" class="form-control text-center input-sm" v-model="producto.unidad" disabled></td>
+                                            <td>
+                                                <input type="text" class="form-control text-center input-sm" v-model="producto.precio">
+                                            </td>
+                                            
+                                            <td><input type="text" class="form-control text-center input-sm" v-model="producto.getSubtotal()" readonly></td>
+                                            <td><button type="button" @click="removeItemFromList(producto.codigo)" class="btn btn-danger btn-sm btn-block"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="8"></td>
-                                            <td class="text-center" style="vertical-align: middle;"><b>Subtotal Productos</b></td>
+                                            <td colspan="6"></td>
+                                            <td class="text-center" style="vertical-align: middle;"><b>Subtotal</b></td>
                                             <td colspan="2">
-                                            <input type="text" id="inputSubTotalProductos" class="form-control text-center" readonly></td>
+                                            <input type="text" :value="documento.getSubTotalProductos()" class="form-control text-center" readonly></td>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td colspan="8"></td>
-                                            <td class="text-center" style="vertical-align: middle;"><b>IVA Productos</b></td>
+                                            <td colspan="6"></td>
+                                            <td class="text-center" style="vertical-align: middle;"><b>IVA</b></td>
                                             <td colspan="2">
-                                            <input type="text" id="inputIVAProductos" class="form-control text-center" readonly></td>
+                                            <input type="text" :value="documento.getIVAFactura()" class="form-control text-center" readonly></td>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td colspan="8"></td>
-                                            <td class="text-center" style="vertical-align: middle;"><b>Total Productos</b></td>
+                                            <td colspan="6"></td>
+                                            <td class="text-center" style="vertical-align: middle;"><b>Total</b></td>
                                             <td colspan="2">
-                                            <input type="text" id="inputTotalProductos" class="form-control text-center" readonly></td>
+                                            <input type="text" :value="documento.getTotalFactura()" class="form-control text-center" readonly></td>
                                             </td>
                                         </tr>
 
@@ -382,46 +368,6 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                     </div>
                 </div>
             </div>
-
-            <!-- fila de resumen de pago-->
-            <div class="row">
-                <div class="col-md-12">
-                <div class="panel panel-default">
-                    <!-- Default panel contents -->
-                
-                    <div class="panel-heading clearfix">
-                    <h4 class="panel-title pull-left">Resumen</h4>
-                    </div>
-
-                    <div class="panel-body">
-                        <div class="responsibetable">        
-                            <table class="table table-bordered tableExtras">
-                            <thead>
-                                <th style="width: 5%; min-width: 80px;" class="text-center headerTablaProducto">Unidades</th>
-                                <th style="width: 10%; min-width: 100px;" class="text-center headerTablaProducto">Descuento</th>
-                                <th style="width: 20%; min-width: 100px;" class="text-center headerTablaProducto">Subtotal</th>
-                                <th style="width: 10%; min-width: 100px;" class="text-center headerTablaProducto">IVA</th>
-                                <th style="width: 20%; min-width: 150px;" class="text-center headerTablaProducto">Total</th>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td><input type="text" class="form-control text-center" id="txt_unidadesProd" readonly></td>
-                                <td><input type="text" class="form-control text-center" id="txt_descuentoResumen" readonly></td>
-                                <td><input type="text" class="form-control text-center" id="txt_subtotal" value="0" readonly></td>
-                                <td><input type="text" class="form-control text-center" id="txt_impuesto" readonly></td>
-                                <td><input type="text" class="form-control text-center" id="txt_totalPagar" readonly></td>
-                                
-                            </tr>
-                        
-                            </tbody>
-                            </table>
-
-                        </div>
-                    </div>
-
-                </div>
-                </div>
-            </div>    
 
     
             <div class="row extraButton">
@@ -454,7 +400,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
             <?php require_once 'sis_modules/modal_cliente_nuevo.php'?>
 
             <!-- Modal Producto -->
-            <?php require_once 'sis_modules/modal_producto-cotizaciones.php'?>
+            <?php require_once 'sis_modules/modalBuscarProducto.php'?>
 
             <!-- Modal Producto -->
             <?php require_once 'sis_modules/modal_detalle_promo.php'?>

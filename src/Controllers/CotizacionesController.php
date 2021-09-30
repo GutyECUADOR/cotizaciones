@@ -43,6 +43,10 @@ class CotizacionesController  {
     public function getProductos(object $busqueda){
         return $this->winfenixModel->Sp_INVCONARTWAN($busqueda);
     }
+
+    public function getProducto(string $codigo) {
+        return $this->model->getProducto($codigo);
+    }
     
 
 

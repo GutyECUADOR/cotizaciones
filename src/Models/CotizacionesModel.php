@@ -89,6 +89,36 @@ class CotizacionesModel extends Conexion  {
 
     }
 
+    public function getProducto(string $busqueda) {
+        $query = "
+            SELECT TOP 1
+                INV_ARTICULOS.Codigo,
+                INV_ARTICULOS.Nombre,
+                INV_ARTICULOS.Unidad,
+                Costo = (SELECT dbo.DimecostoProm('99', :codigoCosto,'') as Costo),
+                Stock = (SELECT dbo.DimeStockFis('99', :codigoStock,'' ,'') as Stock),
+                INV_ARTICULOS.TipoArticulo,
+                INV_ARTICULOS.PrecA,
+                INV_ARTICULOS.Peso,
+                INV_ARTICULOS.TipoIVA,
+                RTRIM(IVA.VALOR) as ValorIVA
+            FROM INV_ARTICULOS 
+            INNER JOIN dbo.INV_IVA AS IVA on IVA.CODIGO = INV_ARTICULOS.TipoIva
+            WHERE INV_ARTICULOS.Codigo = :codigo"; 
+
+        $stmt = $this->instancia->prepare($query);
+        $stmt->bindParam(':codigoCosto', $busqueda); 
+        $stmt->bindParam(':codigoStock', $busqueda); 
+        $stmt->bindParam(':codigo', $busqueda); 
+       
+            if($stmt->execute()){
+                $resulset = $stmt->fetch( \PDO::FETCH_ASSOC );
+            }else{
+                $resulset = false;
+            }
+        return $resulset;  
+    }
+
     
 }
 
