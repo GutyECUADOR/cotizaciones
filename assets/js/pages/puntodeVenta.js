@@ -201,6 +201,14 @@ const app = new Vue({
             isloading: false,
             results: []
         },
+        search_stock: {
+            busqueda: {
+              texto: '',
+              bodega: 'B01'
+            },
+            isloading: false,
+            results: []
+        },
         nuevoCliente: new NuevoCliente({}),
         nuevoProducto: new Producto({}),
         documento : new Documento()
@@ -417,6 +425,8 @@ const app = new Vue({
                     valorIVA: parseFloat(response.data.ValorIVA),
                     unidad: response.data.Unidad
                 });
+
+                this.search_stock.busqueda.texto = this.nuevoProducto.codigo;
             }else{
                 this.nuevoProducto = new Producto({});
             }
@@ -449,18 +459,68 @@ const app = new Vue({
 
             
         },
+        removeItemFromList(codigo){
+            let index = this.documento.productos.findIndex( productoEnArray => {
+                return productoEnArray.codigo === codigo;
+            });
+            this.documento.productos.splice(index, 1);
+        },
+        showDetailPromo(codPromocion=''){
+            if (codPromocion.length > 0) {
+                $('#modalDetallePromo').modal('show');
+                this.validaPromo(codPromocion);
+            }else{
+                Swal.fire({
+                    type: 'warning',
+                    title: 'Sin promoción',
+                    text: 'No se ha encontrado un codigo de promoción para este producto.'
+                    })
+                return;
+            }
+        },
+        showDetailStock(){
+            let codigo = this.nuevoProducto.codigo;
+            if (codigo) {
+                $('#modalBuscarStockProductos').modal('show');
+                this.getStock(codigo);
+            }else{
+                Swal.fire({
+                    type: 'warning',
+                    title: 'Sin codigo de producto',
+                    text: `Indique un producto para buscar su stock.`
+                    })
+                return;
+            }
+        },
+        async getStock(){
+            this.search_stock.isloading = true;
+            let busqueda = JSON.stringify(this.search_stock.busqueda);
+            const response = await fetch(`./api/ventas/index.php?action=getStock&busqueda=${busqueda}`)
+            .then(response => {
+                return response.json();
+            }).catch( error => {
+                console.error(error);
+            }); 
+            console.log(response);
+            response.status == 'ERROR' ? alert(response.message) : null;
+
+            
+            this.search_stock.isloading = false;
+            this.search_stock.results = response.data;
+         
+        },
         validateSaveDocument(){
 
-            if (this.documento.kit.codigo == '') {
-                alert('No se ha indicado un KIT.');
+            if (this.documento.cliente.RUC == '') {
+                alert('No se ha indicado un cliente');
                 return false;
             }
 
-            if (this.documento.kit.cantidad > this.documento.kit.getMaximaProduccion()) {
-                alert(`Segun el stock de los componentes del KIT, no se puede producir más de:
-                     ${this.documento.kit.getMaximaProduccion()} ${this.documento.kit.unidad} de ${this.documento.kit.nombre}`);
+            if (this.documento.productos.length <= 0) {
+                alert('La lista de productos está vacia, agregue productos');
                 return false;
             }
+
 
             return true;
         },

@@ -234,7 +234,9 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                 
                     <div class="panel-heading clearfix">
                         <h4 class="panel-title pull-left" style="padding-top: 7.5px;"><i class="fa fa-address-book" aria-hidden="true"></i></i> Búsqueda de nuevo item</h4>
-                        
+                        <div class="btn-group pull-right">
+                            <button type="button" @click="showDetailStock" class="btn btn-success btn-sm"><i class="fa fa-cubes"></i> Verificar Stock</button>
+                        </div>
                     </div>
                                         
                     <div class="panel-body">
@@ -290,7 +292,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                             <div class="input-group">
                                             <input type="text" id="inputNuevoProductoCodProm" class="form-control text-center input-sm" readonly>
                                             <span class="input-group-btn">
-                                                <button id="btnDetallePromo" class="btn btn-default input-sm" type="button">
+                                                <button @click="showDetailPromo" class="btn btn-default input-sm" type="button">
                                                     <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
                                                 </button>
                                             </span>
@@ -360,7 +362,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                             <td>
                                                 <input type="text" class="form-control text-center input-sm" v-model="producto.precio" readonly>
                                             </td>
-                                            <td><input type="text" class="form-control text-center input-sm" v-model="producto.vendedor"></td>
+                                            <td><input type="number" class="form-control text-center input-sm" v-model="producto.vendedor"></td>
                                             <td><input type="text" class="form-control text-center input-sm" v-model="producto.getSubtotal()" readonly></td>
                                             <td><button type="button" @click="removeItemFromList(producto.codigo)" class="btn btn-danger btn-sm btn-block"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
                                             </td>
@@ -421,25 +423,22 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
             <!-- Modal Buscar Documento -->
             <?php require_once 'sis_modules/modalBuscarDocumento.php'?>
 
-            <!-- Modal Cliente -->
+            <!-- Modal Busqueda Cliente -->
             <?php require_once 'sis_modules/modalBuscarCliente.php'?>
 
-                <!-- Modal Cliente Nuevo -->
+            <!-- Modal Cliente Nuevo -->
             <?php require_once 'sis_modules/modal_cliente_nuevo.php'?>
 
             <!-- Modal Producto -->
             <?php require_once 'sis_modules/modalBuscarProducto.php'?>
 
-            <!-- Modal Producto -->
+            <!-- Modal Stock -->
+            <?php require_once 'sis_modules/modalBuscarStockProductos.php'?>
+
+            <!-- Modal Detalle Promo -->
             <?php require_once 'sis_modules/modal_detalle_promo.php'?>
 
            
-
-            <!-- Modal Enviar Email Personalizado -->
-            <?php require_once 'sis_modules/modal_SendEmail.php'?>
-
-            <!-- Modal agregar fotos y detalles extra -->
-            <?php require_once 'sis_modules/modal_addExtraDetailProduct.php'?>
         
         </div>
     </form>

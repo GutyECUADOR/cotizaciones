@@ -101,6 +101,20 @@ $cotizacionesController = new CotizacionesController();
 
         break;
 
+        case 'getStock':
+          if (isset($_GET['busqueda'])) {
+            $busqueda = json_decode($_GET['busqueda']);
+            $respuesta = $cotizacionesController->getStock($busqueda);
+            $rawdata = array('status' => 'OK', 'message' => 'respuesta correcta', 'data' => $respuesta);
+          }else{
+            http_response_code(400);
+            $rawdata = array('status' => 'ERROR', 'message' => 'No se ha indicado parámetros de búsqueda.');
+          }
+          
+          echo json_encode($rawdata);
+
+        break;
+
         case 'saveCotizacion':
           if (isset($_POST['formData'])) {
             $formData = json_decode($_POST['formData']);
@@ -237,14 +251,14 @@ $cotizacionesController = new CotizacionesController();
         break;
 
         default:
-            $rawdata = array('status' => 'error', 'message' =>'El API no ha podido responder la solicitud, revise el tipo de action');
+            $rawdata = array('status' => 'ERROR', 'message' =>'El API no ha podido responder la solicitud, revise el tipo de action');
             echo json_encode($rawdata);
         break;
     }
     
   } catch (Exception $ex) {
     $rawdata = array();
-    $rawdata['status'] = "error";
+    $rawdata['status'] = "ERROR";
     $rawdata['message'] = $ex->getMessage();
     http_response_code(400);
     echo json_encode($rawdata);

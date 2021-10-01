@@ -45,7 +45,7 @@ class CotizacionesModel extends Conexion  {
             return $resulset;  
 
         }catch(\PDOException $exception){
-            return array('status' => 'error', 'mensaje' => $exception->getMessage() );
+            return array('status' => 'error', 'message' => $exception->getMessage() );
         }
    
     }
@@ -65,7 +65,7 @@ class CotizacionesModel extends Conexion  {
             return $codigoConFormato;
 
         }catch(\PDOException $exception){
-            return array('status' => 'error', 'mensaje' => $exception->getMessage() );
+            return array('status' => 'error', 'message' => $exception->getMessage() );
         }
 
     }
@@ -119,6 +119,119 @@ class CotizacionesModel extends Conexion  {
         return $resulset;  
     }
 
+    public function SQL_getStock(string $codigo) {
+        $query = " 
+        SELECT 
+            X.CODIGO,
+            X.NOMBRE,
+            X.STOCK 
+        FROM 
+            (SELECT A.CODIGO,A.NOMBRE,STOCK = (DBO.DimeStockFis('99' , :codigo ,'', A.CODIGO)) 
+        FROM INV_BODEGAS A WITH(NOLOCK) ) X 
+        WHERE X.STOCK > 0 
+        ORDER BY x.codigo";
+
+        try{
+            $stmt = $this->instancia->prepare($query); 
+            $stmt->bindValue(':codigo', $codigo);
+
+                if($stmt->execute()){
+                    $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+                    
+                }else{
+                    $resulset = false;
+                }
+            return $resulset;  
+
+        }catch(\PDOException $exception){
+            return array('status' => 'error', 'message' => $exception->getMessage() );
+        }
+   
+    }
+
+    public function SQL_getStockComponentes(object $busqueda) {
+        $query = " 
+        SELECT 
+            X.COD_ARTICULO,
+            X.NOM_ARTICULO,
+            X.COD_BODEGA,
+            X.STOCK 
+        FROM (
+            SELECT 
+                A.CODIGO AS COD_BODEGA,
+                A.NOMBRE AS NOM_BODEGA,
+                ART.CODIGO AS COD_ARTICULO,
+                ART.NOMBRE AS NOM_ARTICULO,STOCK = (DBO.DimeStockFis('99' ,ART.CODIGO,'',A.CODIGO)) 
+            FROM INV_BODEGAS A WITH(NOLOCK) 
+                INNER JOIN INV_ARTICULOS ART WITH(NOLOCK) ON 1 = 1 
+                INNER JOIN INV_ARTICULOS MAE WITH(NOLOCK) ON MAE.CODIGO = ART.CODKAO 
+            WHERE MAE.CODIGO = :codigo AND CASE WHEN ISNULL( :bodega1 ,'') = '' THEN '' ELSE A.CODIGO END = ISNULL( :bodega2 ,'')) X 
+        WHERE X.STOCK > 0 
+        ORDER BY X.NOM_ARTICULO
+        ";
+
+        try{
+            $stmt = $this->instancia->prepare($query); 
+            $stmt->bindParam(':codigo', $busqueda->codigo);
+            $stmt->bindParam(':bodega1', $busqueda->bodega);
+            $stmt->bindParam(':bodega2', $busqueda->bodega);
+
+                if($stmt->execute()){
+                    $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+                    
+                }else{
+                    $resulset = false;
+                }
+            return $resulset;  
+
+        }catch(\PDOException $exception){
+            return array('status' => 'error', 'message' => $exception->getMessage() );
+        }
+   
+    }
+
+    public function SQL_getStockRetazos(string $codigo) {
+        $query = " 
+        SELECT 
+        BODEGA,
+        LARGO,
+        ANCHO,
+        PRECIO FROM (
+                SELECT 
+                    KAR.BODEGA,
+                    KAR.LARGO,
+                    KAR.ANCHO,
+                    SUM(CASE WHEN KAR.TIPMOV = 'E' THEN 1 ELSE -1 END * CANTIDAD) AS STOCK,
+                    RET.PRECIO FROM INV_KARDEXRETAZOS KAR WITH(NOLOCK) 
+                    INNER JOIN INV_RETAZOS RET WITH(NOLOCK) ON KAR.SECUENCIA = RET.SECUENCIA 
+                    WHERE RET.CODIGO = :codigo 
+                        AND ISNULL(KAR.ANULADO,0) = 0 
+                        AND NOT EXISTS(SELECT VRT.SECUENCIA FROM VEN_MOVRETAZOS VRT WITH(NOLOCK) INNER JOIN VEN_CAB VCA WITH(NOLOCK) ON VRT.ID = VCA.ID 
+                        WHERE VRT.SECUENCIA = KAR.SECUENCIA AND ISNULL(ANULADO,0) = 0) AND CASE WHEN ISNULL('' ,'') = '' THEN '' ELSE KAR.BODEGA END = ISNULL('' ,'') 
+                GROUP BY KAR.BODEGA,KAR.LARGO,KAR.ANCHO,RET.PRECIO)DET 
+                WHERE STOCK > 0
+        ";
+
+        try{
+            $stmt = $this->instancia->prepare($query); 
+            $stmt->bindParam(':codigo', $codigo);
+
+                if($stmt->execute()){
+                    $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+                    
+                }else{
+                    $resulset = false;
+                }
+            return $resulset;  
+
+        }catch(\PDOException $exception){
+            return array('status' => 'error', 'message' => $exception->getMessage() );
+        }
+   
+    }
+
+
+    
     
 }
 

@@ -47,6 +47,14 @@ class CotizacionesController  {
     public function getProducto(string $codigo) {
         return $this->model->getProducto($codigo);
     }
+
+    public function getStock(object $busqueda) {
+        $response = array('stock' => $this->model->SQL_getStock($busqueda->texto),
+                          'stockComponentes' => $this->model->SQL_getStockComponentes($busqueda),
+                          'stockRetazos' => $this->model->SQL_getStockRetazos($busqueda->texto)
+                        );
+        return $response; 
+    }
     
 
 
