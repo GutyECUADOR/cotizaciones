@@ -1,12 +1,12 @@
 <?php
 
-use App\Controllers\CotizacionController;
+use App\Controllers\CotizacionesController;
 use App\Middleware\RouteMiddleware;
 
 $routeMiddleware = new RouteMiddleware();
 $routeMiddleware->checkisLogin(); 
 
-$cotizacion = new CotizacionController();
+$cotizacion = new CotizacionesController();
 $bodegas = $cotizacion->getBodegas();
 $vendedores = $cotizacion->getVendedores();
 $formasPago = $cotizacion->getFormasPago();

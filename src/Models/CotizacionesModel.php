@@ -45,7 +45,7 @@ class CotizacionesModel extends Conexion  {
             return $resulset;  
 
         }catch(\PDOException $exception){
-            return array('status' => 'error', 'message' => $exception->getMessage() );
+            return array('status' => 'ERROR', 'message' => $exception->getMessage() );
         }
    
     }
@@ -65,7 +65,7 @@ class CotizacionesModel extends Conexion  {
             return $codigoConFormato;
 
         }catch(\PDOException $exception){
-            return array('status' => 'error', 'message' => $exception->getMessage() );
+            return array('status' => 'ERROR', 'message' => $exception->getMessage() );
         }
 
     }
@@ -144,7 +144,7 @@ class CotizacionesModel extends Conexion  {
             return $resulset;  
 
         }catch(\PDOException $exception){
-            return array('status' => 'error', 'message' => $exception->getMessage() );
+            return array('status' => 'ERROR', 'message' => $exception->getMessage() );
         }
    
     }
@@ -185,7 +185,7 @@ class CotizacionesModel extends Conexion  {
             return $resulset;  
 
         }catch(\PDOException $exception){
-            return array('status' => 'error', 'message' => $exception->getMessage() );
+            return array('status' => 'ERROR', 'message' => $exception->getMessage() );
         }
    
     }
@@ -225,7 +225,7 @@ class CotizacionesModel extends Conexion  {
             return $resulset;  
 
         }catch(\PDOException $exception){
-            return array('status' => 'error', 'message' => $exception->getMessage() );
+            return array('status' => 'ERROR', 'message' => $exception->getMessage() );
         }
    
     }

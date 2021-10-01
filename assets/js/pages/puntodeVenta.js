@@ -237,7 +237,7 @@ const app = new Vue({
         },
         generaPDF(ID){
             alert('Generando PDF: ' + ID);
-            window.open(`./api/documentos/index.php?action=generaReportePDF_CreacionReceta&ID=${ID}`, '_blank').focus();
+            window.open(`./api/documentos/index.php?action=generaReportePDF_Cotizacion&ID=${ID}`, '_blank').focus();
         },
         async getClientes() {
             let texto = this.search_cliente.busqueda.texto;
@@ -538,7 +538,7 @@ const app = new Vue({
             let formData = new FormData();
             formData.append('documento', JSON.stringify(this.documento)); 
              
-            const response = await fetch(`./api/inventario/index.php?action=saveTransformacionKITS`, {
+            const response = await fetch(`./api/inventario/index.php?action=saveCotizacion`, {
                             method: 'POST',
                             body: formData
                             })
@@ -561,7 +561,7 @@ const app = new Vue({
                     closeOnConfirm: false
                     },
                     function(){
-                        window.location = './index.php?action=creacionReceta'
+                        window.location = './index.php?action=cotizaciones'
                     });
             }else {
                 console.log(response);

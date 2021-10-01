@@ -42,7 +42,6 @@ class WinfenixModel extends Conexion  {
         return $resulset;  
     }
 
-
     public function sql_getIngresosEgresos (object $busqueda) {
         $query = "
         SELECT 
@@ -184,6 +183,165 @@ class WinfenixModel extends Conexion  {
                 $resulset = false;
             }
         return $resulset;  
+    }
+
+    public function sql_getBodegasWF(){
+        $query  = "SELECT CODIGO, NOMBRE FROM dbo.INV_BODEGAS";
+        try{
+            $stmt = $this->instancia->prepare($query); 
+            if($stmt->execute()){
+                $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+            }else{
+                $resulset = false;
+            }
+        return $resulset;  
+    
+        }catch(\PDOException $exception){
+            return array('status' => 'ERROR', 'message' => $exception->getMessage() );
+        }
+           
+
+    }
+
+    public function sql_getVendedoresWF(){
+        $query  = "SELECT CODIGO, NOMBRE FROM dbo.COB_VENDEDORES";
+        try{
+            $stmt = $this->instancia->prepare($query); 
+            if($stmt->execute()){
+                $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+            }else{
+                $resulset = false;
+            }
+        return $resulset;  
+
+        }catch(\PDOException $exception){
+            return array('status' => 'ERROR', 'message' => $exception->getMessage() );
+        }
+           
+
+    }
+
+    public function sql_getFormasPagoWF(){
+        $query  = "SELECT * From dbo.FORMAPAGO ORDER BY CODIGO";
+        try{
+            $stmt = $this->instancia->prepare($query); 
+            if($stmt->execute()){
+                $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+            }else{
+                $resulset = false;
+            }
+        return $resulset;  
+
+        }catch(\PDOException $exception){
+            return array('status' => 'ERROR', 'message' => $exception->getMessage() );
+        }
+           
+
+    }
+
+    public function sql_getVenTiposDOCWF(){
+        $query  = "SELECT * FROM VEN_TIPOS WHERE TIPODOC = 'C'";
+        try{
+            $stmt = $this->instancia->prepare($query); 
+             if($stmt->execute()){
+                    $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+                }else{
+                    $resulset = false;
+                }
+            return $resulset;  
+        
+
+        }catch(\PDOException $exception){
+            return array('status' => 'ERROR', 'message' => $exception->getMessage() );
+        }
+           
+
+    }
+
+    public function sql_getTiposPagoTarjetaWF(){
+        $query  = "SELECT * From dbo.VEN_MANTAR ORDER BY Codigo";
+        try{
+            $stmt = $this->instancia->prepare($query); 
+    
+             if($stmt->execute()){
+                    $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+                    $row = array('CODIGO' => 'CRE', 'NOMBRE' => 'CREDITO');
+                    array_unshift($resulset, $row);
+                    $row = array('CODIGO' => 'EFE', 'NOMBRE' => 'EFECTIVO');
+                    array_unshift($resulset, $row);
+                    $row = array('CODIGO' => 'SIN', 'NOMBRE' => 'SIN DESCUENTOS');
+                    array_unshift($resulset, $row);
+                }else{
+                    $resulset = false;
+                }
+            return $resulset;  
+        
+
+        }catch(\PDOException $exception){
+            return array('status' => 'ERROR', 'message' => $exception->getMessage() );
+        }
+           
+
+    }
+
+    public function sql_getGruposClientesWF(){
+        $query  = "SELECT * From dbo.COB_Grupos ORDER BY CODIGO";
+        try{
+            $stmt = $this->instancia->prepare($query); 
+            if($stmt->execute()){
+                $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+            }else{
+                $resulset = false;
+            }
+        return $resulset;  
+        
+
+        }catch(\PDOException $exception){
+            return array('status' => 'ERROR', 'message' => $exception->getMessage() );
+        }
+           
+
+    }
+
+    public function sql_getCantonesWF(){
+        $query  = "SELECT * From dbo.TAB_CANTONES ORDER BY Nombre";
+        try{
+            $stmt = $this->instancia->prepare($query); 
+    
+            if($stmt->execute()){
+                $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+            }else{
+                $resulset = false;
+            }
+            return $resulset;  
+        }catch(\PDOException $exception){
+            return array('status' => 'ERROR', 'message' => $exception->getMessage() );
+        }
+           
+
+    }
+
+    public function getDatosEmpresa (){
+        $query = "SELECT NomCia, Oficina, Ejercicio FROM dbo.DatosEmpresa";
+        $stmt = $this->instancia->prepare($query); 
+        try{
+            $stmt->execute();
+            return $stmt->fetch( \PDO::FETCH_ASSOC );
+        }catch(\PDOException $exception){
+            return array('status' => 'error', 'message' => $exception->getMessage() );
+        }
+
+    }
+
+    public function getVenTipos ($tipoDOC){
+        $query = "SELECT CODIGO, NOMBRE, Serie FROM dbo.VEN_TIPOS WHERE CODIGO = '$tipoDOC'";
+        $stmt = $this->instancia->prepare($query); 
+
+        if($stmt->execute()){
+            return $stmt->fetch( \PDO::FETCH_ASSOC );
+        }else{
+            return false;
+        }
     }
 
 

@@ -19,26 +19,11 @@ $documentoController = new DocumentoController();
 
     switch ($HTTPaction) {
 
-        case 'generaReportePDF_IngresosEgresos':
+        case 'generaReportePDF_Cotizacion':
           if (isset($_GET['ID'])) {
             $ID = $_GET['ID'];
           
-            $PDFDocument = $documentoController->getPDF_ingresosEgresos($ID);
-            echo $PDFDocument;
-            
-          }else{
-            http_response_code(400);
-            $rawdata = array('status' => 'ERROR', 'message' => 'No se ha indicado parámetros.');
-            echo json_encode($rawdata);
-          }
-        
-        break;
-
-        case 'generaReportePDF_CreacionReceta':
-          if (isset($_GET['ID'])) {
-            $ID = $_GET['ID'];
-          
-            $PDFDocument = $documentoController->getPDF_CreacionReceta($ID);
+            $PDFDocument = $documentoController->getPDF_Cotizacion($ID);
             echo $PDFDocument;
             
           }else{
@@ -52,16 +37,14 @@ $documentoController = new DocumentoController();
 
         default:
           http_response_code(400);
-          $rawdata = array('status' => 'error', 'mensaje' =>'El API no ha podido responder la solicitud, revise el tipo de action');
+          $rawdata = array('status' => 'error', 'message' =>'El API no ha podido responder la solicitud, revise el tipo de action');
           echo json_encode($rawdata);
         break;
     }
     
   } catch (Exception $ex) {
-    //Return error message
-    $rawdata = array('status' => 'error');
-    $rawdata['error'] = TRUE;
-    $rawdata['mensaje'] = $ex->getMessage();
+    $rawdata['status'] = "ERROR";
+    $rawdata['message'] = $ex->getMessage();
     http_response_code(400);
     echo json_encode($rawdata);
   }

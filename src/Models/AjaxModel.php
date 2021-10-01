@@ -239,7 +239,7 @@ class AjaxModel extends Conexion  {
                 }
             return $resulset;  
 
-        }catch(PDOException $exception){
+        }catch(\PDOException $exception){
             return array('status' => 'error', 'mensaje' => $exception->getMessage() );
         }
    
@@ -274,7 +274,7 @@ class AjaxModel extends Conexion  {
                 }
             return $resulset;  
 
-        }catch(PDOException $exception){
+        }catch(\PDOException $exception){
             return array('status' => 'error', 'mensaje' => $exception->getMessage() );
         }
     }
@@ -320,7 +320,7 @@ class AjaxModel extends Conexion  {
                 }
             return $resulset;  
 
-        }catch(PDOException $exception){
+        }catch(\PDOException $exception){
             return array('status' => 'error', 'mensaje' => $exception->getMessage() );
         }
     }
@@ -349,7 +349,7 @@ class AjaxModel extends Conexion  {
                 }
             return $resulset;  
 
-        }catch(PDOException $exception){
+        }catch(\PDOException $exception){
             return array('status' => 'error', 'mensaje' => $exception->getMessage() );
         }
     }
@@ -370,7 +370,7 @@ class AjaxModel extends Conexion  {
             return $resulset;  
         
 
-        }catch(PDOException $exception){
+        }catch(\PDOException $exception){
             return array('status' => 'error', 'mensaje' => $exception->getMessage() );
         }
            
@@ -392,7 +392,7 @@ class AjaxModel extends Conexion  {
             $codigoConFormato = $codigoConFormato['newcod'];
             return $codigoConFormato;
 
-        }catch(PDOException $exception){
+        }catch(\PDOException $exception){
             return array('status' => 'error', 'mensaje' => $exception->getMessage() );
         }
 
@@ -410,7 +410,7 @@ class AjaxModel extends Conexion  {
             $rowsAfected = $this->instancia->exec($query);
            return array('status' => 'ok', 'mensaje' => $rowsAfected. ' fila afectada(s)' ); //true;
            
-        }catch(PDOException $exception){
+        }catch(\PDOException $exception){
             return array('status' => 'error', 'mensaje' => $exception->getMessage() );
         }
 
@@ -494,20 +494,6 @@ class AjaxModel extends Conexion  {
    
     }
 
-    /*Retorna array con informacion de la empresa que se indique*/
-    public function getDatosEmpresaFromWINFENIX ($dataBaseName='wssp'){
-       
-        $query = "SELECT NomCia, Oficina, Ejercicio FROM dbo.DatosEmpresa";
-        $stmt = $this->instancia->prepare($query); 
-
-        try{
-            $stmt->execute();
-            return $stmt->fetch( \PDO::FETCH_ASSOC );
-        }catch(\PDOException $exception){
-            return array('status' => 'error', 'mensaje' => $exception->getMessage() );
-        }
-
-    }
     
     /*Retorna array asociativo con informacion del cliente que se indique*/
     public function getDatosClienteWINFENIXByRUC ($clienteRUC, $dataBaseName='wssp'){
@@ -523,18 +509,7 @@ class AjaxModel extends Conexion  {
         }
     }
 
-    /*Retorna array asociativo con informacion del cliente que se indique*/
-    public function getDatosDocumentsWINFENIXByTypo ($tipoDOC){
-        
-        $query = "SELECT CODIGO, NOMBRE, Serie FROM dbo.VEN_TIPOS WHERE CODIGO = '$tipoDOC'";
-        $stmt = $this->instancia->prepare($query); 
-
-        if($stmt->execute()){
-            return $stmt->fetch( \PDO::FETCH_ASSOC );
-        }else{
-            return false;
-        }
-    }
+    
 
     /*Retorna el siguiente secuencial del tipo de documento que se le indiqie - Winfenix*/
     public function getNextNumDocWINFENIX ($tipoDoc){
