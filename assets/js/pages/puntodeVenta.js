@@ -19,30 +19,35 @@ class Cliente {
 }
 
 class Producto {
-    constructor({codigo, nombre, tipoArticulo, cantidad, precio, peso, descuento, stock, tipoIVA, unidad, valorIVA}) {
+    constructor({codigo, nombre, tipoArticulo, cantidad, precio, peso, descuento, stock, tipoIVA, unidad, marca, vendedor, valorIVA}) {
+      this.archivos = null;
+      this.cantidad = cantidad || 0;
       this.codigo = codigo;
+      this.descripcion = null;
+      this.descuento = descuento || 0;
+      this.IVA = 0;
+      this.marca = marca || '';
       this.nombre = nombre;
-      this.tipoArticulo = tipoArticulo
-      this.cantidad = cantidad;
-      this.precio = precio;
-      this.peso = parseFloat(peso);
-      this.descuento = descuento;
+      this.peso = parseFloat(peso) || 0;
+      this.precio = precio || 0;
       this.stock = stock;
+      this.subtotal = 0;
+      this.tipoArticulo = tipoArticulo;
       this.tipoIVA = tipoIVA;
       this.unidad = unidad;
-      this.valorIVA = parseFloat(valorIVA);
-      this.vendedor = null;
-      this.descripcion = null;
-      this.archivos = null;
+      this.valorIVA = parseFloat(valorIVA) || 0;
+      this.vendedor = vendedor;
      
     }
 
     getIVA(){
-        return (this.getSubtotal() * this.valorIVA) / 100;
+        this.IVA = parseFloat(((this.getSubtotal() * this.valorIVA) / 100).toFixed(2));
+        return this.IVA;
     }
 
     getDescuento(){
-        return ((this.cantidad * this.precio)* this.descuento)/100;
+        this.descuento = parseFloat((((this.cantidad * this.precio)* this.descuento)/100).toFixed(2));
+        return this.descuento;
     }
 
     getPeso(){
@@ -50,7 +55,8 @@ class Producto {
     }
 
     getSubtotal(){
-        return (this.cantidad * this.precio) - this.getDescuento(this.descuento);
+        this.subtotal = parseFloat(((this.cantidad * this.precio) - this.getDescuento(this.descuento)).toFixed(2));
+        return this.subtotal
     }
 
     setCantidad(cantidad){
@@ -380,6 +386,11 @@ const app = new Vue({
             $('#modalBuscarProducto').modal('hide');
         },
         async getProducto() {
+            if (!this.documento.cliente.RUC) {
+                alert('Indique un cliente antes de agregar productos');
+                return
+            }
+
             let codigo = this.search_producto.busqueda.texto;
             const response = await fetch(`./api/ventas/index.php?action=getProducto&busqueda=${codigo.trim()}`)
             .then(response => {
@@ -389,7 +400,9 @@ const app = new Vue({
             });
             
             console.log(response);
+            
             if (response.data) {
+                console.log(this.documento.cliente.codVendedor);
                 this.nuevoProducto = new Producto({
                     codigo: response.data.Codigo.trim(),
                     nombre: response.data.Nombre.trim(),
@@ -398,6 +411,7 @@ const app = new Vue({
                     precio: response.data.PrecA,
                     peso: parseFloat(response.data.Peso),
                     descuento: 0,
+                    vendedor: this.documento.cliente.codVendedor,
                     stock: response.data.Stock,
                     tipoIVA: response.data.TipoIVA,
                     valorIVA: parseFloat(response.data.ValorIVA),
@@ -420,7 +434,7 @@ const app = new Vue({
                 }
                 this.documento.productos.push(this.nuevoProducto);
                 this.nuevoProducto = new Producto({});
-                this.search_producto.text = '';
+                this.search_producto.busqueda.texto = '';
             }else{
                 swal({
                     title: "Ops!",
@@ -504,6 +518,11 @@ const app = new Vue({
             
 
             
+        },
+        cancelSubmit(){
+            if (confirm("Confirma que desea cancelar?")) {
+              location.reload();
+            } 
         }
         
     },
