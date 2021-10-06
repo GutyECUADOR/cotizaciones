@@ -344,6 +344,114 @@ class WinfenixModel extends Conexion  {
         }
     }
 
+    public function SP_contador ($tipoDOC, $tipoMOV){
+        
+        $query = "exec Sp_Contador :tipoMOV,'99','',:tipoDOC,''";  
+
+        try{
+            $stmt = $this->instancia->prepare($query); 
+            $stmt->bindValue(':tipoMOV', $tipoMOV);
+            $stmt->bindValue(':tipoDOC', $tipoDOC);
+            $stmt->execute();
+            $stmt->nextRowset();
+            $nextID = $stmt->fetchColumn();
+            $NextIDWithFormat = str_pad($nextID, 8, '0', STR_PAD_LEFT);
+            return $NextIDWithFormat;
+
+        }catch(\PDOException $exception){
+            return array('status' => 'error', 'message' => $exception->getMessage() );
+        }
+
+        
+    }
+
+
+    public function SP_VENGRACAB (object $documento) {
+        try{
+            $this->instancia->beginTransaction();
+
+            $tipoDOC = 'COT';
+            //Obtenemos informacion de la empresa
+            $datosEmpresa =  $this->getDatosEmpresa();
+            $serieDocs =  $this->getVenTipos($tipoDOC)['Serie'];
+        
+            //Creamos nuevo codigo de VEN_CAB (secuencial)
+            $numeroDOC =  $this->SP_contador($tipoDOC, 'VEN'); 
+            $new_cod_VENCAB = $datosEmpresa['Oficina'].$datosEmpresa['Ejercicio'].$tipoDOC.$numeroDOC;
+                
+            
+
+            $query = "
+                exec Sp_vengracab 'I ', :userID, :pcID, :oficina, :ejercicio, :tipoDOC, :numeroDOC,'', :fecha, :codCliente,
+                :bodega,'DOL','1.00','0.00', :baseIVA,'0.00','0.00','0.00','0.00','0.00', :subtotal,'0.00', :impuesto,
+                '0.00', :total,'CON','0','0','0','S','0','1','0','0','                 ','','0009',' ',' ','-','002005','00009418','','','','','0.00','0.00','0.00','','','','','','','                    ','001','','0','P','','','','','','0','','','','','0','262.10','0.00','0.00','0.00','0','1113431809','0','','','','','','','','','','  ','20211005',''
+            
+            ";
+
+            $stmt = $this->instancia->prepare($query); 
+            $stmt->bindValue(':userID', $_SESSION["usuarioRUC".APP_UNIQUE_KEY]);
+            $stmt->bindValue(':pcID', php_uname('n'));
+            $stmt->bindValue(':oficina', $datosEmpresa['Oficina']);
+            $stmt->bindValue(':ejercicio', $datosEmpresa['Ejercicio']);
+            $stmt->bindValue(':tipoDOC', $tipoDOC);
+            $stmt->bindValue(':numeroDOC', $numeroDOC);
+            $stmt->bindValue(':fecha', date('Ymd'));
+            $stmt->bindValue(':codCliente', $documento->cliente->codigo);
+
+            $stmt->bindValue(':bodega', $documento->bodega);
+            $stmt->bindValue(':baseIVA', $documento->subtotal);
+            $stmt->bindValue(':subtotal', $documento->subtotal);
+            $stmt->bindValue(':impuesto', $documento->IVA);
+
+            $stmt->bindValue(':total', $documento->total);
+            /* $stmt->bindValue(':formaPago', $documento->formaPago);
+            $stmt->bindValue(':codVendedor', $documento->cliente->codVendedor);
+            $stmt->bindValue(':observacion', $documento->comentario);
+            $stmt->bindValue(':serie', $serieDocs);
+            
+            $stmt->bindValue(':secuencia', $numeroDOC);
+
+            $stmt->bindValue(':montoIVA', $documento->IVA);
+            $stmt->bindValue(':fechaEntrega', date('Ymd')); */
+            
+        
+            $stmt->execute();
+
+                
+            $commit = $this->instancia->commit();
+            return array('status' => 'OK', 'commit' => $commit, 'message'=> "Se registro correctamente la cotización: #$new_cod_VENCAB");
+            
+        }catch(\PDOException $exception){
+            $this->instancia->rollBack();
+            http_response_code(400);
+            return array('status' => 'error', 'message' => $exception->getMessage() );
+        }
+   
+    }
+
+    public function SP_VENGRAMOV ($VEN_MOV_obj){
+        
+        $VEN_MOV = new VenMovClass();
+        $VEN_MOV = $VEN_MOV_obj;
+
+        $query = "
+        
+        exec dbo.SP_VENGRAMOV 'I','$VEN_MOV->oficina','$VEN_MOV->ejercicio','$VEN_MOV->tipoDoc','$VEN_MOV->numeroDoc','$VEN_MOV->fecha','$VEN_MOV->cliente','$VEN_MOV->bodega','S','0','0','$VEN_MOV->codProducto','UND','$VEN_MOV->cantidad','$VEN_MOV->tipoPrecio','$VEN_MOV->precioProducto','$VEN_MOV->porcentajeDescuentoProd','$VEN_MOV->porcentajeIVA','$VEN_MOV->precioTOTAL','$VEN_MOV->fecha','','0.00','0.0000000','0','1.01.11','','1','1','$VEN_MOV->vendedor','0.0000','0.0000','0','','0','$VEN_MOV->tipoIVA' 
+        
+        ";
+
+        $stmt = $this->instancia->prepare($query); 
+       
+        try{
+            $rowsAfected = $this->instancia->execute($query);
+           return array('status' => 'ok', 'message' => $rowsAfected. ' fila afectada(s)' ); //true;
+           
+        }catch(\PDOException $exception){
+            return array('status' => 'error', 'message' => $exception->getMessage() );
+        }
+
+
+    }
 
     
 

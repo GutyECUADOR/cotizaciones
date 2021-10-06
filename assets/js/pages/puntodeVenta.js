@@ -1,15 +1,16 @@
 class Cliente {
-    constructor({RUC, nombre, email, empresa, telefono, codVendedor, vendedor, tipoPrecio, diasPago, formaPago}) {
-      this.RUC = RUC || '';
-      this.nombre = nombre || '';
-      this.email = email || '';
-      this.empresa = empresa || '';
-      this.telefono = telefono || '';
-      this.codVendedor = codVendedor || '';
-      this.vendedor = vendedor || '';
-      this.tipoPrecio = tipoPrecio || 'A';
-      this.diasPago = diasPago || 0;
-      this.formaPago = formaPago || 'EFE';
+    constructor({codigo, RUC, nombre, email, empresa, telefono, codVendedor, vendedor, tipoPrecio, diasPago, formaPago}) {
+        this.codigo = codigo || '';
+        this.RUC = RUC || '';
+        this.nombre = nombre || '';
+        this.email = email || '';
+        this.empresa = empresa || '';
+        this.telefono = telefono || '';
+        this.codVendedor = codVendedor || '';
+        this.vendedor = vendedor || '';
+        this.tipoPrecio = tipoPrecio || 'A';
+        this.diasPago = diasPago || 0;
+        this.formaPago = formaPago || 'EFE';
       
     }
 
@@ -283,6 +284,7 @@ const app = new Vue({
             console.log(response);
             if (response.data) {
                 const newCliente = new Cliente({
+                    codigo: response.data.CODIGO,
                     RUC: response.data.RUC,
                     nombre: response.data.NOMBRE,
                     empresa: response.data.EMPRESA,
@@ -538,7 +540,7 @@ const app = new Vue({
             let formData = new FormData();
             formData.append('documento', JSON.stringify(this.documento)); 
              
-            const response = await fetch(`./api/inventario/index.php?action=saveCotizacion`, {
+            const response = await fetch(`./api/ventas/index.php?action=saveCotizacion`, {
                             method: 'POST',
                             body: formData
                             })
@@ -547,7 +549,10 @@ const app = new Vue({
                             })
                             .catch(function(error) {
                                 console.error(error);
-                            });  
+                            }); 
+            if (condition) {
+                
+            } 
 
             if (response.commit) {
                 console.log(response);

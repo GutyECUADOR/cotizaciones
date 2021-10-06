@@ -116,10 +116,9 @@ $cotizacionesController = new CotizacionesController();
         break;
 
         case 'saveCotizacion':
-          if (isset($_POST['formData'])) {
-            $formData = json_decode($_POST['formData']);
-            $respuesta = $cotizacionesController->saveCotizacion($formData);
-            $rawdata = array('status' => 'OK', 'message' => 'Realizado', 'data' => $respuesta, 'formDataSended' => $formData);
+          if (isset($_POST['documento'])) {
+            $formData = json_decode($_POST['documento']);
+            $rawdata = $cotizacionesController->saveCotizacion($formData);
             
           }else{
             http_response_code(400);

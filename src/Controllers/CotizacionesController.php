@@ -92,7 +92,7 @@ class CotizacionesController  {
         return $response;
     }
 
-    public function saveCotizacion(object $formData){
+    public function saveCotizacion_old(object $formData){
         $VEN_CAB = new VenCabClass();
         $tipoDOC = 'COT';
 
@@ -101,15 +101,14 @@ class CotizacionesController  {
             try {
                //Obtenemos informacion de la empresa
                 $datosEmpresa =  $this->winfenixModel->getDatosEmpresa();
-                $serieDocs =  $this->ajaxModel->getVenTipos($tipoDOC)['Serie'];
+                $serieDocs =  $this->winfenixModel->getVenTipos($tipoDOC)['Serie'];
             
                 //Informacion extra del cliente
                 $datosCliente = $this->model->SQL_getCliente($formData->cliente->RUC);
 
                 //Creamos nuevo codigo de VEN_CAB (secuencial)
-                $newCodigo =  $this->ajaxModel->getNextNumDocWINFENIX($tipoDOC, $this->defaulDataBase); // Recuperamos secuencial de SP de Winfenix
-                $newCodigoWith0 =  $this->ajaxModel->formatoNextNumDocWINFENIX($this->defaulDataBase, $newCodigo); // Asignamos formato con 0000X
-
+                $newCodigoWith0 =  $this->winfenixModel->SP_contador($tipoDOC, 'VEN'); 
+               
                 $new_cod_VENCAB = $datosEmpresa['Oficina'].$datosEmpresa['Ejercicio'].$tipoDOC.$newCodigoWith0;
                 
                 /* NOTA SE ESTABLECE DESCUENTO EN 0 TANTO PARA CABECERA COMO DETALLE */
@@ -138,7 +137,7 @@ class CotizacionesController  {
                 $VEN_CAB->setObservacion('WebForms, ' . $formData->comentario);
                 
                 //Registro en VEN_CAB y MOV mantenimientosEQ
-                $response_VEN_CAB =  $this->ajaxModel->insertVEN_CAB($VEN_CAB, $this->defaulDataBase);
+                $response_VEN_CAB =  $this->winfenixModel->SP_VENGRACAB($VEN_CAB);
 
                 $arrayVEN_MOVinsets = array();
 
@@ -166,7 +165,7 @@ class CotizacionesController  {
                         $VEN_MOV->setPrecioTOTAL($VEN_MOV->calculaPrecioTOTAL());
                         $VEN_MOV->setObservacion('');
                         
-                        $response_VEN_MOV =  $this->ajaxModel->insertVEN_MOV($VEN_MOV, $this->defaulDataBase);
+                        $response_VEN_MOV =  $this->winfenixModel->SP_VENGRAMOV($VEN_MOV);
                         
                         array_push($arrayVEN_MOVinsets, $response_VEN_MOV);
 
@@ -189,6 +188,14 @@ class CotizacionesController  {
         }
        
         
+
+        
+        
+    }
+
+    public function saveCotizacion(object $documento){
+        $response =  $this->winfenixModel->SP_VENGRACAB($documento);
+        return $response;
 
         
         

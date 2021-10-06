@@ -1,18 +1,19 @@
-<?php
+<?php 
 
-session_start();
+    use Dotenv\Dotenv;
+    session_start();
+
 require_once '../vendor/autoload.php';
-$dotenv = \Dotenv::createImmutable(__DIR__);
+$dotenv = Dotenv::createImmutable('../');
 $dotenv->load();
 
-$ajax = new App\Models\AjaxModel();
-$ajax->setDbname('MODELO1');
+$ajax = new App\Models\WinfenixModel();
+$ajax->setDbname('MODELO');
 $ajax->conectarDB();
 
-$stmt = $this->ajax->prepare("exec Sp_Contador 'INV','99','','STK',''"); 
-$stmt->execute();
+$tipoDOC = 'COT';
+$datosEmpresa =  $ajax->getDatosEmpresa();
+$numeroDOC =  $ajax->SP_contador($tipoDOC, 'VEN'); 
+$new_cod_VENCAB = $datosEmpresa['Oficina'].$datosEmpresa['Ejercicio'].$tipoDOC.$numeroDOC;
 
-$newCodLimpio = $stmt->fetch(\PDO::FETCH_ASSOC);
-$STK_ID =  str_pad($newCodLimpio['NExtID'], 8, '0', STR_PAD_LEFT);
-
-var_dump($STK_ID);
+var_dump($numeroDOC);
