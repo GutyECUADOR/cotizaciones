@@ -119,47 +119,39 @@ class Documento {
         return this.productos.cantidad;
     }
 
-    getTotalFactura(){
-        return this.productos.reduce( (total, producto) => { 
-            return total + producto.getSubtotal(); 
-        }, 0); 
-    }
-
-    getIVAFactura(){
-        return this.productos.reduce( (total, producto) => { 
-            return total + producto.getIVA(); 
-        }, 0); 
-    }
-
     getDescuentoProductos(){
-        return this.productos.reduce( (total, producto) => { 
+        this.descuento = this.productos.reduce( (total, producto) => { 
             return total + producto.getDescuento(); 
         }, 0); 
+        return this.descuento;
     }
 
     getPesoProductos(){
-        return this.productos.reduce( (total, producto) => { 
+        this.peso = this.productos.reduce( (total, producto) => { 
             return total + producto.getPeso(); 
         }, 0); 
+        this.peso;
     }
 
-
     getSubTotalProductos(){
-        return this.productos.filter(({tipoArticulo}) => tipoArticulo == '1')
-        .reduce( (total, producto) => { 
-        return total + producto.getSubtotal(); 
+        this.subtotal = this.productos.filter(({tipoArticulo}) => tipoArticulo == '1')
+            .reduce( (total, producto) => { 
+            return total + producto.getSubtotal(); 
         }, 0); 
+        return this.subtotal;
     }
 
     getIVAProductos(){
-        return this.productos.filter(({tipoArticulo}) => tipoArticulo == '1')
-        .reduce( (total, producto) => { 
-        return total + producto.getIVA(); 
+        this.IVA = this.productos.filter(({tipoArticulo}) => tipoArticulo == '1')
+            .reduce( (total, producto) => { 
+            return total + producto.getIVA(); 
         }, 0); 
+        return this.IVA;
     }
 
     getTotalProductos(){
-        return this.getSubTotalProductos() + this.getIVAProductos();
+        this.total = this.getSubTotalProductos() + this.getIVAProductos();
+        return this.total;
     }
 
   

@@ -10,7 +10,16 @@
       </button>
       <a class="navbar-brand" href="#" data-toggle="modal" data-target="#modal_info_sesion">
         <span><img alt="Brand" height="25" src="<?php echo LOGO_NAME?>"></span>
-        <span style="margin-left:5px"><?php echo APP_NAME; ?></span>
+        <span style="margin-left:5px">
+          <?php 
+            if (isset($_SESSION["empresaAUTH".APP_UNIQUE_KEY])) {
+              echo 'Empresa:' . $_SESSION["empresaAUTH".APP_UNIQUE_KEY];
+            }else{
+              echo APP_NAME; 
+            }
+            
+          ?>
+        </span>
       </a>
       
     </div>

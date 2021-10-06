@@ -106,7 +106,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                     
                 <div class="form-group formextra col-lg-4 col-md-12">
                     <div class="well text-center wellextra" >
-                        <span id="welltotal">$ {{ documento.getTotalFactura() }}</span>
+                        <span id="welltotal">$ {{ documento.total }}</span>
                     </div>
                 </div>
             </div>
@@ -380,14 +380,14 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                             <td colspan="6"></td>
                                             <td class="text-center" style="vertical-align: middle;"><b>IVA</b></td>
                                             <td colspan="3">
-                                            <input type="text" :value="documento.getIVAFactura()" class="form-control text-center" readonly></td>
+                                            <input type="text" :value="documento.getIVAProductos()" class="form-control text-center" readonly></td>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td colspan="6"></td>
                                             <td class="text-center" style="vertical-align: middle;"><b>Total</b></td>
                                             <td colspan="3">
-                                            <input type="text" :value="documento.getTotalFactura()" class="form-control text-center" readonly></td>
+                                            <input type="text" :value="documento.getTotalProductos()" class="form-control text-center" readonly></td>
                                             </td>
                                         </tr>
 
