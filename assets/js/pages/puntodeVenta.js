@@ -205,7 +205,8 @@ const app = new Vue({
         search_stock: {
             busqueda: {
               texto: '',
-              bodega: 'B01'
+              bodega: 'B01',
+              producto: null
             },
             isloading: false,
             results: []
@@ -492,6 +493,7 @@ const app = new Vue({
         },
         async getStock(){
             this.search_stock.isloading = true;
+            this.search_stock.busqueda.producto = this.nuevoProducto
             let busqueda = JSON.stringify(this.search_stock.busqueda);
             const response = await fetch(`./api/ventas/index.php?action=getStock&busqueda=${busqueda}`)
             .then(response => {
