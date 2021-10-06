@@ -454,7 +454,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
     <!-- JS Propio-->
     
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\pnotify.custom.min.js"></script>
-    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\sweetalert2@8.js"></script>
+    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\sweetalert.min.js"></script>
 
     
 

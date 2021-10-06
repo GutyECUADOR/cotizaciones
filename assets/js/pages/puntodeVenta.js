@@ -547,7 +547,7 @@ const app = new Vue({
 
             if (response.commit) {
                 console.log(response);
-                Swal.fire({
+                swal({
                     title: "Realizado",
                     text: `${response.message}`,
                     type: "success",
@@ -561,7 +561,7 @@ const app = new Vue({
                     });
             }else {
                 console.log(response);
-                Swal.fire({
+                swal({
                     title: "No se pudo completar.",
                     text: `${response.message}`,
                     type: "error",
