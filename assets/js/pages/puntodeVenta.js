@@ -273,15 +273,12 @@ const app = new Vue({
         },
         async getCliente() {
             let RUC = this.search_cliente.busqueda.texto;
-            console.log(RUC);
             const response = await fetch(`./api/ventas/index.php?action=getCliente&RUC=${RUC.trim()}`)
             .then(response => {
                 return response.json();
             }).catch( error => {
                 console.error(error);
             }); 
-
-            console.log(response);
             if (response.data) {
                 const newCliente = new Cliente({
                     codigo: response.data.CODIGO,
@@ -296,7 +293,7 @@ const app = new Vue({
                     diasPago: response.data.DIASPAGO,
                     formaPago: response.data.FORMAPAGO
                 });
-                console.log(newCliente);
+                
                 this.documento.cliente = newCliente;
             }
             
@@ -412,7 +409,6 @@ const app = new Vue({
             console.log(response);
             
             if (response.data) {
-                console.log(this.documento.cliente.codVendedor);
                 this.nuevoProducto = new Producto({
                     codigo: response.data.Codigo.trim(),
                     nombre: response.data.Nombre.trim(),
@@ -527,6 +523,7 @@ const app = new Vue({
             return true;
         },
         async saveDocumento(){
+            console.log(this.documento);
             const confirmar = confirm('Confirma guardar el documento?');
             if (!confirmar) {
                 return;
@@ -550,13 +547,13 @@ const app = new Vue({
                             .catch(function(error) {
                                 console.error(error);
                             }); 
-            if (condition) {
-                
+            if (response.status == 'ERROR') {
+                alert(response.message);
             } 
 
             if (response.commit) {
                 console.log(response);
-                swal({
+                Swal.fire({
                     title: "Realizado",
                     text: `${response.message}`,
                     type: "success",
@@ -570,7 +567,7 @@ const app = new Vue({
                     });
             }else {
                 console.log(response);
-                swal({
+                Swal.fire({
                     title: "No se pudo completar.",
                     text: `${response.message}`,
                     type: "error",

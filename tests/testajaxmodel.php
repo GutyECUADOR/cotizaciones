@@ -11,9 +11,12 @@ $ajax = new App\Models\WinfenixModel();
 $ajax->setDbname('MODELO');
 $ajax->conectarDB();
 
-$tipoDOC = 'COT';
+/* $tipoDOC = 'COT';
 $datosEmpresa =  $ajax->getDatosEmpresa();
 $numeroDOC =  $ajax->SP_contador($tipoDOC, 'VEN'); 
-$new_cod_VENCAB = $datosEmpresa['Oficina'].$datosEmpresa['Ejercicio'].$tipoDOC.$numeroDOC;
+$new_cod_VENCAB = $datosEmpresa['Oficina'].$datosEmpresa['Ejercicio'].$tipoDOC.$numeroDOC; */
 
-var_dump($numeroDOC);
+$tipoDOC = 'COT';
+$serieDocs =  $ajax->getVenTipos($tipoDOC)['Serie'];
+
+var_dump($serieDocs);

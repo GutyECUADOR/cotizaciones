@@ -328,7 +328,7 @@ class WinfenixModel extends Conexion  {
             $stmt->execute();
             return $stmt->fetch( \PDO::FETCH_ASSOC );
         }catch(\PDOException $exception){
-            return array('status' => 'error', 'message' => $exception->getMessage() );
+            return array('status' => 'ERROR', 'message' => $exception->getMessage() );
         }
 
     }
@@ -359,7 +359,7 @@ class WinfenixModel extends Conexion  {
             return $NextIDWithFormat;
 
         }catch(\PDOException $exception){
-            return array('status' => 'error', 'message' => $exception->getMessage() );
+            return array('status' => 'ERROR', 'message' => $exception->getMessage() );
         }
 
         
@@ -379,12 +379,11 @@ class WinfenixModel extends Conexion  {
             $numeroDOC =  $this->SP_contador($tipoDOC, 'VEN'); 
             $new_cod_VENCAB = $datosEmpresa['Oficina'].$datosEmpresa['Ejercicio'].$tipoDOC.$numeroDOC;
                 
-            
-
             $query = "
                 exec Sp_vengracab 'I ', :userID, :pcID, :oficina, :ejercicio, :tipoDOC, :numeroDOC,'', :fecha, :codCliente,
                 :bodega,'DOL','1.00','0.00', :baseIVA,'0.00','0.00','0.00','0.00','0.00', :subtotal,'0.00', :impuesto,
-                '0.00', :total,'CON','0','0','0','S','0','1','0','0','                 ','','0009',' ',' ','-','002005','00009418','','','','','0.00','0.00','0.00','','','','','','','                    ','001','','0','P','','','','','','0','','','','','0','262.10','0.00','0.00','0.00','0','1113431809','0','','','','','','','','','','  ','20211005',''
+                '0.00', :total, :formaPago,'0','0','0','S','0','1','0','0','','', :codVendedor,' ',' ', :observacion, :serie, 
+                :secuencia,'','','','','0.00','0.00','0.00','','','','','','','','001','','0','P','','','','','','0','','','','','0', :montoIVA,'0.00','0.00','0.00','0','1113431809','0','','','','','','','','','','  ', :fechaEntrega,''
             
             ";
 
@@ -404,15 +403,22 @@ class WinfenixModel extends Conexion  {
             $stmt->bindValue(':impuesto', $documento->IVA);
 
             $stmt->bindValue(':total', $documento->total);
-            /* $stmt->bindValue(':formaPago', $documento->formaPago);
+            $stmt->bindValue(':formaPago', $documento->formaPago);
             $stmt->bindValue(':codVendedor', $documento->cliente->codVendedor);
             $stmt->bindValue(':observacion', $documento->comentario);
             $stmt->bindValue(':serie', $serieDocs);
-            
-            $stmt->bindValue(':secuencia', $numeroDOC);
 
+            $stmt->bindValue(':secuencia', $numeroDOC);
             $stmt->bindValue(':montoIVA', $documento->IVA);
-            $stmt->bindValue(':fechaEntrega', date('Ymd')); */
+            $stmt->bindValue(':fechaEntrega', date('Ymd'));
+            /* 
+           
+            
+            
+            
+            
+
+             */
             
         
             $stmt->execute();
@@ -424,7 +430,7 @@ class WinfenixModel extends Conexion  {
         }catch(\PDOException $exception){
             $this->instancia->rollBack();
             http_response_code(400);
-            return array('status' => 'error', 'message' => $exception->getMessage() );
+            return array('status' => 'ERROR', 'message' => $exception->getMessage() );
         }
    
     }
@@ -447,7 +453,7 @@ class WinfenixModel extends Conexion  {
            return array('status' => 'ok', 'message' => $rowsAfected. ' fila afectada(s)' ); //true;
            
         }catch(\PDOException $exception){
-            return array('status' => 'error', 'message' => $exception->getMessage() );
+            return array('status' => 'ERROR', 'message' => $exception->getMessage() );
         }
 
 
