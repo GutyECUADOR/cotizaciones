@@ -25,5 +25,5 @@ $ajax = new App\Models\CotizacionesModel();
 $ajax->setDbname('MODELO');
 $ajax->conectarDB();
 
-$response = $ajax->SQL_getProductoMaster('00000841', 'ML')['CODIGO'];
+$response = $ajax->SQL_getProductoRelacionado('00000841', 'ML')['CODIGO'];
 var_dump($response);

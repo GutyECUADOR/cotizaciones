@@ -175,39 +175,42 @@ class CotizacionesModel extends Conexion  {
         try{
             $codigoProducto = $busqueda->producto->codigo;
             $unidadMedida = $busqueda->producto->unidad;
-            $productoRelacionado = $this->SQL_getProductoRelacionado($codigoProducto, $unidadMedida)['CODIGO'];
+            $productoRelacionado = $this->SQL_getProductoRelacionado($codigoProducto, $unidadMedida);
             
-            $query = "
-                SELECT 
-                    X.COD_ARTICULO,
-                    X.NOM_ARTICULO,
-                    X.COD_BODEGA,
-                    X.STOCK 
-                FROM 
-                    (SELECT 
-                        A.CODIGO AS COD_BODEGA,
-                        A.NOMBRE AS NOM_BODEGA,
-                        ART.CODIGO AS COD_ARTICULO,
-                        ART.NOMBRE AS NOM_ARTICULO,
-                        STOCK = (DBO.DimeStockFis('99' ,ART.CODIGO,'',A.CODIGO)) 
-                    FROM INV_BODEGAS A WITH(NOLOCK) 
-                        INNER JOIN INV_ARTICULOS ART WITH(NOLOCK) ON 1 = 1 
-                        INNER JOIN INV_ARTICULOS MAE WITH(NOLOCK) ON MAE.CODIGO = ART.CODKAO 
-                    WHERE MAE.CODIGO = :codProducto  AND CASE WHEN ISNULL( :bodega1 ,'') = '' THEN '' ELSE A.CODIGO END = ISNULL( :bodega2 ,'')) X 
-                WHERE X.STOCK > 0 ORDER BY X.NOM_ARTICULO 
-            ";
-        
-            $stmt = $this->instancia->prepare($query); 
-            $stmt->bindParam(':codProducto', $productoRelacionado);
-            $stmt->bindParam(':bodega1', $busqueda->bodega);
-            $stmt->bindParam(':bodega2', $busqueda->bodega);
+            if ($productoRelacionado) {
+                
+                $query = "
+                    SELECT 
+                        X.COD_ARTICULO,
+                        X.NOM_ARTICULO,
+                        X.COD_BODEGA,
+                        X.STOCK 
+                    FROM 
+                        (SELECT 
+                            A.CODIGO AS COD_BODEGA,
+                            A.NOMBRE AS NOM_BODEGA,
+                            ART.CODIGO AS COD_ARTICULO,
+                            ART.NOMBRE AS NOM_ARTICULO,
+                            STOCK = (DBO.DimeStockFis('99' ,ART.CODIGO,'',A.CODIGO)) 
+                        FROM INV_BODEGAS A WITH(NOLOCK) 
+                            INNER JOIN INV_ARTICULOS ART WITH(NOLOCK) ON 1 = 1 
+                            INNER JOIN INV_ARTICULOS MAE WITH(NOLOCK) ON MAE.CODIGO = ART.CODKAO 
+                        WHERE MAE.CODIGO = :codProducto  AND CASE WHEN ISNULL( :bodega1 ,'') = '' THEN '' ELSE A.CODIGO END = ISNULL( :bodega2 ,'')) X 
+                    WHERE X.STOCK > 0 ORDER BY X.NOM_ARTICULO 
+                ";
+            
+                $stmt = $this->instancia->prepare($query); 
+                $stmt->bindParam(':codProducto', $productoRelacionado['CODIGO']);
+                $stmt->bindParam(':bodega1', $busqueda->bodega);
+                $stmt->bindParam(':bodega2', $busqueda->bodega);
 
                 if($stmt->execute()){
                     $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
-                    
-                }else{
-                    $resulset = false;
                 }
+            }else{
+                $resulset = false;
+            }
+
             return $resulset;  
 
         }catch(\PDOException $exception){
