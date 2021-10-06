@@ -411,17 +411,43 @@ class WinfenixModel extends Conexion  {
             $stmt->bindValue(':secuencia', $numeroDOC);
             $stmt->bindValue(':montoIVA', $documento->IVA);
             $stmt->bindValue(':fechaEntrega', date('Ymd'));
-            /* 
-           
-            
-            
-            
-            
-
-             */
-            
-        
             $stmt->execute();
+
+            foreach ($documento->productos as $producto) {
+                /* $query = "
+                    Sp_invgraMOV 'I', :oficina, :ejercicio, :tipoDOC, :secuencia, :fecha, :bodega,'E', :codproducto, :unidadproducto, :cantidadproducto, :costoproducto,'0.0000000', :costototal,'',''
+                ";   */
+
+                $query = "
+                exec Sp_vengramov  'I', :oficina, :ejercicio, :tipoDOC, :numeroDOC, :fecha, :codCliente, :bodega ,'S','0','0', 
+                                    :codProducto, :unidad, :cantidad, :tipoPrecio, :precio,'0.0000', :porcentIVA, :precioTotal, 
+                                    :fechaCaducidad,'','0.00','0.0000000','0','','',0,0, :codProducto_1, :unidad_1
+
+                ";
+                    $stmt = $this->instancia->prepare($query);
+                    $stmt->bindValue(':oficina', $datosEmpresa['Oficina']);
+                    $stmt->bindValue(':ejercicio', $datosEmpresa['Ejercicio']);
+                    $stmt->bindValue(':tipoDOC', $tipoDOC);
+                    $stmt->bindValue(':numeroDOC', $numeroDOC);
+                    $stmt->bindValue(':fecha', date('Ymd'));
+                    $stmt->bindValue(':codCliente', $documento->cliente->codigo);
+                    $stmt->bindValue(':bodega', $documento->bodega);
+
+                    $stmt->bindValue(':codProducto', $producto->codigo);
+                    $stmt->bindValue(':unidad', $producto->unidad);
+                    $stmt->bindValue(':cantidad', $producto->cantidad);
+                    $stmt->bindValue(':tipoPrecio', $documento->cliente->tipoPrecio);
+                    $stmt->bindValue(':precio', $producto->precio);
+                    $stmt->bindValue(':porcentIVA', $producto->valorIVA);
+                    $stmt->bindValue(':precioTotal', $producto->subtotal);
+
+                    $stmt->bindValue(':fechaCaducidad', date('Ymd'));
+                    $stmt->bindValue(':codProducto_1', $producto->codigo);
+                    $stmt->bindValue(':unidad_1', $producto->unidad);
+                   
+                $stmt->execute();
+            }
+
 
                 
             $commit = $this->instancia->commit();
