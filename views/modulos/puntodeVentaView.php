@@ -423,6 +423,9 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
             <!-- Modal Buscar Documento -->
             <?php require_once 'sis_modules/modalBuscarDocumento.php'?>
 
+            <!-- Modal Enviar Email Personalizado -->
+            <?php require_once 'sis_modules/modalSendEmail.php'?>
+
             <!-- Modal Busqueda Cliente -->
             <?php require_once 'sis_modules/modalBuscarCliente.php'?>
 

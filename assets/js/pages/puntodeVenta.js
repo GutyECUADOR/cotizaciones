@@ -233,6 +233,12 @@ const app = new Vue({
             alert('Generando PDF: ' + ID);
             window.open(`./api/documentos/index.php?action=generaReportePDF_Cotizacion&ID=${ID}`, '_blank').focus();
         },
+        showModalEmail(ID){
+            $('#modalBuscarDocumento').modal('hide');
+            $('#modalSendEmail').modal('show');
+
+            
+        },
         async getClientes() {
             let texto = this.search_cliente.busqueda.texto;
           
@@ -461,7 +467,7 @@ const app = new Vue({
                 $('#modalDetallePromo').modal('show');
                 this.validaPromo(codPromocion);
             }else{
-                Swal.fire({
+                swal({
                     type: 'warning',
                     title: 'Sin promoción',
                     text: 'No se ha encontrado un codigo de promoción para este producto.'
@@ -475,7 +481,7 @@ const app = new Vue({
                 $('#modalBuscarStockProductos').modal('show');
                 this.getStock(codigo);
             }else{
-                Swal.fire({
+                swal({
                     type: 'warning',
                     title: 'Sin codigo de producto',
                     text: `Indique un producto para buscar su stock.`

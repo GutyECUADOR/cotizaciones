@@ -1,6 +1,6 @@
 <?php
 /* Configurar aqui todas las variables globales a utilizar*/
-define("APP_NAME", "WebForms Adfolsa & Vitador");
+define("APP_NAME", "Adfolsa & Vitador");
 define("EMPRESA_NAME", "Adfolsa & Vitador");
 define("APP_UNIQUE_KEY", "AdfolsaVita2021$");
 define("LOGO_NAME", "./assets/img/logo.png");

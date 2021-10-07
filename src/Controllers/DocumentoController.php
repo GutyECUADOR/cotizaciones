@@ -44,7 +44,7 @@ class DocumentoController  {
                      </div>
                  </div>
          
-                 <div id="logo" style="float: left; width: 20%;">
+                 <div id="logo" style="float: left; width: 25%;">
                      <img src="../../assets/img/logo.png" alt="Logo">
                  </div>
          
