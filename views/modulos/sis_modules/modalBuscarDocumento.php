@@ -64,7 +64,7 @@
                                             </button>
                                             <ul class="dropdown-menu pull-right">
                                                 <li><a href="#" @click="generaPDF(documento.id)"> <span class="glyphicon glyphicon-save-file" aria-hidden="true"></span> Generar PDF</a></li>
-                                                <li><a href="#" @click="showModalEmail(documento.id)"> <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Enviar por email (personalizado)</a></li>
+                                                <li><a href="#" @click="showModalEmail(documento.id)"> <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Enviar por email </a></li>
                                             </ul>
                                         </div>
                                     </td>

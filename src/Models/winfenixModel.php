@@ -431,7 +431,7 @@ class WinfenixModel extends Conexion  {
         try{
             $this->instancia->beginTransaction();
 
-            $tipoDOC = 'COT';
+            $tipoDOC = $documento->tipoDOC;
             //Obtenemos informacion de la empresa
             $datosEmpresa =  $this->getDatosEmpresa();
             $serieDocs =  $this->getVenTipos($tipoDOC)['Serie'];
@@ -545,6 +545,8 @@ class WinfenixModel extends Conexion  {
 
 
     }
+
+
 
     
 

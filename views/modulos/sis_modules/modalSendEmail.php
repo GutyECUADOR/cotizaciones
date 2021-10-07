@@ -41,7 +41,7 @@
             
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-primary" id="btnSendCustomEmail">Enviar</button>
+            <button type="button" class="btn btn-primary" @click="sendEmail">Enviar</button>
             <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
         </div>
         </div>

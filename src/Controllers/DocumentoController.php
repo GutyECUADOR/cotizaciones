@@ -101,7 +101,7 @@ class DocumentoController  {
          
              <!-- END ITEMS HERE -->
                  <tr>
-                 <td class="blanktotal" colspan="6" rowspan="6"></td>
+                 <td class="blanktotal" colspan="6" rowspan="5"></td>
                  <td class="totals" colspan="2">Imponible 0%:</td>
                  <td class="totals cost">'.$VEN_CAB["BASCERO"].'</td>
                  </tr>
@@ -115,11 +115,6 @@ class DocumentoController  {
                  <tr>
                  <td class="totals" colspan="2">Subtotal:</td>
                  <td class="totals cost">'.$VEN_CAB["SUBTOTAL"].'</td>
-                 </tr>
-         
-                 <tr>
-                 <td class="totals" colspan="2">Base Imponible:</b></td>
-                 <td class="totals cost">0</td>
                  </tr>
          
                  <tr>

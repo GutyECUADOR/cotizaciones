@@ -37,21 +37,24 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
             <!-- Row de cabecera-->
             <div class="row">
             
-                <div class="form-group formextra col-lg-6">
+                <div class="form-group formextra col-lg-12">
                     <div class="input-group">
-                            <span class="input-group-addon"  id="testButton">Tipo Doc</span>
-                            <select class="form-control input-sm">
-                                <option>Cotizacion</option>
+                            <span class="input-group-addon">Tipo Documento</span>
+                            <select v-model="documento.tipoDOC" class="form-control input-sm">
+                                <?php
+                                    foreach ($tiposDOC as $tipodoc => $row) {
+
+                                        $codigo = trim($row['CODIGO']);
+                                        $texto= $row['NOMBRE']; 
+                                        
+                                        echo "<option value='$codigo'>$texto</option>";
+                                    }
+                                
+                                ?>
                             </select>
                     </div>
                 </div>
 
-                <div class="form-group formextra col-lg-6 pull-right hidden-md hidden-sm hidden-xs">
-                    <div class="input-group">
-                        <input type="text" class="form-control input-sm" placeholder="Estado">
-                        <span class="input-group-addon">Estado</span>
-                    </div>
-                </div>
             </div>
 
             <!-- Row Modal Buscar Documento-->

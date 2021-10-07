@@ -90,6 +90,7 @@ class NuevoCliente {
 
 class Documento {
     constructor() {
+        this.tipoDOC = 'COT',
         this.cliente = new Cliente({}),
         this.bodega = 'B01',
         this.fecha = moment().format("YYYY-MM-DD"),
@@ -236,6 +237,11 @@ const app = new Vue({
         showModalEmail(ID){
             $('#modalBuscarDocumento').modal('hide');
             $('#modalSendEmail').modal('show');
+
+            
+        },
+        sendEmail(){
+            alert('Cuenta SMTP no configurado.')
 
             
         },
