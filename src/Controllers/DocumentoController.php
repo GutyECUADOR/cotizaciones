@@ -24,14 +24,12 @@ class DocumentoController  {
         $this->ajaxModel->conectarDB();
     }
 
-    public function getPDF_Cotizacion($IDDocument, $outputMode = 'I'){
+    public function getPDF_Cotizacion($ID, $outputMode = 'I'){
 
-        $empresaData = $this->winfenixModel->getInfoEmpresaController();
-        $VEN_CAB = $this->winfenixModel->getVEN_CABController($IDDocument);
-        $VEN_MOV = $this->winfenixModel->getVEN_MOVController($IDDocument);
+        $empresaData = $this->winfenixModel->getDatosEmpresa();
+        $VEN_CAB = $this->winfenixModel->SQL_getVENCAB($ID);
+        $VEN_MOV = $this->winfenixModel->SQL_getVENMOV($ID);
         
-        
-         
          $html = '
              
              <div style="width: 100%;">
@@ -47,7 +45,7 @@ class DocumentoController  {
                  </div>
          
                  <div id="logo" style="float: left; width: 20%;">
-                     <img src="../../../assets/img/logo.png" alt="Logo">
+                     <img src="../../assets/img/logo.png" alt="Logo">
                  </div>
          
              </div>
@@ -141,24 +139,21 @@ class DocumentoController  {
                  <p id="observacion">Observacion: '.$VEN_CAB["OBSERVA"].'</p> 
              </div>
          
-             <div style="width: 100%;">
-                 <p>Imagenes del documento: '.$IDDocument.' </p>
-                 '. $this->getLinkImagesByDocument($IDDocument) .' 
-             </div>
          ';
  
          //==============================================================
          //==============================================================
          //==============================================================
  
-         /* require_once '../../../vendor/autoload.php'; */
          $mpdf = new mPDF();
- 
-         // LOAD a stylesheet
-         $stylesheet = file_get_contents('../../../assets/css/reportesStyles.css');
-         
+         $stylesheet = file_get_contents('../../assets/css/reportesStyles.css');
          $mpdf->WriteHTML($stylesheet,1);	// The parameter 1 tells that this is css/style only and no body/html/text
- 
+         $html = mb_convert_encoding($html, 'UTF-8', 'UTF-8');
+         $mpdf->SetTitle("Cotizacion ".$ID);
+         $mpdf->SetHTMLHeader('
+         <div id="cod">
+             <h5 class="myheader">Página: {PAGENO} de {nbpg}</h5>  
+         </div> ');
          $mpdf->WriteHTML($html);
          
          return $mpdf->Output('doc.pdf', $outputMode);

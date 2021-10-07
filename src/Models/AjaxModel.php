@@ -133,72 +133,7 @@ class AjaxModel extends Conexion  {
     }
 
 
-    public function getVENCABByID($IDDocument) {
-        $query = " 
-        SELECT 
-            RTRIM(LTRIM(REPLACE(CLIENTE.NOMBRE, NCHAR(0x00A0), ''))) as NOMBRE,
-            CLIENTE.RUC,
-            CLIENTE.DIRECCION1,
-            CLIENTE.TELEFONO1,
-            RTRIM(LTRIM(REPLACE(CLIENTE.EMAIL, NCHAR(0x00A0), ''))) as EMAIL,
-            VENDEDOR.CODIGO as CodigoVendedor,
-            VENDEDOR.NOMBRE as VendedorName,
-            VEN_CAB.*
-        FROM 
-            dbo.VEN_CAB 
-            INNER JOIN dbo.COB_CLIENTES as CLIENTE on CLIENTE.CODIGO = VEN_CAB.CLIENTE
-            LEFT JOIN dbo.COB_VENDEDORES as VENDEDOR on VENDEDOR.CODIGO = VEN_CAB.CODVEN	
-        WHERE ID='$IDDocument'
-        ";  // Final del Query SQL 
-
-        try{
-            $stmt = $this->instancia->prepare($query); 
     
-                if($stmt->execute()){
-                    $resulset = $stmt->fetch( \PDO::FETCH_ASSOC );
-                    
-                }else{
-                    $resulset = false;
-                }
-            return $resulset;  
-
-        }catch(\PDOException $exception){
-            return array('status' => 'error', 'mensaje' => $exception->getMessage() );
-        }
-   
-    }
-
-    public function getVENMOVByID($IDDocument) {
-
-       //Query de consulta con parametros para bindear si es necesario.
-       $query = "
-       SELECT
-            ARTICULO.Nombre,
-            VEN_MOV.*
-            
-        FROM 
-            dbo.VEN_MOV
-            INNER JOIN dbo.INV_ARTICULOS as ARTICULO ON ARTICULO.Codigo = VEN_MOV.CODIGO
-        WHERE 
-            ID = '$IDDocument'
-       ";  // Final del Query SQL 
-
-       $stmt = $this->instancia->prepare($query); 
-   
-       $arrayResultados = array();
-
-           if($stmt->execute()){
-               while ($row = $stmt->fetch( \PDO::FETCH_ASSOC )) {
-                   array_push($arrayResultados, $row);
-               }
-               return $arrayResultados;
-               
-           }else{
-               $resulset = false;
-           }
-       return $resulset; 
-   
-    }
     
 
     public function getInfoProductoModel($codigoProducto, $tipoPrecio='A', $bodega='B01') {

@@ -58,9 +58,16 @@
                                     <td>{{documento.total}}</td>
                                     <td>{{documento.id}}</td>
                                     <td>
-                                        <button type="button" @click="generaPDF(documento.id)" class="btn btn-primary btn-sm btn-block">
-                                            <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-                                        </button>
+                                        <div class="btn-group">
+                                            <button class="btn btn-primary btn-sm btn-block dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Opciones <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu pull-right">
+                                                <li><a href="#" @click="generaPDF(documento.id)"> <span class="glyphicon glyphicon-save-file" aria-hidden="true"></span> Generar PDF</a></li>
+                                                <li><a href="#"> <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Enviar por email (default)</a></li>
+                                                <li><a href="#"> <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Enviar por email (personalizado)</a></li>
+                                            </ul>
+                                        </div>
                                     </td>
                                     
                                 </tr>
