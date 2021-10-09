@@ -206,7 +206,13 @@ const app = new Vue({
         },
         nuevoCliente: new NuevoCliente({}),
         nuevoProducto: new Producto({}),
-        documento : new Documento()
+        documento : new Documento(),
+        email: {
+            destinatario: '',
+            mensaje: '',
+            idDocumento : '',
+            isloading: false,
+        }
     },
     methods:{
         async getDocumentos() {
@@ -234,16 +240,33 @@ const app = new Vue({
             alert('Generando PDF: ' + ID);
             window.open(`./api/documentos/index.php?action=generaReportePDF_Cotizacion&ID=${ID}`, '_blank').focus();
         },
-        showModalEmail(ID){
+        async showModalEmail(ID){
+            const response = await fetch(`./api/ventas/index.php?action=getVENCAB&IDDocument=${ ID }`)
+                .then(response => {
+                    return response.json();
+                }).catch(error => {
+                    console.error(error);
+            });  
+            console.log(response);
+
             $('#modalBuscarDocumento').modal('hide');
             $('#modalSendEmail').modal('show');
-
             
+            this.email.destinatario = response.data.EMAIL;
+            this.email.idDocumento = ID;
         },
-        sendEmail(){
-            alert('Cuenta SMTP no configurado.')
+        async sendEmail(){
+            let email = JSON.stringify(this.email);
+            console.log(email);
+            const response = await fetch(`./api/ventas/index.php?action=sendEmail&email=${ email }`)
+                .then(response => {
+                    return response.json();
+                }).catch(error => {
+                    console.error(error);
+            });  
+            console.log(response);
+            alert(response.message);
 
-            
         },
         async getClientes() {
             let texto = this.search_cliente.busqueda.texto;

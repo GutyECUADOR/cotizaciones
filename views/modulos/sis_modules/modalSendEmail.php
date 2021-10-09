@@ -9,20 +9,20 @@
         <form>
             <div class="input-group">
                 <span class="input-group-addon" id="basic-addon1">De:</span>
-                <input type="text" class="form-control" placeholder="de@email.com" aria-describedby="basic-addon1" value="<?php echo $_SESSION["usuarioNOMBRE".APP_UNIQUE_KEY] ?>" disabled>
+                <input type="text" class="form-control" placeholder="de@email.com" value="<?php echo $_SESSION["usuarioNOMBRE".APP_UNIQUE_KEY] ?>" disabled>
             </div>
             <div class="input-group">
                 <span class="input-group-addon" id="basic-addon1">Destinatario: </span>
-                <input type="text" class="form-control" placeholder="destinataroi@email.com" id="emailDestinatario" aria-describedby="basic-addon1">
+                <input type="text" class="form-control" placeholder="destinataroi@email.com" v-model="email.destinatario" aria-describedby="basic-addon1">
             </div>
 
             <div class="input-group">
                 <span class="input-group-addon" id="basic-addon1">CC: </span>
-                <input type="text" class="form-control" placeholder="cc@email.com" aria-describedby="basic-addon1" value="<?php echo DEFAULT_EMAIL?>" disabled>
+                <input type="text" class="form-control" placeholder="cc@email.com" value="<?php echo DEFAULT_EMAIL?>" disabled>
             </div>
             <div class="input-group">
                 <span class="input-group-addon" id="basic-addon1">Documento: </span>
-                <input type="text" class="form-control" placeholder="#992018PRO000XXXXX" id='emailIDDocument' aria-describedby="basic-addon1" disabled>
+                <input type="text" class="form-control" placeholder="#992018PRO000XXXXX" v-model="email.idDocumento" disabled>
             </div>
 
             </br>
@@ -34,7 +34,7 @@
 
             <div class="form-group">
                 <label for="comment">Mensaje:</label>
-                <textarea class="form-control tiny" rows="5" id="mailContent"></textarea>
+                <textarea class="form-control tiny" rows="5" v-model="email.mensaje"></textarea>
             </div>
 
         </form>

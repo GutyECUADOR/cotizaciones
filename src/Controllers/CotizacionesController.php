@@ -1,7 +1,5 @@
 <?php namespace App\Controllers;
 
-use App\Models\VenCabClass;
-use App\Models\VenMovClass;
 use App\Models\CotizacionesModel;
 use App\Models\WinfenixModel;
 
@@ -89,6 +87,16 @@ class CotizacionesController  {
 
     public function getCantones(){
         $response =  $this->winfenixModel->sql_getCantonesWF();
+        return $response;
+    }
+
+    public function getVENCAB(string $ID){
+        $response =  $this->winfenixModel->SQL_getVENCAB($ID);
+        return $response;
+    }
+
+    public function getVENMOV(string $ID){
+        $response =  $this->winfenixModel->SQL_getVENMOV($ID);
         return $response;
     }
 

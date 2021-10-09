@@ -1,6 +1,7 @@
 <?php
 
 use App\Controllers\CotizacionesController;
+use App\Controllers\EmailController;
 use Dotenv\Dotenv;
 
 header('Content-Type: application/json');
@@ -12,6 +13,7 @@ $dotenv = Dotenv::createImmutable('../../');
 $dotenv->load();
 
 $cotizacionesController = new CotizacionesController();
+$emailController = new EmailController();
 
   try{
     $HTTPaction = isset($_GET["action"]) ? $_GET["action"] : '';
@@ -129,10 +131,10 @@ $cotizacionesController = new CotizacionesController();
 
         break;
        
-        case 'getInfoVENCAB':
+        case 'getVENCAB':
           if (isset($_GET['IDDocument'])) {
             $IDDocument = $_GET['IDDocument'];
-            $respuesta = $ajax->getInfoVENCAB($IDDocument);
+            $respuesta = $cotizacionesController->getVENCAB($IDDocument);
             $rawdata = array('status' => 'OK', 'message' => 'respuesta correcta', 'data' => $respuesta);
           }else{
             http_response_code(400);
@@ -143,10 +145,10 @@ $cotizacionesController = new CotizacionesController();
 
         break;
 
-        case 'getInfoVENMOV':
+        case 'getVENMOV':
           if (isset($_GET['IDDocument'])) {
             $IDDocument = $_GET['IDDocument'];
-            $respuesta = $ajax->getInfoVENMOV($IDDocument);
+            $respuesta = $cotizacionesController->getVENMOV($IDDocument);
             $rawdata = array('status' => 'OK', 'message' => 'respuesta correcta', 'data' => $respuesta);
           }else{
             http_response_code(400);
@@ -245,6 +247,19 @@ $cotizacionesController = new CotizacionesController();
             $rawdata = array('status' => 'ERROR', 'message' => 'No se ha recibido extra data.');
           }
         
+          echo json_encode($rawdata);
+
+        break;
+
+        case 'sendEmail':
+          if (isset($_GET['email']) ) {
+            $email = json_decode($_GET['email']);
+            $rawdata = $emailController->sendCotizacion($email);
+          }else{
+            http_response_code(400);
+            $rawdata = array('status' => 'ERROR', 'message' => 'No se ha indicado parámetros.' );
+          }  
+          
           echo json_encode($rawdata);
 
         break;

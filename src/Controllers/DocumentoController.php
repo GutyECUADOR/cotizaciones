@@ -87,7 +87,7 @@ class DocumentoController  {
                          <td align="center">'.$row["CODIGO"].'</td>
                          <td align="center">'.$row["CANTIDAD"].'</td>
                          <td>'.$row["Nombre"].'</td>
-                         <td>'.$row["tipoiva"].'</td>
+                         <td></td>
                          <td>'.$row["PRECIO"].'</td>
                          <td>'.$row["DESCU"].'</td>
                          <td class="cost"> '.$row["DESCU"].' </td>
