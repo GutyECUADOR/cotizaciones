@@ -18,3 +18,7 @@ User: ninguna - October 8, 2021, 9:17 pm
 PCid: S1
 Detail: SMTP Error: Could not authenticate. No se pudo enviar correo a: guti06@hotmail.es
 -------------------------
+User: ninguna - October 9, 2021, 10:13 am
+PCid: S1
+Detail: Message body empty No se pudo enviar correo a: gutiecuador@gmail.com
+-------------------------

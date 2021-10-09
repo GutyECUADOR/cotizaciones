@@ -41,7 +41,9 @@
             
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-primary" @click="sendEmail">Enviar</button>
+            <button @click="sendEmail" type="button" class="btn btn-primary" :disabled="email.isloading"  >
+                <i class="fa" :class="[{'fa-spin fa-refresh': email.isloading}, {  'fa-paper-plane' : !email.isloading  }]" ></i> Enviar
+            </button>
             <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
         </div>
         </div>

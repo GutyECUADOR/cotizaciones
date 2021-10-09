@@ -6,3 +6,15 @@ User: ninguna - October 8, 2021, 10:03 pm
 PCid: S1
 Detail: Correo ha sido enviado a : guti06@hotmail.es
 -------------------------
+User: ninguna - October 8, 2021, 10:05 pm
+PCid: S1
+Detail: Correo ha sido enviado a : gutiecuador@gmail.com
+-------------------------
+User: ninguna - October 9, 2021, 10:13 am
+PCid: S1
+Detail: Correo ha sido enviado a : gutiecuador@gmail.com
+-------------------------
+User: ninguna - October 9, 2021, 10:17 am
+PCid: S1
+Detail: Correo ha sido enviado a : guti06@hotmail.es
+-------------------------

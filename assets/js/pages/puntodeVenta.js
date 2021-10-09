@@ -256,10 +256,12 @@ const app = new Vue({
             this.email.idDocumento = ID;
         },
         async sendEmail(){
+            this.email.isloading = true;
             let email = JSON.stringify(this.email);
             console.log(email);
             const response = await fetch(`./api/ventas/index.php?action=sendEmail&email=${ email }`)
                 .then(response => {
+                    this.email.isloading = false;
                     return response.json();
                 }).catch(error => {
                     console.error(error);

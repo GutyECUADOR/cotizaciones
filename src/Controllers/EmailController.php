@@ -47,7 +47,7 @@ class EmailController  {
             $mail->CharSet = "UTF-8";
             $mail->isHTML(true);                  // Set email format to HTML
             $mail->Subject = 'Cotizacion #'.$IDDocument;
-            $mail->Body    = 'Hola como estas';//$this->getBodyHTMLofEmail($IDDocument, $customMessage);
+            $mail->Body    = $customMessage; //$this->getBodyHTMLofEmail($IDDocument, $customMessage);
         
             // Adjuntos
             $mail->addStringAttachment($this->documentosController->getPDF_Cotizacion($IDDocument, 'S'), 'cotizacion-'.$IDDocument.'.pdf');
