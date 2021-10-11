@@ -2,6 +2,7 @@
 
 use App\Controllers\CotizacionesController;
 use App\Controllers\EmailController;
+use App\Controllers\WhatsAppController;
 use Dotenv\Dotenv;
 
 header('Content-Type: application/json');
@@ -14,6 +15,7 @@ $dotenv->load();
 
 $cotizacionesController = new CotizacionesController();
 $emailController = new EmailController();
+$whatsAppController = new WhatsAppController();
 
   try{
     $HTTPaction = isset($_GET["action"]) ? $_GET["action"] : '';
@@ -255,6 +257,19 @@ $emailController = new EmailController();
           if (isset($_GET['email']) ) {
             $email = json_decode($_GET['email']);
             $rawdata = $emailController->sendCotizacion($email);
+          }else{
+            http_response_code(400);
+            $rawdata = array('status' => 'ERROR', 'message' => 'No se ha indicado parámetros.' );
+          }  
+          
+          echo json_encode($rawdata);
+
+        break;
+
+        case 'sendWhatsApp':
+          if (isset($_GET['whatsApp']) ) {
+            $whatsApp = json_decode($_GET['whatsApp']);
+            $rawdata = $whatsAppController->sendMessage($whatsApp);
           }else{
             http_response_code(400);
             $rawdata = array('status' => 'ERROR', 'message' => 'No se ha indicado parámetros.' );

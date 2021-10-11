@@ -65,6 +65,7 @@
                                             <ul class="dropdown-menu pull-right">
                                                 <li><a href="#" @click="generaPDF(documento.id)"> <span class="glyphicon glyphicon-save-file" aria-hidden="true"></span> Generar PDF</a></li>
                                                 <li><a href="#" @click="showModalEmail(documento.id)"> <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Enviar por email </a></li>
+                                                <li><a href="#" @click="openWhatsAppUI(documento.id)"> <i class="fa fa-whatsapp" aria-hidden="true"></i> Enviar por WhatsApp </a></li>
                                             </ul>
                                         </div>
                                     </td>

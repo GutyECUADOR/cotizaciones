@@ -70,7 +70,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                             </button>
                         </span>
                         <span class="input-group-btn">
-                            <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span></button>
+                            <button class="btn btn-default" type="button" @click="showModalWhatsApp"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span></button>
                         </span>
                         <span class="input-group-btn">
                             <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span></button>
@@ -429,6 +429,9 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
             <!-- Modal Enviar Email Personalizado -->
             <?php require_once 'sis_modules/modalSendEmail.php'?>
 
+             <!-- Modal Enviar Email Personalizado -->
+             <?php require_once 'sis_modules/modalSendWhatsApp.php'?>
+
             <!-- Modal Busqueda Cliente -->
             <?php require_once 'sis_modules/modalBuscarCliente.php'?>
 
@@ -453,7 +456,8 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\vue.js"></script>
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\bootstrap-datepicker.js"></script>
-   
+    <script src="https://cloud.tinymce.com/5/tinymce.min.js?apiKey=ubmvgme7f7n7likjbniglty12b9m92um98w9m75mdtnphwqp"></script>
+    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\tinymce.js"></script>
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\bootstrap.min.js"></script>
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\popper.min.js"></script>
   

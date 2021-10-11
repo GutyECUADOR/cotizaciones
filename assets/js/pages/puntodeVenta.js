@@ -209,7 +209,13 @@ const app = new Vue({
         documento : new Documento(),
         email: {
             destinatario: '',
-            mensaje: '',
+            mensaje: 'Reciba un cordial saludo, estamos atendiendo a su requerimiento por lo que encontrara el documento solicitado adjunto en este correo. ',
+            idDocumento : '',
+            isloading: false,
+        },
+        whatsApp: {
+            destinatario: '+593 ',
+            mensaje: 'Reciba un cordial saludo, estamos atendiendo a su requerimiento por lo que encontrara el documento solicitado adjunto en este correo. ',
             idDocumento : '',
             isloading: false,
         }
@@ -257,6 +263,8 @@ const app = new Vue({
         },
         async sendEmail(){
             this.email.isloading = true;
+            let textoMensaje = tinyMCE.get('tinyMCE').getContent();
+            this.email.mensaje = textoMensaje;
             let email = JSON.stringify(this.email);
             console.log(email);
             const response = await fetch(`./api/ventas/index.php?action=sendEmail&email=${ email }`)
@@ -270,6 +278,39 @@ const app = new Vue({
             alert(response.message);
 
         },
+        async showModalWhatsApp(){
+            $('#modalBuscarDocumento').modal('hide');
+            $('#modalSendWhatsApp').modal('show');
+            
+            this.whatsApp.idDocumento = '992014COT00023345';
+        },
+        async sendWhatsApp(){
+            this.whatsApp.isloading = true;
+            let whatsApp = JSON.stringify(this.whatsApp);
+            console.log(whatsApp);
+            const response = await fetch(`./api/ventas/index.php?action=sendWhatsApp&whatsApp=${ whatsApp }`)
+                .then(response => {
+                    this.whatsApp.isloading = false;
+                    return response.json();
+                }).catch(error => {
+                    console.error(error);
+            });  
+            console.log(response);
+           
+
+        },
+        async openWhatsAppUI(ID){
+            const response = await fetch(`./api/ventas/index.php?action=getContactoUsuarioByVENCAB&IDDocument=${ ID }`)
+                .then(response => {
+                    return response.json();
+                }).catch(error => {
+                    console.error(error);
+            });  
+            console.log(response);
+           
+
+        },
+        
         async getClientes() {
             let texto = this.search_cliente.busqueda.texto;
           

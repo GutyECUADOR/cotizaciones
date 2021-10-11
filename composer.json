@@ -12,7 +12,8 @@
     "require": {
         "mpdf/mpdf": "8.0.4",
         "phpmailer/phpmailer": "^6.0",
-        "vlucas/phpdotenv": "^5.3"
+        "vlucas/phpdotenv": "^5.3",
+        "twilio/sdk": "^6.29"
     },
     "autoload": {
         "psr-4": {"App\\": "src/"},
