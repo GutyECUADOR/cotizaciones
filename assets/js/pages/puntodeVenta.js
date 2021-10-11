@@ -215,7 +215,7 @@ const app = new Vue({
         },
         whatsApp: {
             destinatario: '+593 ',
-            mensaje: 'Reciba un cordial saludo, estamos atendiendo a su requerimiento por lo que encontrara el documento solicitado adjunto en este correo. ',
+            mensaje: 'Reciba un cordial saludo, estamos atendiendo a su requerimiento. ',
             idDocumento : '',
             isloading: false,
         }
@@ -296,7 +296,7 @@ const app = new Vue({
                     console.error(error);
             });  
             console.log(response);
-           
+           alert(`'Realizado ID SMS: ${response.id}`);
 
         },
         async openWhatsAppUI(ID){
