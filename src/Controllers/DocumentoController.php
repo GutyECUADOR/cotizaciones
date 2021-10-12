@@ -150,6 +150,9 @@ class DocumentoController  {
              <h5 class="myheader">Página: {PAGENO} de {nbpg}</h5>  
          </div> ');
          $mpdf->WriteHTML($html);
+         if ($outputMode == 'F') {
+             $ID = "../../assets/docs./$ID";
+         }
          
          return $mpdf->Output($ID.'.pdf', $outputMode);
  

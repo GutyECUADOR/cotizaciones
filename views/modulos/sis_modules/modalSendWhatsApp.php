@@ -28,7 +28,7 @@
             
         </div>
         <div class="modal-footer">
-            <button @click="sendWhatsApp" type="button" class="btn btn-primary" :disabled="email.isloading"  >
+            <button @click="openWhatsAppUI(whatsApp.idDocumento)" type="button" class="btn btn-primary" :disabled="email.isloading"  >
                 <i class="fa" :class="[{'fa-spin fa-refresh': email.isloading}, {  'fa-whatsapp' : !email.isloading  }]" ></i> Enviar
             </button>
             <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>

@@ -215,7 +215,7 @@ const app = new Vue({
         },
         whatsApp: {
             destinatario: '+593 ',
-            mensaje: 'Reciba un cordial saludo, estamos atendiendo a su requerimiento. ',
+            mensaje: 'Reciba un cordial saludo, estamos atendiendo a su requerimiento. Encontrará su documento en el siguiente enlace: ',
             idDocumento : '',
             isloading: false,
         }
@@ -278,11 +278,11 @@ const app = new Vue({
             alert(response.message);
 
         },
-        async showModalWhatsApp(){
+        async showModalWhatsApp(ID){
             $('#modalBuscarDocumento').modal('hide');
             $('#modalSendWhatsApp').modal('show');
             
-            this.whatsApp.idDocumento = '992014COT00023345';
+            this.whatsApp.idDocumento = ID;
         },
         async sendWhatsApp(){
             this.whatsApp.isloading = true;
@@ -300,17 +300,25 @@ const app = new Vue({
 
         },
         async openWhatsAppUI(ID){
-            const response = await fetch(`./api/ventas/index.php?action=getContactoUsuarioByVENCAB&IDDocument=${ ID }`)
+            this.whatsApp.isloading = true;
+            let whatsApp = JSON.stringify(this.whatsApp);
+            // Verificamos que se haya cargado el archivo al hosting
+            const response = await fetch(`./api/ventas/index.php?action=uploadFtpFile&whatsApp=${ whatsApp }`)
                 .then(response => {
+                    this.whatsApp.isloading = false;
                     return response.json();
                 }).catch(error => {
                     console.error(error);
             });  
-            console.log(response);
-           
 
+            alert(response.message);
+
+            if (this.whatsApp.destinatario.length > 5 && response.status=='OK') {
+                window.open(`https://api.whatsapp.com/send?phone=${this.whatsApp.destinatario}&text=${this.whatsApp.mensaje}%0ahttp://sudcompu.com/docs/${ID}.pdf`, '_blank').focus();
+            }else{
+                alert('Ingrese número de celular completo, incluido código de pais.');
+            }
         },
-        
         async getClientes() {
             let texto = this.search_cliente.busqueda.texto;
           
