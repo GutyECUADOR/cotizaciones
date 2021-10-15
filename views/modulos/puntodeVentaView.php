@@ -69,12 +69,10 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                 </span>
                             </button>
                         </span>
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button" @click="showModalWhatsApp"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span></button>
-                        </span>
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span></button>
-                        </span>
+                        <!-- <span class="input-group-btn">
+                            <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span></button>
+                        </span> -->
+                        
                         
                     </div>
                 </div>
