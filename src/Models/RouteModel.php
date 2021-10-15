@@ -1,6 +1,6 @@
 <?php namespace App\Models;
 
-class RouteModel {
+class RouteModel extends Conexion {
     
     public function actionCatcherModel($action){
         switch ($action) {
@@ -8,23 +8,13 @@ class RouteModel {
                 $contenido = "views/modulos/inicioView.php";
                 break;
 
+            /* MODULO DE VENTAS */
+            case 'ventas':
+                $contenido = "views/modulos/ventasView.php";
+                break;
             
-            case 'cotizaciones':
+            case 'puntodeVenta':
                 $contenido = "views/modulos/puntodeVentaView.php";
-                break;
-
-            /* Módulo de Inventario */
-
-            case 'formularioCortes':
-                $contenido = "views/modulos/formularioCortesView.php";
-                break;
-
-            case 'creacionReceta':
-                $contenido = "views/modulos/creacionRecetaView.php";
-                break;
-
-            case 'costoTeorico':
-                $contenido = "views/modulos/costoTeoricoView.php";
                 break;
 
             /* Shared Options */
@@ -45,5 +35,17 @@ class RouteModel {
        
         return $contenido;
         
+    }
+
+    public function getMenus(){
+        $query = "SELECT * FROM wssp.dbo.sys_menus ORDER BY orden";
+        $stmt = $this->instancia->prepare($query); 
+        $stmt->execute();
+            if($stmt->execute()){
+                $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC);
+            }else{
+                $resulset = false;
+            }
+        return $resulset;  
     }
 }

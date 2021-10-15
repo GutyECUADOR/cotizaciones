@@ -2,6 +2,15 @@ body{
 	font-family: sans;
 }
 
+#cod{
+    text-align: right;
+}
+
+.myheader{
+	margin: 0px;
+	font-size: 10px;
+  }
+
 .rounded {
 	border:1px solid #000000;
 	border-radius: 4px;
@@ -30,16 +39,18 @@ div {
 	display: flex;
   }
 
-#logo {
+#logosection {
 	text-align: center;
-	/* background: lightblue; */
-	/* Just so it's visible */
 }
+
+#logo{
+	width: 150px;
+}
+
 #informacion {
 	text-align: center;
-	/* Grow to rest of container */
-	/* background: lightgreen; */
-	/* Just so it's visible */
+	width: 100%;
+	
 }
 
 #observacion {

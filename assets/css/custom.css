@@ -1,17 +1,36 @@
 
-.wrap .shadow{
+.wrap, .card {
     box-shadow: 0px 0px 10px grey;
 }
 
 .card {
-    box-shadow: 0px 0px 10px grey;
     border: 1px solid #ccc;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding: 20px;
     margin-bottom: 10px;
     border-radius: .60rem;
+  }
+
+.img-fluid{
+    max-width: 100%;
+    height: auto;
 }
 
+.wrap-admin {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.select-group {
+    width: 100%;
+}
+
+.select-group input[type="text"] {
+    width: 80%;
+}
+
+.select-group > .input-group-addon {
+    width: 20%;
+}
 
 /*CALLOUTS*/
 
@@ -87,6 +106,46 @@
 .bs-callout-info h4 {
     color: #5bc0de;
 }
+
+.font-weight-bold {
+    font-weight: bold !important ;
+}
+
+.btn-xsm {
+    padding: 0px 10px !important;
+}
+
+/* Tamaño del scroll */
+/* *::-webkit-scrollbar {
+    width: 8px;
+  } */
+  
+   /* Estilos barra (thumb) de scroll */
+  /* *::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+  }
+  
+  *::-webkit-scrollbar-thumb:active {
+    background-color: #999999;
+  }
+  
+  *::-webkit-scrollbar-thumb:hover {
+    background: #b3b3b3;
+    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+  } */
+  
+   /* Estilos track de scroll */
+  /* *::-webkit-scrollbar-track {
+    background: #e1e1e1;
+    border-radius: 4px;
+  }
+  
+  *::-webkit-scrollbar-track:hover, 
+  *::-webkit-scrollbar-track:active {
+    background: #d4d4d4;
+  } */
+  
 
 
 /* INICIO RESPONSIVE DESING*/

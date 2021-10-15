@@ -8,9 +8,9 @@
       <div class='selector'>
           <ul>
             
-            <li onclick="location.href='?action=cotizaciones';">
+            <li onclick="location.href='?action=ventas';">
                 <input id='c3' type='checkbox' />
-                <label for='c3' title='Punto de Venta - Cotizaciones'><i class="fa fa-shopping-cart fa-3x" aria-hidden="true"></i></i></label>   
+                <label for='c3' title='VENTAS'><i class="fa fa-shopping-cart fa-3x" aria-hidden="true"></i></i></label>   
               </a>
             </li>
 
@@ -21,7 +21,7 @@
     </div>
       
     <!-- USO JQUERY, y Bootstrap CDN-->
-    <script src="assets\js\jquery.min.js"></script>
-    <script src="assets\js\bootstrap.min.js"></script>
-    <script src="assets\js\moment.min.js"></script>
-    <script src="assets\js\inicio.js?<?php echo date('Ymdhiiss')?>"></script>
+    <script src="assets\js\libs\jquery.min.js"></script>
+    <script src="assets\js\libs\bootstrap.min.js"></script>
+    <script src="assets\js\libs\moment.min.js"></script>
+    <script src="assets\js\pages\inicio.js?<?php echo date('Ymdhiiss')?>"></script>

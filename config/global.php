@@ -4,7 +4,8 @@ define("APP_NAME", "Adfolsa & Vitador");
 define("EMPRESA_NAME", "Adfolsa & Vitador");
 define("APP_UNIQUE_KEY", "AdfolsaVita2021$");
 define("LOGO_NAME", "./assets/img/logo.png");
-define("APP_VERSION", "05.08.2021");
+define("PATH_LOGO_CLARO", "./assets/img/logo.png");
+define("APP_VERSION", "15.10.2021");
 define("ROOT_PATH","");   //Root del proyecto
 
 define("IMAGES_UPLOAD_DIR", $_SERVER['DOCUMENT_ROOT'].'/uploadsCotizaciones');

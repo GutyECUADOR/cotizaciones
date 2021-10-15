@@ -1,14 +1,15 @@
 <?php namespace App\Controllers;
-
 use App\Models\RouteModel;
 
 class RouteController {
     
-    public $mainmodel;
+    public $routeModel;
     
-    public function __construct()
-    {
-        $this->mainmodel = new RouteModel();
+    public function __construct() {
+        $this->defaulDataBase = (!isset($_SESSION["empresaAUTH".APP_UNIQUE_KEY])) ? DEFAULT_DBName : $_SESSION["empresaAUTH".APP_UNIQUE_KEY] ;
+        $this->routeModel = new RouteModel();
+        $this->routeModel->setDbname($this->defaulDataBase);
+        $this->routeModel->conectarDB();
     }
     
     public function loadtemplate(){
@@ -18,14 +19,18 @@ class RouteController {
     public function actionCatcherController(){
         if (isset($_GET['action'])){
            $action = $_GET['action'];
-           $modulo = $this->mainmodel->actionCatcherModel($action);
+           $modulo = $this->routeModel->actionCatcherModel($action);
            
            include $modulo; 
         }else{
            $action = 'default';
-           $modulo = $this->mainmodel->actionCatcherModel($action);
+           $modulo = $this->routeModel->actionCatcherModel($action);
            include $modulo; 
         }
        
+    }
+
+    public function getMenus(){
+        return $this->routeModel->getMenus();
     }
 }

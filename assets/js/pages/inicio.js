@@ -40,3 +40,8 @@ var update_clock = function update_clock() {
 
 // start the clock immediatly
 clock_tick();
+
+$("#menu-toggle").click(function(e) {
+    e.preventDefault();
+  $("#wrapper").toggleClass("toggled");
+  });

@@ -34,6 +34,7 @@ use App\Controllers\RouteController;
       <link rel="stylesheet" href="assets\css\pnotify.custom.min.css">
 
       <!-- Custom CSS -->
+      <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\css\sidebar.css">
       <link rel="stylesheet" href="assets\css\custom.css?<?php echo date('Ymdhiiss')?>">
        
       <!-- CSS Paginas -->
