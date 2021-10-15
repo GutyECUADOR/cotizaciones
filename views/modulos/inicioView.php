@@ -10,7 +10,7 @@
             
             <li onclick="location.href='?action=ventas';">
                 <input id='c3' type='checkbox' />
-                <label for='c3' title='VENTAS'><i class="fa fa-shopping-cart fa-3x" aria-hidden="true"></i></i></label>   
+                <label for='c3' title='VENTAS'><i class="fa fa fa-shopping-bag fa-3x" aria-hidden="true"></i></i></label>   
               </a>
             </li>
 

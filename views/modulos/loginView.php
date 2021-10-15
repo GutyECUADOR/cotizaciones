@@ -14,7 +14,7 @@ if (isset($_SESSION["usuarioRUC".APP_UNIQUE_KEY])){
     <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\css\signin.css">
     <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\css\sticky-footer-navbar.css">
    
-    <div class="container" style="margin-top: 5%;">   
+    <div class="container">   
         <div class="div col">
             <div class="row">
             <form class="form-signin" method="POST" autocomplete="off"  class="formulario" name="formulario_registro">
