@@ -204,7 +204,7 @@ class WinfenixModel extends Conexion  {
     }
 
     public function sql_getVendedoresWF(){
-        $query  = "SELECT CODIGO, NOMBRE FROM dbo.COB_VENDEDORES";
+        $query  = "SELECT CODIGO, NOMBRE FROM dbo.COB_VENDEDORES ORDER BY NOMBRE";
         try{
             $stmt = $this->instancia->prepare($query); 
             if($stmt->execute()){
@@ -546,6 +546,37 @@ class WinfenixModel extends Conexion  {
 
     }
 
+    public function SP_VENINFCOMADF (object $busqueda) {
+        try{
+            $this->instancia->beginTransaction();
+
+            $query = "
+                exec SP_VENINFCOMADF :fecha, :codVendedor
+            ";
+
+            $stmt = $this->instancia->prepare($query); 
+            $stmt->bindValue(':fecha', date("Ymd", strtotime($busqueda->fecha)));
+            $stmt->bindValue(':codVendedor', $busqueda->vendedor);
+           
+            $stmt->execute();
+            if($stmt->execute()){
+                $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+            }else{
+                $resulset = false;
+            }
+  
+            $this->instancia->commit();
+            return $resulset;
+            
+        }catch(\PDOException $exception){
+            $this->instancia->rollBack();
+            http_response_code(400);
+            return array('status' => 'ERROR', 'message' => $exception->getMessage() );
+        }
+   
+    }
+
+   
 
 
     

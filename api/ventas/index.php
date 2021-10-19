@@ -4,6 +4,7 @@ use App\Controllers\CotizacionesController;
 use App\Controllers\EmailController;
 use App\Controllers\WhatsAppController;
 use App\Controllers\FTPController;
+use App\Controllers\VentasController;
 use Dotenv\Dotenv;
 
 header('Content-Type: application/json');
@@ -15,6 +16,7 @@ $dotenv = Dotenv::createImmutable('../../');
 $dotenv->load();
 
 $cotizacionesController = new CotizacionesController();
+$ventasController = new VentasController();
 $emailController = new EmailController();
 $whatsAppController = new WhatsAppController();
 $ftpController = new FTPController();
@@ -280,6 +282,22 @@ $ftpController = new FTPController();
           echo json_encode($rawdata);
 
         break;
+
+        case 'getInformeComisionesVendedor':
+          if (isset($_GET['busqueda'])) {
+            $busqueda = json_decode($_GET['busqueda']);
+            $respuesta = $ventasController->getInformeComisionesVendedores($busqueda);
+            $rawdata = array('status' => 'OK', 'message' => 'respuesta correcta', 'data' => $respuesta);
+          }else{
+            http_response_code(400);
+            $rawdata = array('status' => 'ERROR', 'message' => 'No se ha indicado parámetros de búsqueda.');
+          }
+          
+          echo json_encode($rawdata);
+
+        break;
+
+
 
         case 'uploadFtpFile':
           if (isset($_GET['whatsApp']) ) {

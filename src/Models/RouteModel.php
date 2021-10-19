@@ -17,6 +17,10 @@ class RouteModel extends Conexion {
                 $contenido = "views/modulos/puntodeVentaView.php";
                 break;
 
+            case 'informeComisiones':
+                $contenido = "views/modulos/informeComisionesView.php";
+                break;
+
             /* Shared Options */
 
             case 'login':
