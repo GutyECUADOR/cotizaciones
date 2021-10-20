@@ -8,7 +8,16 @@ class Documento {
         this.numero = '';
         this.fecha = moment().format("YYYY-MM-DD"),
         this.fechaCorte = moment().format("YYYY-MM-DD"),
-        this.comentario = 'Proforma/Cotización'
+        this.comentario = 'Proforma/Cotización',
+        this.movimientos = [],
+        this.totalComision = 0
+    }
+
+    getTotalComision() {
+        this.totalComision = this.movimientos.reduce( (total, movimiento) => {
+            return total + parseFloat(movimiento.Total_comision);
+        }, 0).toFixed(2);
+        return this.totalComision;
     }
 
 }
@@ -43,7 +52,7 @@ const app = new Vue({
                 alert(`${response.message}`);
             }
            
-            this.search_informe.results = response.data;
+            this.documento.movimientos = response.data;
             
         },
         cancelSubmit(){

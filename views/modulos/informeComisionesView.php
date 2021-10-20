@@ -129,7 +129,7 @@ $vendedores = $cotizacion->getVendedores();
                             <div class="col ">
                                 <div class="form-group">
                                     <div class="well text-center wellextra" >
-                                        <span id="welltotal">$ {{ documento.total }}</span>
+                                        <span id="welltotal">$ {{ documento.totalComision }}</span>
                                     </div>
                                     <button type="submit" class="btn btn-primary btn btn-block" :disabled="search_informe.isloading"  >
                                         <i class="fa" :class="[{'fa-spin fa-refresh': search_informe.isloading}, {  'fa-search' : !search_informe.isloading  }]" ></i> Buscar
@@ -165,30 +165,30 @@ $vendedores = $cotizacion->getVendedores();
                                             <thead>
                                                 <tr>
                                                     <th style="width: 10%; min-width: 80px;" class="text-center headerTablaProducto">Cliente</th>
-                                                    <th style="width: 20%; min-width: 200px;" class="text-center headerTablaProducto">Nombre Cliente</th>
-                                                    <th style="width: 5%; min-width: 80px;" class="text-center headerTablaProducto">Documento</th>
-                                                    <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">F. Emisión</th>
-                                                    <th style="width: 5%; min-width: 90px;" class="text-center headerTablaProducto">F. Vencimiento</th>
-                                                    <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Grupo</th>
+                                                    <th style="width: 20%; min-width: 300px;" class="text-center headerTablaProducto">Nombre Cliente</th>
+                                                    <th style="width: 5%; min-width: 120px;" class="text-center headerTablaProducto">Documento</th>
+                                                    <th style="width: 5%; min-width: 100px;" class="text-center headerTablaProducto">F. Emisión</th>
+                                                    <th style="width: 5%; min-width: 100px;" class="text-center headerTablaProducto">F. Vencimiento</th>
+                                                    <th style="width: 10%; min-width: 220px;" class="text-center headerTablaProducto">Grupo</th>
                                                     <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Marca</th>
                                                     <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Nombre Articulo</th>
-                                                    <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Cod Tabla Comi</th>
+                                                    <th style="width: 10%; min-width: 70px;" class="text-center headerTablaProducto">Cod Tabla Comi</th>
                                                     <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Monto Total</th>
                                                     <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Descuento</th>
                                                     <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Neto</th>
                                                     <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Por Comision Vita</th>
                                                     <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Por Comision Desc</th>
-                                                    <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">F. Deposito</th>
+                                                    <th style="width: 10%; min-width: 100px;" class="text-center headerTablaProducto">F. Deposito</th>
                                                     <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Dias Credito</th>
                                                     <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Por Comision Cobro</th>
                                                     <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Valor Comision Cobro</th>
                                                     <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">Total Comision</th>
-                                                    <th style="width: 10%; min-width: 90px;" class="text-center headerTablaProducto">NumRel</th>
+                                                    <th style="width: 10%; min-width: 160px;" class="text-center headerTablaProducto">NumRel</th>
                                                     
                                                 </tr>
                                             </thead>
                                             <tbody id="tablaProductos">
-                                                <tr v-for="row in search_informe.results">
+                                                <tr v-for="row in documento.movimientos">
                                                     <td><input type="text" class="form-control text-center input-sm" v-model="row.CLIENTE" disabled></td>
                                                     <td><input type="text" class="form-control text-center input-sm" v-model="row.Nombre_cliente" disabled></td>
                                                     <td><input type="text" class="form-control text-center input-sm" v-model="row.Documento" disabled></td>
@@ -231,7 +231,7 @@ $vendedores = $cotizacion->getVendedores();
                                                     <td colspan="16"></td>
                                                     <td colspan="2" class="text-center" style="vertical-align: middle;"><b>Total comision</b></td>
                                                     <td colspan="3">
-                                                    <input type="text" class="form-control text-center" readonly></td>
+                                                    <input type="text" v-model="documento.getTotalComision()" class="form-control text-center" readonly></td>
                                                     </td>
                                                 </tr>
 
