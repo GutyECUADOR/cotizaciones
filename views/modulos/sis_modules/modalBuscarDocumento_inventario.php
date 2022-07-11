@@ -26,7 +26,7 @@
 
             <div class="panel panel-default"> 
                 <div class="panel-heading">Resultados: <b>{{ search_documentos.results.length}}</b> documentos</div> 
-                    <div class="responsibetable"> 
+                    <div class="responsibetable" style="padding-bottom: 20px;"> 
                         <table class="table"> 
                             <thead>
                                 <tr> 
