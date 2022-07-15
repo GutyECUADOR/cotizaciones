@@ -160,7 +160,7 @@ $vendedores = $cotizacion->getVendedores();
                                 </div>
 
                                 <div class="panel-body">
-                                    <div class="responsibetable">        
+                                    <div class="table-responsive">        
                                         <table class="table table-bordered tableExtras">
                                             <thead>
                                                 <tr>

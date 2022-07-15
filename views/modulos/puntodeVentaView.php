@@ -254,7 +254,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                             </div>
                                                 
                             <div class="panel-body">
-                                <div class="responsibetable">     
+                                <div class="table-responsive">     
                                     <table id="tablaAgregaNuevo" class="table table-bordered tableExtras">
                                         <thead>
                                         <tr>
@@ -351,7 +351,7 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
                                 </div>
 
                                 <div class="panel-body">
-                                    <div class="responsibetable">        
+                                    <div class="table-responsive">        
                                         <table class="table table-bordered tableExtras">
                                             <thead>
                                                 <tr>

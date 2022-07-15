@@ -21,7 +21,7 @@
 
             <div class="panel panel-default"> 
                 <div class="panel-heading">Resultados</div> 
-                    <div class="responsibetable"> 
+                    <div class="table-responsive"> 
                         <table id="tblResultadosBusquedaProductos" class="table"> 
                             <thead>
                                 <tr> 
@@ -35,12 +35,12 @@
                             
                             <tbody>
                             <tr v-for="producto in search_producto.results">
-                                <td>{{producto.Codigo}}</td>
-                                <td>{{producto.Nombre.trim()}}</td>
-                                <td>{{parseFloat(producto.PrecA.trim()).toFixed(2)}}</td>
-                                <td>{{parseFloat(producto.Stock.trim())}}</td>
+                                <td>{{producto.CODIGO}}</td>
+                                <td>{{producto.NOMBRE.trim()}}</td>
+                                <td>{{parseFloat(producto.PRECA.trim()).toFixed(2)}}</td>
+                                <td>{{parseFloat(producto.STOCK.trim())}}</td>
                                 <td>
-                                    <button type="button" class="btn btn-primary btn-sm btn-block" @click="selectProduct(producto.Codigo)">
+                                    <button type="button" class="btn btn-primary btn-sm btn-block" @click="selectProduct(producto.CODIGO)">
                                         <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
                                     </button>
                                 </td>

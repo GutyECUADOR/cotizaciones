@@ -24,12 +24,7 @@ if (isset($_SESSION["usuarioRUC".APP_UNIQUE_KEY])){
             
         
             <h2 class="form-signin-heading text-center"><?php echo APP_NAME?></h2>
-
-            <div class="alert alert-info text-center alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <strong>Recuerde</strong>, siempre borrar datos de navegacion antes de ingresar al aplicativo.
-            </div>
-
+            
             <?php $login->actionCatcherController(); ?>
             <input type="hidden" name="preaction" value="<?php echo isset($_GET['preaction']) ? $_GET['preaction'] : ''?>">
             
