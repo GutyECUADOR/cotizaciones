@@ -30,7 +30,7 @@ class Producto {
       this.marca = marca || '';
       this.nombre = nombre;
       this.peso = parseFloat(peso) || 0;
-      this.precio = precio || 0;
+      this.precio = parseFloat(precio) || 0;
       this.stock = stock;
       this.subtotal = 0;
       this.tipoArticulo = tipoArticulo;

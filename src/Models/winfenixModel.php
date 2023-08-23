@@ -475,37 +475,50 @@ class WinfenixModel extends Conexion  {
             $stmt->execute();
 
             foreach ($documento->productos as $producto) {
-                /* $query = "
-                    Sp_invgraMOV 'I', :oficina, :ejercicio, :tipoDOC, :secuencia, :fecha, :bodega,'E', :codproducto, :unidadproducto, :cantidadproducto, :costoproducto,'0.0000000', :costototal,'',''
-                ";   */
-
-                $query = "
-                exec Sp_vengramov  'I', :oficina, :ejercicio, :tipoDOC, :numeroDOC, :fecha, :codCliente, :bodega ,'S','0','0', 
-                                    :codProducto, :unidad, :cantidad, :tipoPrecio, :precio,'0.0000', :porcentIVA, :precioTotal, 
-                                    :fechaCaducidad,'','0.00','0.0000000','0','','',0,0, :codProducto_1, :unidad_1
-
-                ";
-                    $stmt = $this->instancia->prepare($query);
-                    $stmt->bindValue(':oficina', $datosEmpresa['Oficina']);
-                    $stmt->bindValue(':ejercicio', $datosEmpresa['Ejercicio']);
-                    $stmt->bindValue(':tipoDOC', $tipoDOC);
-                    $stmt->bindValue(':numeroDOC', $numeroDOC);
-                    $stmt->bindValue(':fecha', date('Ymd'));
-                    $stmt->bindValue(':codCliente', $documento->cliente->codigo);
-                    $stmt->bindValue(':bodega', $documento->bodega);
-
-                    $stmt->bindValue(':codProducto', $producto->codigo);
-                    $stmt->bindValue(':unidad', $producto->unidad);
-                    $stmt->bindValue(':cantidad', $producto->cantidad);
-                    $stmt->bindValue(':tipoPrecio', $documento->cliente->tipoPrecio);
-                    $stmt->bindValue(':precio', $producto->precio);
-                    $stmt->bindValue(':porcentIVA', $producto->valorIVA);
-                    $stmt->bindValue(':precioTotal', $producto->subtotal);
-
-                    $stmt->bindValue(':fechaCaducidad', date('Ymd'));
-                    $stmt->bindValue(':codProducto_1', $producto->codigo);
-                    $stmt->bindValue(':unidad_1', $producto->unidad);
-                   
+                $query = "exec Sp_vengramov :OPCION, :OFI, :EJE, :TIPO, :NUMERO, :FECHA, :CLIENTE, :BODEGA, :TIPMOV, :ACTINV, :ACTPEN, :CODIGO, :UNIDAD, :CANTIDAD, :TIPOPRECIO, :PRECIO, :DESCU, :IVA, :PRECIOTOT, :CADUCIDA, :NOMBRE_EX, :CANDEV, :COSTO, :PRETRANS, :CENTRO, :ORDEN_P, :FLETE_NAVIERA, :FLETE_AGENTE, :CODVEN, :DESC2, :DESC3, :ITEMAGREGADO, :IDDOCINV, :ITEMESOBSEQUI, :CODREL, :CENTRO1, :CENTRO4, :TIPOIVA, :LOTE, :CODPROMO, :CODBONI";
+                
+                $stmt = $this->instancia->prepare($query);            
+                $stmt->bindValue(':OPCION', 'I');
+                $stmt->bindValue(':OFI', $datosEmpresa['Oficina']);
+                $stmt->bindValue(':EJE', $datosEmpresa['Ejercicio']);
+                $stmt->bindValue(':TIPO', $tipoDOC);
+                $stmt->bindValue(':NUMERO', $numeroDOC);
+                $stmt->bindValue(':FECHA', date('Ymd'));
+                $stmt->bindValue(':CLIENTE', $documento->cliente->codigo);
+                $stmt->bindValue(':BODEGA', $documento->bodega);
+                $stmt->bindValue(':TIPMOV', 'S');
+                $stmt->bindValue(':ACTINV', 0);
+                $stmt->bindValue(':ACTPEN', 0);
+                $stmt->bindValue(':CODIGO', $producto->codigo);
+                $stmt->bindValue(':UNIDAD', $producto->unidad);
+                $stmt->bindValue(':CANTIDAD', $producto->cantidad);
+                $stmt->bindValue(':TIPOPRECIO', $documento->cliente->tipoPrecio);
+                $stmt->bindValue(':PRECIO', $producto->precio);
+                $stmt->bindValue(':DESCU', $producto->descuento);
+                $stmt->bindValue(':IVA', $producto->valorIVA);
+                $stmt->bindValue(':PRECIOTOT', $producto->subtotal);
+                $stmt->bindValue(':CADUCIDA', date('Ymd'));
+                $stmt->bindValue(':NOMBRE_EX', '');
+                $stmt->bindValue(':CANDEV', 0);
+                $stmt->bindValue(':COSTO', 0);
+                $stmt->bindValue(':PRETRANS', 0);
+                $stmt->bindValue(':CENTRO', '');
+                $stmt->bindValue(':ORDEN_P', '');
+                $stmt->bindValue(':FLETE_NAVIERA', 0);
+                $stmt->bindValue(':FLETE_AGENTE', 0);
+                $stmt->bindValue(':CODVEN', $documento->cliente->codVendedor);
+                $stmt->bindValue(':DESC2', 0);
+                $stmt->bindValue(':DESC3', 0);
+                $stmt->bindValue(':ITEMAGREGADO', 0);
+                $stmt->bindValue(':IDDOCINV', '');
+                $stmt->bindValue(':ITEMESOBSEQUI', 0);
+                $stmt->bindValue(':CODREL', '');
+                $stmt->bindValue(':CENTRO1', '');
+                $stmt->bindValue(':CENTRO4', '');
+                $stmt->bindValue(':TIPOIVA', $producto->tipoIVA);
+                $stmt->bindValue(':LOTE', '');
+                $stmt->bindValue(':CODPROMO', '');
+                $stmt->bindValue(':CODBONI', '');
                 $stmt->execute();
             }
 
