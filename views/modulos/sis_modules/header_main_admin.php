@@ -20,6 +20,15 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">  
         <li><a href="?action=inicio"><i class="fa fa-home" aria-hidden="true"></i></i> Inicio</a></li>
+        <li><a title="<?php echo trim($_SESSION["empresaNombre".APP_UNIQUE_KEY])?>"> 
+          <?php 
+            if (strlen(trim($_SESSION["empresaNombre".APP_UNIQUE_KEY])) > 15) {
+              echo substr(trim($_SESSION["empresaNombre".APP_UNIQUE_KEY]), 0, 15).'...';
+            }else{
+              echo trim($_SESSION["empresaNombre".APP_UNIQUE_KEY]);
+            }
+          ?></a></li>
+        <li><a> <?php echo trim($_SESSION["empresaRUC".APP_UNIQUE_KEY])?></a></li>
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
@@ -27,14 +36,20 @@
               if (isset($_SESSION["usuarioRUC".APP_UNIQUE_KEY])){
         ?> 
               
+                <li style="cursor: pointer;" data-container="body" data-toggle="popover" data-placement="bottom" title="<?php echo trim($_SESSION["empresaNombre".APP_UNIQUE_KEY])?>" data-content="<?php echo trim($_SESSION["empresaRUC".APP_UNIQUE_KEY])?>">
+                  <a>
+                    <i class="fa fa-database"></i>
+                      <?php echo $_SESSION["empresaAUTH".APP_UNIQUE_KEY] ?>
+                  </a>
+                </li>
                 <li><a id="liveclock"></a></li>
                 <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i></i> Bienvenido, <?php echo $_SESSION["usuarioNOMBRE".APP_UNIQUE_KEY] ?><span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i></i> <?php echo $_SESSION["usuarioNOMBRE".APP_UNIQUE_KEY] ?><span class="caret"></span></a>
                   <ul class="dropdown-menu">
-                    <?php if ($_SESSION["usuarioNOMBRE".APP_UNIQUE_KEY] == 'SUPERUSUARIO') {
+                    <?php if ($_SESSION["usuarioNOMBRE".APP_UNIQUE_KEY] == 'SUPERUSUARIO' || $_SESSION["isSupervisor".APP_UNIQUE_KEY] == 1) {
                       
                     ?>
-                    <li><a href="?action=admin"><span class="glyphicon glyphicon-log-in" ></span> Administración </a></li>
+                     <li><a href="?action=dashboard"><i class="fa fa-dashboard"></i> Administración </a></li>
                     
                     <?php }?>
                     <li><a href="?action=logout"><span class="glyphicon glyphicon-log-out" ></span> Cerrar Sesión </a></li>

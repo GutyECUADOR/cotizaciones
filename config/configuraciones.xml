@@ -1,7 +1,48 @@
 <?xml version="1.0"?>
 <xmlConfig>
-    <enMantenimiento>false</enMantenimiento>
-    <empresas>
-        <empresa dbName="MODELO">Modelo</empresa>
-    </empresas>
+      <variables>
+            <variable id="primerDiaVales">
+                  <id>primerDiaVales</id>
+                  <nombre>Primer dia habilitado Vales</nombre>
+                  <descripcion>Define desde que dia del mes estan disponibles los vales por perdida, valor minimo 1.</descripcion>
+                  <valor>01</valor>
+            </variable>
+
+            <variable id="ultimoDiaVales">
+                  <id>ultimoDiaVales</id>
+                  <nombre>Ultimo dia habilitado Vales</nombre>
+                  <descripcion>Define hasta que dia del mes estan disponibles los vales por perdida, no exceder del ultimo dia del mes.</descripcion>
+                  <valor>28</valor>
+            </variable>
+
+            <variable id="ultimoDiaAprobacionVales">
+                  <id>ultimoDiaAprobacionVales</id>
+                  <nombre>Ultimo dia habilitado para la aprobaci&#xF3;n de Vales</nombre>
+                  <descripcion>Define hasta que dia del mes estan disponibles la aprobaci&#xF3;n de los vales por p&#xE9;rdida.</descripcion>
+                  <valor>25</valor>
+            </variable>
+
+            <variable id="descuentoVales">
+                  <id>descuentoVales</id>
+                  <nombre>Descuento Vales por Perdida</nombre>
+                  <descripcion>Define el % de descuento aplicado a los empleados listados en los vales por perdida.</descripcion>
+                  <valor>15</valor>
+            </variable>
+
+            <variable id="primerDiaSolicitudSuministros">
+                  <id>primerDiaSolicitudSuministros</id>
+                  <nombre>Primer dia para Solicitud de Suministros</nombre>
+                  <descripcion>Define el primer dia en el que estar&#xE1; habilitado el formulario de solicitud de suministros.</descripcion>
+                  <valor>20</valor>
+            </variable>
+
+            <variable id="ultimoDiaSolicitudSuministros">
+                  <id>ultimoDiaSolicitudSuministros</id>
+                  <nombre>Ultimo dia para Solicitud de Suministros</nombre>
+                  <descripcion>Define el utimo dia en el que estar&#xE1; habilitado el formulario de solicitud de suministros.</descripcion>
+                  <valor>31</valor>
+            </variable>
+           
+      </variables>
+     
 </xmlConfig>

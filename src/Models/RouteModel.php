@@ -21,6 +21,20 @@ class RouteModel extends Conexion {
                 $contenido = "views/modulos/informeComisionesView.php";
                 break;
 
+            // ADMINISTRACION 
+            case 'dashboard':
+                $contenido = "views/modulos/admin/dashboardView.php";
+                break;
+
+            case 'usuarios':
+                $contenido = "views/modulos/admin/usuariosView.php";
+                break;
+
+            case 'variables':
+                $contenido = "views/modulos/admin/variablesView.php";
+                break;
+
+
             /* Shared Options */
 
             case 'login':

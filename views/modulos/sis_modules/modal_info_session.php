@@ -11,10 +11,34 @@
         <div class="panel panel-default">
             <div class="panel-heading">Conexion por defecto</div>
             <div class="panel-body">
-            <?php echo $_SESSION["empresaAUTH".APP_UNIQUE_KEY] ?>
-            <?php echo $_SESSION["usuarioRUC".APP_UNIQUE_KEY] ?>
+            Empresa: <?php echo $_SESSION["empresaAUTH".APP_UNIQUE_KEY] ?>
+            <br> Usuario:<?php echo $_SESSION["usuarioRUC".APP_UNIQUE_KEY] ?>
+            <br> Supervisor:<?php echo $_SESSION["isSupervisor".APP_UNIQUE_KEY] ?>
+            <br> RUC:<?php echo $_SESSION["empresaRUC".APP_UNIQUE_KEY]  ?>
+            <br> Grupo: <?php echo $_SESSION["usuarioGRUPO".APP_UNIQUE_KEY]  ?>
+            <br> Bodega_Default: <?php echo $_SESSION["bodegaDefault".APP_UNIQUE_KEY]  ?>
+            
+            
+            <br> Actions: <?php var_dump(($_SESSION["arrayModulosAccess".APP_UNIQUE_KEY]))  ?>
+            <?php 
+            /* if (in_array(trim($_GET['action']), $_SESSION["arrayModulosAccess".APP_UNIQUE_KEY])) {
+                echo "Existe Action";
+            }else{
+              echo 'No existe';
+            } */
+            ?>
             </div>
         </div>
+
+        <!-- <div class="panel panel-default">
+            <div class="panel-heading">Tramaco Session</div>
+            <div class="panel-body">
+            <?php  
+              echo $_SESSION["DEFAULT_TRAMACO_SERVER".APP_UNIQUE_KEY];
+              echo ' - ' . $_SESSION["DEFAULT_TRAMACO_USER".APP_UNIQUE_KEY];
+            ?>
+            </div>
+        </div> -->
 
       </div>
       <div class="modal-footer">

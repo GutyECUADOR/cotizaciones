@@ -72,7 +72,7 @@ class LoginModel extends Conexion {
 
     /* Retorna el nombre array con la clave Codigo, Nombre para el nombre de la DB, para ser usada en la conexion*/ 
     public function getAllDataBaseList(){
-        $query = "SELECT nombre, dbname FROM WSSP.dbo.databases_info"; 
+        $query = "SELECT nombre, dbname FROM wssp.dbo.databases_info WHERE activo ='1'"; 
         $stmt = $this->instancia->prepare($query); 
             if($stmt->execute()){
               return $stmt->fetchAll( \PDO::FETCH_ASSOC);
@@ -81,6 +81,30 @@ class LoginModel extends Conexion {
             }
         return $resulset;  
     }
+
+     /* Retorna el nombre array con la lista de rutas de los modulos disponibles para el tipo de usuario*/ 
+     public function getModulosAccess($usuarioWinf){
+        $query = "
+            SELECT 
+                sys_menus.action 
+            FROM 
+                wssp.dbo.sys_permisos as permisos
+                INNER JOIN wssp.dbo.sys_menus on sys_menus.id = permisos.id_menu
+            WHERE codigoGrupo IN (:codigoGrupo, :username)
+            ORDER BY sys_menus.modulo
+        "; 
+        $stmt = $this->instancia->prepare($query); 
+        $stmt->bindValue(':codigoGrupo', trim($usuarioWinf['Grupo'])); 
+        $stmt->bindValue(':username', trim($usuarioWinf['Codigo'])); 
+       
+            if($stmt->execute()){
+                $resulset = $stmt->fetchAll( \PDO::FETCH_COLUMN );
+            }else{
+                $resulset = false;
+            }
+        return $resulset;  
+    }
+
     
 
     public function test(){

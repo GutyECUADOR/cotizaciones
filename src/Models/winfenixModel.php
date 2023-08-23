@@ -322,7 +322,7 @@ class WinfenixModel extends Conexion  {
     }
 
     public function getDatosEmpresa (){
-        $query = "SELECT NomCia, DirCia, TelCia, RucCia, Oficina, Ejercicio FROM dbo.DatosEmpresa";
+        $query = "SELECT NomCia, DirCia, TelCia, RucCia, Oficina, Ejercicio FROM dbo.DatosEmpresa WITH(NOLOCK)";
         $stmt = $this->instancia->prepare($query); 
         try{
             $stmt->execute();
@@ -332,7 +332,7 @@ class WinfenixModel extends Conexion  {
         }
 
     }
-
+    
     public function getVenTipos ($tipoDOC){
         $query = "SELECT CODIGO, NOMBRE, Serie FROM dbo.VEN_TIPOS WHERE CODIGO = '$tipoDOC'";
         $stmt = $this->instancia->prepare($query); 

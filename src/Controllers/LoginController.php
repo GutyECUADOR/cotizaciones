@@ -1,14 +1,17 @@
 <?php namespace App\Controllers;
 
 use App\Models\LoginModel;
+use App\Models\WinfenixModel;
 
 class LoginController  {
 
     public $loginModel;
+    public $winfenixModel;
 
     public function __construct()
     {
         $this->loginModel = new LoginModel();
+        $this->winfenixModel = new WinfenixModel();
     }
     
     public function loadtemplate() {
@@ -23,12 +26,19 @@ class LoginController  {
 
                 //$dataBaseName = $this->loginModel->getDBNameByCodigo($codigoDB); // Obtenemos nombre de la DB segun codigo, retorno de un array
                 $arrayResultados = $this->loginModel->validaIngreso($arrayDatos, $codigoDB); // Validamos info del usuario en esa DB
-               
+                $arrayModulosAccess = $this->loginModel->getModulosAccess($arrayResultados); // Retorna la lista de rutas disponibles para el tipo de usuario
+                $arrayDatosEmpresa = $this->winfenixModel->getDatosEmpresa();
+
                 //Funcion validar acceso retorna array de resultados
                     if (!empty($arrayResultados)) {
                         session_start();
-                        $_SESSION["usuarioRUC".APP_UNIQUE_KEY] =  $arrayResultados['Codigo'] ;
-                        $_SESSION["usuarioNOMBRE".APP_UNIQUE_KEY] =  $arrayResultados['Nombre'] ;
+                        $_SESSION["usuarioRUC".APP_UNIQUE_KEY] =  $arrayResultados['Codigo'];
+                        $_SESSION["usuarioNOMBRE".APP_UNIQUE_KEY] =  $arrayResultados['Nombre'];
+                        $_SESSION["isSupervisor".APP_UNIQUE_KEY] = $arrayResultados['Supervisor'];
+                        $_SESSION["usuarioGRUPO".APP_UNIQUE_KEY] = trim($arrayResultados['Grupo']);
+                        $_SESSION["arrayModulosAccess".APP_UNIQUE_KEY] = array_map('trim', $arrayModulosAccess);
+                        $_SESSION["empresaNombre".APP_UNIQUE_KEY] = trim($arrayDatosEmpresa['NomCia']);
+                        $_SESSION["empresaRUC".APP_UNIQUE_KEY] = trim($arrayDatosEmpresa['RucCia']);
                         $_SESSION["empresaAUTH".APP_UNIQUE_KEY] = $codigoDB;
                         $_SESSION["bodegaDefault".APP_UNIQUE_KEY] = 'B01';
                         header("Location: index.php?&action=$preaction");

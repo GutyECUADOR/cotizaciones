@@ -45,3 +45,16 @@ $("#menu-toggle").click(function(e) {
     e.preventDefault();
   $("#wrapper").toggleClass("toggled");
   });
+
+
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="popover"]').popover();
+
+  })
+
+  $("form").keypress(function(e) {
+    if (e.which == 13) {
+        return false;
+    }
+});
