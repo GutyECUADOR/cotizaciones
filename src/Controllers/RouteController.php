@@ -31,6 +31,11 @@ class RouteController {
     }
 
     public function getMenus(){
-        return $this->routeModel->getMenus();
+        if (isset($_GET['action'])) {
+            return $this->routeModel->getMenus(trim($_GET['action']));
+        }else{
+            return $this->routeModel->getMenus('');
+        }
+       
     }
 }

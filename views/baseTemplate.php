@@ -26,6 +26,7 @@ use App\Controllers\RouteController;
       <!-- Librerias-->
       <link rel="stylesheet" href="assets\css\bootstrap-datepicker.css">
       <link rel="stylesheet" href="assets\css\font-awesome.min.css">
+      <script src="https://kit.fontawesome.com/a4039c978a.js" crossorigin="anonymous"></script>
       <link rel="stylesheet" type="text/css"  href="assets\css\sweetalert.css" />
 
       <!-- CSS Propios -->
@@ -53,5 +54,3 @@ use App\Controllers\RouteController;
     
   </body>
 </html>
-
-

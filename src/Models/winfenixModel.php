@@ -576,6 +576,27 @@ class WinfenixModel extends Conexion  {
    
     }
 
+    public function SQL_getUSUGRUPOS(){
+       
+        $query = " 
+            SELECT Codigo, Nombre FROM USUGRUPOS WITH(NOLOCK)
+                UNION
+            SELECT Codigo, Nombre FROM USUARIOS WITH(NOLOCK) WHERE Estatus = '1'
+        ";  
+        try{
+            $stmt = $this->instancia->prepare($query); 
+          
+                if($stmt->execute()){
+                    $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+                }else{
+                    $resulset = false;
+                }
+            return $resulset;  
+
+        }catch(\PDOException $exception){
+            return array('status' => 'error', 'message' => $exception->getMessage() );
+        }
+    }
    
 
 

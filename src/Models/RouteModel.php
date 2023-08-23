@@ -55,9 +55,14 @@ class RouteModel extends Conexion {
         
     }
 
-    public function getMenus(){
-        $query = "SELECT * FROM wssp.dbo.sys_menus ORDER BY orden";
+    public function getMenus(string $action){
+        $query = "
+        SELECT * FROM wssp.dbo.sys_menus 
+            WHERE modulo IN (SELECT modulo  FROM wssp.dbo.sys_menus WHERE action = :action)
+        ORDER BY orden  
+        ";
         $stmt = $this->instancia->prepare($query); 
+        $stmt->bindParam(':action', $action); 
         $stmt->execute();
             if($stmt->execute()){
                 $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC);
