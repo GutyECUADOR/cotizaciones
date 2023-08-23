@@ -487,4 +487,4 @@ $tiposDOC = $cotizacion->getVenTiposDOCWF();
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\pages\inicio.js?<?php echo date('Ymdhiiss')?>"></script>
     
     <!-- JS Propio-->
-    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\pages\puntodeVenta.js"></script>
+    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\pages\puntodeVenta.js?<?php echo date('Ymdhiiss')?>"></script>
