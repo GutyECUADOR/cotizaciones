@@ -35,7 +35,7 @@
 
             <div class="panel panel-default"> 
                 <div class="panel-heading">Resultados</div> 
-                    <div class="table-responsive" style="padding-bottom: 20px;">  
+                    <div class="table-responsive" style="padding-bottom: 100px;">  
                         <table class="table"> 
                             <thead>
                                 <tr> 

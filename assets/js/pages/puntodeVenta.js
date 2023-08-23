@@ -643,7 +643,7 @@ const app = new Vue({
                     closeOnConfirm: false
                     },
                     function(){
-                        window.location = './index.php?action=cotizaciones'
+                        window.location = './index.php?action=puntodeVenta'
                     });
             }else {
                 console.log(response);
