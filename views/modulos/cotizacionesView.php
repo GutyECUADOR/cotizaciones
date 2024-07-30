@@ -87,7 +87,7 @@ $vendedores = $cotizacion->getVendedores();
 
                             <div class="form-group formextra col-lg-2">
                                 <span class="input-group-addon bordederecho">Almacen</span>
-                                    <select class="form-control input-sm centertext" disabled>
+                                    <select class="form-control input-sm centertext">
                                         <?php
                                         foreach ($bodegas as $bodega => $row) {
 

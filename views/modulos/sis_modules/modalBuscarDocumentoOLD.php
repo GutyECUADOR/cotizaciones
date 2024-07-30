@@ -14,8 +14,8 @@
             </div>
 
             <div class="input-group select-group">
-                <input type="text" id="terminoBusquedaModalDocument" placeholder="Termino de busqueda..." class="form-control" value="%" style="width: 75%;"/>
-                <select id="tipoBusquedaModalProducto" class="form-control input-group-addon" style="width: 25%;">
+                <input type="text"  placeholder="Termino de busqueda..." class="form-control" value="%" style="width: 75%;"/>
+                <select id="terminoBusquedaModalDocument" class="form-control input-group-addon" style="width: 25%;">
                     <?php
                     foreach ($tiposDOC as $grupo => $row) {
 

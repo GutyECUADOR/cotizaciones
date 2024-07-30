@@ -322,7 +322,7 @@ class AjaxModel extends Conexion  {
         WHERE 
             VEN.TIPO = @P1  AND VEN.OFI = @P2  AND Ven.fecha BETWEEN @P3  AND @P4  AND CLI.NOMBRE LIKE @P5
         ORDER BY VEN.FECHA DESC,VEN.TIPO,VEN.NUMERO'
-        ,'PRO','99','$fechaINI','$fechaFIN','$stringBusqueda%'
+        ,'COT','99','$fechaINI','$fechaFIN','$stringBusqueda%'
 
         ";
         $stmt = $this->instancia->prepare($query); 
