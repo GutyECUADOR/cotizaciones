@@ -291,8 +291,9 @@ $(document).ready(function() {
        if (newProducto != null) {
            
             //Get content of tinimce and reset
-            let text = tinyMCE.get('extraDetailContent').getContent();
-            newProducto.descripcion = text;
+           //let text = tinyMCE.get('extraDetailContent').getContent();
+           newProducto.descripcion = "";
+           
            
 
             addProductToList(newProducto);
@@ -385,7 +386,7 @@ $(document).ready(function() {
     $("#btnSendCustomEmail").on("click", function(event) {
         alert('Enviando, espere...');
         $(this).attr("disabled", true);
-        tinyMCE.triggerSave();
+        //tinyMCE.triggerSave();
         let IDDocument = $('#emailIDDocument').val();
         let emails = $('#emailDestinatario').val();
         let menssage = $('#mailContent').val();
@@ -438,7 +439,7 @@ $(document).ready(function() {
             return productoEnArray.codigo === newProducto.codigo;
         });
             
-        if (existeInArray === -1){ // No existe el producto en el array
+        if (true){ // No existe el producto en el array
             cotizacion.productos.push(newProducto);
             resetnewProducto();
         }else{
@@ -472,8 +473,9 @@ $(document).ready(function() {
         document.getElementById("inputNuevoProductoStock1").value = "";
         document.getElementById("inputNuevoProductoStock2").value = "";
         document.getElementById("inputNuevoProductoStock3").value = "";
+        document.getElementById("inputNuevoProductoStock4").value = "";
 
-        tinyMCE.get('extraDetailContent').setContent('');
+        //tinyMCE.get('extraDetailContent').setContent('');
         
         
     }
@@ -484,6 +486,7 @@ $(document).ready(function() {
        document.getElementById("inputNuevoProductoStock1").value = parseFloat(producto.stock).toFixed(2);
        document.getElementById("inputNuevoProductoStock2").value = parseFloat(producto.stock1).toFixed(2);
        document.getElementById("inputNuevoProductoStock3").value = parseFloat(producto.stock2).toFixed(2);
+       document.getElementById("inputNuevoProductoStock4").value = parseFloat(producto.stock3).toFixed(2);
        document.getElementById("inputNuevoProductoPrecioUnitario").value = producto.precio;
        document.getElementById("inputNuevoProductoSubtotal").value = producto.getSubtotal();
     }
@@ -540,17 +543,44 @@ $(document).ready(function() {
         console.log(arrayProductos)
         $('#tblResultadosBusquedaProductos').find("tr:gt(0)").remove();
         let cont = 1;
-        let precioDisplay = 'Precio_'+cotizacion.cliente.tipoPrecio;
+        let precioDisplay
+        console.log(cotizacion.cliente.tipoPrecio);
+        switch (cotizacion.cliente.tipoPrecio) {
+            case 'A':
+                precioDisplay = 'PREC'+cotizacion.cliente.tipoPrecio;
+                break;
+            
+            case 'B':
+                precioDisplay = 'Prec'+cotizacion.cliente.tipoPrecio;
+                break;
+
+            case 'C':
+                precioDisplay = 'Prec'+cotizacion.cliente.tipoPrecio;
+                break;
+
+            case 'D':
+                precioDisplay = 'Prec'+cotizacion.cliente.tipoPrecio;
+                break;
+            
+            case 'E':
+                precioDisplay = 'Prec'+cotizacion.cliente.tipoPrecio;
+                break;
+        
+            default:
+                precioDisplay = 'PREC'+cotizacion.cliente.tipoPrecio;
+                break;
+        }
+       
         console.log(precioDisplay);
         arrayProductos.forEach(producto => {
             let row = `
             <tr>
                 <th scope="row">${cont}</th> 
-                <td>${producto.Codigo}</td>
-                <td>${producto.Nombre}</td>
-                <td>${parseFloat(producto[precioDisplay].trim()).toFixed(4)}</td>
-                <td>${producto.Stock.trim()}</td>
-                <td><button type="button" class="btn btn-primary btn-sm btn-block btnSeleccionaProducto" data-codigo="${producto.Codigo.trim()}"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></button></td>
+                <td>${producto.CODIGO}</td>
+                <td>${producto.NOMBRE}</td>
+                <td>${parseFloat(producto[precioDisplay]?.trim()).toFixed(4) || 0}</td>
+                <td>${producto.STOCK.trim()}</td>
+                <td><button type="button" class="btn btn-primary btn-sm btn-block btnSeleccionaProducto" data-codigo="${producto.CODIGO.trim()}"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></button></td>
                 
             </tr>
                 `;
@@ -579,7 +609,7 @@ $(document).ready(function() {
                         <button class="btn btn-primary btn-sm btn-block dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Opciones <span class="caret"></span>
                         </button>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu pull-right">
                             <li><a href="#" data-codigo="${documento.id.trim()}" class="btnModalGeneraPDF"> <span class="glyphicon glyphicon-save-file" aria-hidden="true"></span> Generar PDF</a></li>
                             <li><a href="#" data-codigo="${documento.id.trim()}" class="btnModalSendEmail"> <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Enviar por email (default)</a></li>
                             <li><a href="#" data-codigo="${documento.id.trim()}" class="btnModalSendCustomEmail"> <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Enviar por email (personalizado)</a></li>
@@ -613,7 +643,6 @@ $(document).ready(function() {
                 if (response.data) {
                     const myCliente = new Cliente(cliente.RUC, cliente.NOMBRE, cliente.EMAIL, cliente.TELEFONO, cliente.VENDEDOR, cliente.TIPOPRECIO, cliente.DIASPAGO, cliente.FPAGO);
                     cotizacion.cliente = myCliente;
-                    console.log(cotizacion);
     
                     $('#inputCodigo').val(cliente.CODIGO.trim());
                     $('#inputNombre').val(cliente.NOMBRE.trim());
@@ -658,6 +687,7 @@ $(document).ready(function() {
                     newProducto = new Producto(producto.CODIGO, producto.NOMBRE, 1, producto.PRECIO, 0, producto.STOCK, producto.TIPOIVA || 0, parseFloat(producto.VALORIVA));
                     newProducto.stock1 = producto.STOCK2;
                     newProducto.stock2 = producto.STOCK3;
+                    newProducto.stock3 = producto.STOCK4;
                     printDataProducto(newProducto);
                     console.log(newProducto);
                 } else {
@@ -926,52 +956,43 @@ $(document).ready(function() {
             });
     }
 
-    function loadDataByDocument(IDDocument) {
+    async function loadDataByDocument(IDDocument) {
         if (confirm('Está seguro que desea cargar la informacion del documento: ' +IDDocument + '?, esto borrara la informacion ingresada actualmente.')) {
             
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                animation : true,
-                timer: 5000
-                
-              });
-    
-            fetch(`./api/cotizaciones/index.php?action=getInfoVENCAB&IDDocument=${ IDDocument }`)
-                .then(function(response) {
+                const responseCAB = await fetch(`./api/cotizaciones/index.php?action=getInfoVENCAB&IDDocument=${ IDDocument }`)
+                .then(response => {
                     return response.json();
-                })
-                .then(function(data) {
-                    let VEN_CAB = data.data;
-                    $("#inputRUC").val(VEN_CAB.RUC);
-                    validaCliente();
-
-                    // Carga de VEN_MOV
-                    fetch(`./api/cotizaciones/index.php?action=getInfoVENMOV&IDDocument=${ IDDocument }`)
-                    .then(function(response) {
-                        return response.json();
-                    })
-                    .then(function (data){
-                        let VEN_MOV = data.data;
-                        console.log(VEN_MOV);
-                        cotizacion.productos = [];
-                        VEN_MOV.forEach(producto => {
-                            let loadproducto = new Producto(producto.CODIGO.trim(), producto.Nombre.trim(), parseInt(producto.CANTIDAD), parseFloat(producto.PRECIO), 0, 0, producto.tipoiva, parseInt(producto.IVA));
-                            console.log(loadproducto);
-                            cotizacion.productos.push(loadproducto);
-                            //console.log(cotizacion.productos);
-                            printProductos(cotizacion.productos);
-                            let objectResumen = resumenProdutosInList();
-                            printResumen(objectResumen);
-                        });
-
-                        console.log(cotizacion);
-                    })
-                   
                 }).catch(function(err) {
                     console.error(err);
                 });
+
+
+                // Carga de VEN_MOV
+                const responseMOV = await fetch(`./api/cotizaciones/index.php?action=getInfoVENMOV&IDDocument=${ IDDocument }`)
+                .then(response => {
+                    return response.json();
+                }).catch(function(err) {
+                    console.error(err);
+                });
+
+               console.log(responseMOV);
+
+                let VEN_MOV = responseMOV.data;
+                   
+                cotizacion.productos = [];
+                VEN_MOV.forEach(producto => {
+                    let loadproducto = new Producto(producto.CODIGO.trim(), producto.Nombre.trim(), parseInt(producto.CANTIDAD), parseFloat(producto.PRECIO), 0, 0, producto.tipoiva, parseInt(producto.IVA));
+                    console.log(loadproducto);
+                    cotizacion.productos.push(loadproducto);
+                    printProductos(cotizacion.productos);
+                    let objectResumen = resumenProdutosInList();
+                    printResumen(objectResumen);
+                });
+
+                let VEN_CAB = responseCAB.data;
+                $("#inputRUC").val(VEN_CAB.RUC);
+                validaCliente();
+                console.log(cotizacion);
 
         }
     }

@@ -25,7 +25,7 @@
             <div class="panel panel-default"> 
                 <div class="panel-heading">Resultados: <strong>{{search_cliente.results.length}}</strong></div> 
                 <div class="table-responsive">  
-                    <table class="table"> 
+                    <table class="table table-bordered">
                         <thead>
                             <tr> 
                                 <th>Codigo</th>

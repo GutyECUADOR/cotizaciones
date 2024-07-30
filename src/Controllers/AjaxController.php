@@ -1,27 +1,22 @@
 <?php namespace App\Controllers;
 
-use App\Models\AjaxModel;
-use App\Models\VenCabClass;
-use App\Models\VenMovClass;
-use App\Models\WinfenixModel;
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-use Mpdf\Mpdf;
+    use App\Models\AjaxModel;
+    use App\Models\VenCabClass;
+    use App\Models\VenMovClass;
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\Exception;
+    use \Mpdf\Mpdf;
 
 class AjaxController  {
 
     public $defaulDataBase;
     public $ajaxModel;
-    public $winfenixModel;
 
     public function __construct() {
         $this->defaulDataBase = (!isset($_SESSION["empresaAUTH".APP_UNIQUE_KEY])) ? DEFAULT_DBName : $_SESSION["empresaAUTH".APP_UNIQUE_KEY] ;
         $this->ajaxModel = new AjaxModel();
         $this->ajaxModel->setDbname($this->defaulDataBase);
         $this->ajaxModel->conectarDB();
-        $this->winfenixModel = new WinfenixModel();
-        $this->winfenixModel->setDbname($this->defaulDataBase);
-        $this->winfenixModel->conectarDB();
     }
   
     /* Retorna la respuesta del modelo ajax*/
@@ -50,8 +45,7 @@ class AjaxController  {
 
     /* Retorna la respuesta del modelo ajax*/
     public function getVEN_MOVController($IDDocument){
-        $response = $this->ajaxModel->getVENMOVByID($IDDocument);
-        return $response;
+        return $this->ajaxModel->getVENMOVByID($IDDocument);
     }
 
     /* Retorna la respuesta del modelo ajax*/
@@ -59,6 +53,8 @@ class AjaxController  {
         $response = $this->ajaxModel->getInfoUsuarioModel($codigoUsuario);
         return $response;
     }
+
+    
 
     /* Retorna la respuesta del modelo ajax*/
     public function getAllClientesController($terminoBusqueda, $tipoBusqueda){
@@ -68,44 +64,23 @@ class AjaxController  {
 
     /* Retorna la respuesta del modelo ajax*/
     public function getAllProductosController($terminoBusqueda, $tipoBusqueda){
-        $response = $this->ajaxModel->Sp_INVCONARTWAN($terminoBusqueda, $tipoBusqueda);
+        $response = $this->ajaxModel->getAllProductosModel($terminoBusqueda, $tipoBusqueda);
         return $response;
     }
 
     /* Retorna la respuesta del modelo ajax*/
-    public function getAllDocumentosController(object $busqueda){
-        $response = $this->ajaxModel->getAllDocumentosModel($busqueda);
+    public function getAllDocumentosController($fechaINI, $fechaFIN, $stringBusqueda){
+        $response = $this->ajaxModel->getAllDocumentosModel($fechaINI, $fechaFIN, $stringBusqueda);
         return $response;
     }
 
     /* Retorna la respuesta del modelo ajax*/
     public function getInfoProductoController($codigoProducto, $clienteRUC){
-        $bodega = $_SESSION["bodegaDefault".APP_UNIQUE_KEY];
-        $producto = $this->ajaxModel->getInfoProductoModel($codigoProducto, 'A', $bodega);
-        $promocion = false;
-        $response = array('producto' => $producto, 'promocion' => $promocion);
+        $tipoPrecio = $this->ajaxModel->getInfoClienteModel($clienteRUC)['TIPOPRECIO'];
+        $response = $this->ajaxModel->getInfoProductoModel($codigoProducto, $tipoPrecio);
         return $response;
     }
 
-    public function getInfoPromocionController($codPromo){
-        $response = $this->ajaxModel->getInfoPromoModel($codPromo);
-        return $response;
-    }
-
-    public function getInfoPromocionByCodController($codPromo, $formaPago){
-        $response = $this->ajaxModel->getInfoPromoModelByFormaPago($codPromo, $formaPago);
-        return $response;
-    }
-
-    public function getVendedorByCodController($codVendedor){
-        $response = $this->ajaxModel->getVendedoreWFByCodigo($codVendedor);
-        return $response;
-    }
-
-    public function saveNuevoClienteController($formData){
-        $newCodigo = $this->ajaxModel->getNextNumClienteWF(); //Codigo en formado 000XXX
-        return $this->ajaxModel->insertNuevoCliente($formData, $newCodigo);
-    }
 
     /* Retorna la respuesta del modelo ajax*/
     public function insertExtraDataController($extraDataArray){
@@ -136,7 +111,7 @@ class AjaxController  {
                 $datosCliente = $this->getInfoClienteController($formData->cliente->RUC);
 
                 //Creamos nuevo codigo de VEN_CAB (secuencial)
-                $newCodigo =  $this->ajaxModel->getNextNumDocWINFENIX($tipoDOC, $this->defaulDataBase); // Recuperamos secuencial de SP de Winfenix
+                $newCodigo =  $this->ajaxModel->getNextNumDocWINFENIX($tipoDOC); // Recuperamos secuencial de SP de Winfenix
                 $newCodigoWith0 =  $this->ajaxModel->formatoNextNumDocWINFENIX($this->defaulDataBase, $newCodigo); // Asignamos formato con 0000X
 
                 $new_cod_VENCAB = $datosEmpresa['Oficina'].$datosEmpresa['Ejercicio'].$tipoDOC.$newCodigoWith0;
@@ -167,7 +142,7 @@ class AjaxController  {
                 $VEN_CAB->setObservacion('WebForms, ' . $formData->comentario);
                 
                 //Registro en VEN_CAB y MOV mantenimientosEQ
-                $response_VEN_CAB =  $this->ajaxModel->insertVEN_CAB($VEN_CAB, $this->defaulDataBase);
+                $response_VEN_CAB =  $this->ajaxModel->insertVEN_CAB($VEN_CAB);
 
                 $arrayVEN_MOVinsets = array();
 
@@ -190,12 +165,12 @@ class AjaxController  {
                         $VEN_MOV->setCantidad($producto->cantidad);
                         $VEN_MOV->setPrecioProducto($producto->precio);
                         $VEN_MOV->setPorcentajeDescuentoProd(0);
-                        $VEN_MOV->setTipoIVA('T00');
+                        $VEN_MOV->setTipoIVA($producto->tipoIVA);
                         $VEN_MOV->setPorcentajeIVA($producto->valorIVA);
                         $VEN_MOV->setPrecioTOTAL($VEN_MOV->calculaPrecioTOTAL());
                         $VEN_MOV->setObservacion('');
                         
-                        $response_VEN_MOV =  $this->ajaxModel->insertVEN_MOV($VEN_MOV, $this->defaulDataBase);
+                        $response_VEN_MOV =  $this->ajaxModel->insertVEN_MOV($VEN_MOV);
                         
                         array_push($arrayVEN_MOVinsets, $response_VEN_MOV);
 
@@ -223,7 +198,167 @@ class AjaxController  {
         
     }
 
+    public function generaReporte($IDDocument, $outputMode = 'S'){
+
+       $empresaData = $this->getInfoEmpresaController();
+       $VEN_CAB = $this->getVEN_CABController($IDDocument);
+       $VEN_MOV = $this->getVEN_MOVController($IDDocument);
+       
+       $html = '
+            <div class="container-fluid">
+            <div class="row">
+                <div class="col text-center">
+                    <img src="../../assets/img/logo.png" alt="Logo" style="width: 150px;">
+                    <h5>'.$empresaData["NomCia"].'</h5>
+                    <h5>Direccion: '.$empresaData["DirCia"].'</h5>
+                    <h5>Telefono: '.$empresaData["TelCia"].'</h5>
+                    <h4 style="font-weight: bold;">PROFORMA</strong></h4>
+                </div>
+                
+            </div>
+
+            <div class="row" style="border:1px solid #000000; border-radius: 4px; padding: 5px; font-size: 12px;">
+                <div class="col-xs-6 text-left">
+                    <div><span style="font-weight: bold; text-align: right;">LOCAL:</span>('. $VEN_CAB["BODEGA"].')</div>
+                    <div><span style="font-weight: bold;">CLIENTE:</span> '.$VEN_CAB["NOMBRE"].'</div>
+                    <div><span style="font-weight: bold;">RUC:</span> '.$VEN_CAB["RUC"].'</div>
+                    <div><span style="font-weight: bold;">DIRECCION:</span> '.$VEN_CAB["DIRECCION1"].' </div>
+                    <div><span style="font-weight: bold;">TELEFONO:</span> '.$VEN_CAB["TELEFONO1"].' </div>
+                    
+                </div>
+                <div class="col-xs-4 text-left">
+                    <div><span style="font-weight: bold;">SISTEMA # </span> '.$VEN_CAB["TIPO"].'-'.$VEN_CAB["NUMERO"].' </div>
+                    <div><span style="font-weight: bold;">FECHA # </span> '.$VEN_CAB["CREADODATE"].' </div>
+                    <div><span style="font-weight: bold;">VENDEDOR:</span>('.$VEN_CAB["CodigoVendedor"].')'. $VEN_CAB["VendedorName"].' </div>
+                </div>
+            </div>
+
+            <div class="row" style="padding-top:10px;">
+                <div class="col">
+                    <table style="border-collapse: collapse;" class="table" cellpadding="8">
+                        <thead>
+                            <tr>
+                                <td style="font-weight: bold;" class="text-center" width="15%">Codigo</td>
+                                <td style="font-weight: bold;" class="text-center" width="55%">Descripcion</td>
+                                <td style="font-weight: bold;" class="text-right" width="15%">Cant.</td>
+                                <td style="font-weight: bold;" class="text-right" width="15%">Precio</td>
+                                <td style="font-weight: bold;" class="text-right" width="10%">% Desc.</td>
+                                <td style="font-weight: bold;" class="text-right" width="15%">P. Total</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+            
+                            <!-- ITEMS HERE -->
+                            ';
+                            $cont = 1;
+                            foreach($VEN_MOV as $row){
+                                $html .= '
+                    
+                                <tr>
+                                    <td class="text-left">'.$row["CODIGO"].'</td>
+                                    <td class="text-left">'.$row["Nombre"].'</td>
+                                    <td class="text-right">'.$row["CANTIDAD"].'</td>
+                                    <td class="text-right">'.round($row["PRECIO"],4).'</td>
+                                    <td class="text-right">'.round($row["DESCU"],2).'</td>
+                                    <td class="text-right"> '.round($row["PRECIOTOT"],4).'</td>
+                                </tr>';
+                                $cont++;
+                                }
+                
+                                $html .= ' 
+                               
+                                    <tr>
+                                        <td colspan="3" rowspan="5">
+                                            <p><span style="font-weight: bold;">Observaciones:</span> '.$VEN_CAB["OBSERVA"].'</p> 
+                                        </td>
+                                        <td style="font-weight: bold;" class="text-right" colspan="2">Subtotal:</td>
+                                        <td class="text-right">'.round($VEN_CAB["BASIVA"]+$VEN_CAB["BASCERO"],4).'</td>
+                                    
+                                    </tr>
+                            
+                                    <tr>
+                                        <td style="font-weight: bold;" class="text-right" colspan="2">Base Imp 0:</td>
+                                        <td class="text-right">'.round( $VEN_CAB["BASCERO"],4).'</td>
+                                    </tr>
+                            
+                                    <tr>
+                                        <td style="font-weight: bold;" class="text-right" colspan="2">Base Imp:</td>
+                                        <td class="text-right">'.round($VEN_CAB["SUBTOTAL"],4).'</td>
+                                    </tr>
+                                    
+
+                                    $VEN_CAB["BASCERO"]
+                            
+                                    <tr>
+                                        <td style="font-weight: bold;" class="text-right" colspan="2">IVA 15%:</td>
+                                        <td class="text-right">'.round($VEN_CAB["IMPUESTO"],4).'</td>
+                                    </tr>
+                            
+                                    <tr>
+                                        <td style="font-weight: bold;" class="text-right" colspan="2"><b>Total a Pagar:</b></td>
+                                        <td class="text-right"><b>'.round($VEN_CAB["TOTAL"],4).'</b></td>
+                                    </tr>
+                        
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="row" style="border:1px solid #000000; border-radius: 4px; padding: 5px; font-size: 12px;">
+                <div class="col-xs-3 text-center">
+                   <span style="font-weight: bold;">Aprobado por</span>
+                </div>
+                <div class="col-xs-3 text-center">
+                    <span style="font-weight: bold;">Recibi conforme</span>
+                </div>
+                <div class="col-xs-4 text-center">
+                    <div><span style="font-weight: bold;">FAVOR EMITIR EL CHEQUE A NOMBRE '.$empresaData["NomCia"].'</span> </div>
+                    <div><span>Estos precios NO incluyen costo de flete, Cotización Válida por 8 dias.</span> </div>
+                </div>
+            </div> 
+
+            <div class="row">
+                <div class="col-xs-12 text-center">
+                    <h5 style="font-weight: bold;">ES UN PLACER ATENDERLE</h5>
+                </div>
+            </div>
+          
+        ';
+        
+       
+
+        //==============================================================
+        //==============================================================
+        //==============================================================
+
+        /* require_once '../../../vendor/autoload.php'; */
+        $mpdf = new mPDF();
+
+        // LOAD a stylesheet
+        $stylesheet = file_get_contents('../../assets/css/bootstrap.min.css');
+        $stylesheet2 = file_get_contents('../../assets/css/reportesStyles.css');
+        $mpdf->WriteHTML($stylesheet,1);	// The parameter 1 tells that this is css/style only and no body/html/text
+        $mpdf->WriteHTML($stylesheet2,1);	
+        $html = mb_convert_encoding($html, 'UTF-8', 'UTF-8');
+        $mpdf->SetTitle("Proforma - ".$IDDocument);
     
+        $mpdf->SetHTMLHeader('
+        <div style=" text-align: right;">
+            <h5 style="font-size: 10px;">Página: {PAGENO} de {nbpg}</h5> 
+            <h5 style="font-size: 10px;">'.$IDDocument.'</h5>
+        </div> ');
+        $mpdf->WriteHTML($html);
+        if ($outputMode == 'F') {
+            $ID = "../../assets/docs./$IDDocument";
+        }
+        
+        return $mpdf->Output($IDDocument.'.pdf', $outputMode);
+
+        //==============================================================
+        //==============================================================
+        //==============================================================
+
+    }
 
     public function getLinkImagesByDocument($IDDocument){
         $files = glob(IMAGES_UPLOAD_DIR.'/'.$IDDocument.'_*');
@@ -623,7 +758,7 @@ class AjaxController  {
                                     <tbody>
                                         <tr>
                                         <td style="text-align: center">
-                                        <img src="http://www.agricolabaquero.com/img/resources/logo.png" alt="Logo"> </td>
+                                        <img src="http://www.adfolsa.com.ec/img/resources/logo.png" alt="Logo"> </td>
                                         </tr>
                                     </tbody>
                                     </table>
@@ -694,7 +829,7 @@ class AjaxController  {
 
     }
 
-    /* ATECION LOS DATOS DE CUERPO Y LOGS DEBEN NO DEBEN SER MODIFICADOS ESTAS DIRECCIONADOS PARA AJAX */
+     /* ATECION LOS DATOS DE CUERPO Y LOGS DEBEN NO DEBEN SER MODIFICADOS ESTAS DIRECCIONADOS PARA AJAX */
     public function sendCotizacion($IDDocument){
        
 
@@ -781,6 +916,7 @@ class AjaxController  {
 
     }
 
+    
      /* ATECION LOS DATOS DE CUERPO Y LOGS DEBEN NO DEBEN SER MODIFICADOS ESTAS DIRECCIONADOS PARA AJAX */
     public function sendCotizacionToEmails($arrayEmails, $IDDocument, $customMesagge){
        
@@ -835,7 +971,7 @@ class AjaxController  {
            
             
             // Adjuntos
-            $mail->addStringAttachment($this->generaReporte($IDDocument), 'cotizacion.pdf');
+            $mail->addStringAttachment($this->generaReporte($IDDocument), 'cotizacion-'.$IDDocument.'.pdf');
 
             $mail->send();
             $detalleMail = 'Correo ha sido enviado a : '. $arrayEmails;
@@ -851,7 +987,7 @@ class AjaxController  {
                 "-------------------------".PHP_EOL;
                 //Save string to log, use FILE_APPEND to append.
 
-                file_put_contents('../../../logs/logMailOK.txt', $log, FILE_APPEND );
+                file_put_contents('../../logs/logMailOK.txt', $log, FILE_APPEND );
             
             return array('status' => 'ok', 'mensaje' => $detalleMail ); 
 
@@ -863,41 +999,15 @@ class AjaxController  {
                 $pcID = php_uname('n'); // Obtiene el nombre del PC
                 $log  = "User: ".$ip.' - '.date("F j, Y, g:i a").PHP_EOL.
                 "PCid: ".$pcID.PHP_EOL.
-                "Detail: ".$mail->ErrorInfo .' No se pudo enviar correo a: ' . $arrayCorreos . PHP_EOL.
+                "Detail: ".$mail->ErrorInfo .' No se pudo enviar correo a: ' . $userEmail . PHP_EOL.
                 "-------------------------".PHP_EOL;
                 //Save string to log, use FILE_APPEND to append.
-                file_put_contents('../../../logs/logMailError.txt', $log, FILE_APPEND);
+                file_put_contents('../../logs/logMailError.txt', $log, FILE_APPEND);
                 $detalleMail = 'Error al enviar el correo. Mailer Error: '. $mail->ErrorInfo;
             return array('status' => 'false', 'mensaje' => $detalleMail ); 
             
         }
 
-    }
-
-
-    /* INVENTARIO */
-
-    function getProducto(string $busqueda) {
-        $producto = $this->ajaxModel->getProducto($busqueda);
-        $unidades_medida = $this->ajaxModel->getUnidadesMedida($busqueda);
-        return array('producto' => $producto, 'unidades_medida' => $unidades_medida);
-    }
-
-    function getCostoProducto(object $busqueda) {
-        $response = $this->ajaxModel->getCostoProducto($busqueda);
-        return $response;
-    }
-
-    function getProductos(string $busqueda) {
-        $response = $this->ajaxModel->getProductos($busqueda);
-        return $response;
-    }
-
-    function saveInventario(object $documento) {
-        $egreso = $this->ajaxModel->Winfenix_SaveEgreso($documento);
-        $ingreso = $this->ajaxModel->Winfenix_SaveIngreso($documento);
-      
-        return  array('egreso'=> $egreso, 'ingreso'=> $ingreso);
     }
 
 

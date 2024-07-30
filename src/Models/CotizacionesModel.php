@@ -13,6 +13,7 @@ class CotizacionesModel extends Conexion  {
         $query = " 
             
         SELECT 
+            CLIENTE.*,
             CLIENTE.CODIGO, 
             RTRIM(CLIENTE.NOMBRE) as NOMBRE, 
             RTRIM(CLIENTE.EMPRESA) as EMPRESA, 
@@ -28,8 +29,8 @@ class CotizacionesModel extends Conexion  {
             RTRIM(CLIENTE.DIASPAGO) as DIASPAGO, 
             RTRIM(CLIENTE.TIPOPRECIO) as TIPOPRECIO 
         FROM 
-            dbo.COB_CLIENTES as CLIENTE INNER JOIN
-            dbo.COB_VENDEDORES as VENDEDOR ON VENDEDOR.CODIGO = CLIENTE.VENDEDOR
+            dbo.COB_CLIENTES as CLIENTE WITH(NOLOCK) INNER JOIN
+            dbo.COB_VENDEDORES as VENDEDOR WITH(NOLOCK) ON VENDEDOR.CODIGO = CLIENTE.VENDEDOR
         WHERE 
             RUC='$RUC'";  
 
@@ -72,6 +73,11 @@ class CotizacionesModel extends Conexion  {
 
     public function insertNuevoCliente($formData, $newcodigo){
         $fecha = date('Ymd');
+
+        if ($this->SQL_getCliente($formData->RUC)) {
+            throw new \Exception("El RUC/DNI ya se encuentra registrado en la tabla CLIENTES.");
+        }
+
         $query = "
             INSERT INTO COB_CLIENTES
                 (OFICINA,CODIGO,NOMBRE,VENDEDOR,CODVENOLD,GRUPO,CONTACTO,EMPRESA,CUENTA,CUENTA2,ESVARIOS,RUC,DIRECCION1,DIRECCION2,TELEFONO1,TELEFONO2,TELEFONO3,CODPOS,FAX,FAXPED,EMAIL,EMAIL2,PAGWEB,DIVISA,IDIOMA,NOTA,FPAGO,DIASPAGO,TIPOPRECIO,PORDES,TIPOCLI,LIMITECRED,DIRENV,DIRENV1,TELENV,GNOMBRE,GCEDULA,GEMPRESA,GDIRECCION,GTELEFONO1,GTELEFONO2,CELULAR,GNOTA,PWD,WEBDERECHO,WEBAVISO,WEBNOTA,LIBRE,CURSO,ESTUDIA,SALDO,ULTIMAVENTA,ULTIMOCOBRO,ESTADO,CREADOPOR,EDITADOPOR,ANULADOPOR,CREADODATE,EDITADODATE,ANULADODATE,PCID,CLASE,NEGOCIO,PAIS,PROVINCIA,CANTON,REQ_ANTICIPO,TIPOIDENT,PROMOCION,CODCOMRELA,DIVISION,ACTIVIDAD1,ACTIVIDAD2,REPRESENTA,CEDREPRESENTA,RECAUDADOR,CONDICION,NUMPAG,ENTREPAG,TIPOPAGO,CONDPAGO,PROVCLIENTE,FECEXPIRAN,CONTACTO1,MAILCON1,EXTCON1,CELCON1,CONTACTO2,MAILCON2,EXTCON2,CELCON2,CONTACTO3,MAILCON3,EXTCON3,CELCON3,SOBRECUPO,DIASGRACIA,DIADEPAGO,HORADEPAGO,GARANTIAS,CODTARJETA,EMITARJETA,VENTARJETA,PORTARJETA,PORTARJETAEFE,PORTARJETACHE,PORTARJETATAR,PORANTICIPO,CONTACTOPAGO,FECHAALTA,WEBENVEMAIL,PARTEREL,TIPCLI) 
@@ -80,7 +86,7 @@ class CotizacionesModel extends Conexion  {
         
         try{
             $rowsAfected = $this->instancia->exec($query);
-           return array('status' => 'OK', 'message' => $rowsAfected. ' fila afectada(s)' ); //true;
+           return array('status' => 'OK', 'message' => $rowsAfected. ' cliente creado, código de cliente: '. $newcodigo ); //true;
            
         }catch(\PDOException $exception){
             http_response_code(400);
@@ -89,7 +95,7 @@ class CotizacionesModel extends Conexion  {
 
     }
 
-    public function getProducto(string $busqueda) {
+    public function getProducto(string $codigo) {
         $query = "
             SELECT TOP 1
                 INV_ARTICULOS.Codigo,
@@ -98,18 +104,37 @@ class CotizacionesModel extends Conexion  {
                 Costo = (SELECT dbo.DimecostoProm('99', :codigoCosto,'') as Costo),
                 Stock = (SELECT dbo.DimeStockFis('99', :codigoStock,'' ,'') as Stock),
                 INV_ARTICULOS.TipoArticulo,
+                INV_ARTICULOS.Grupo,
                 INV_ARTICULOS.PrecA,
                 INV_ARTICULOS.Peso,
                 INV_ARTICULOS.TipoIVA,
                 RTRIM(IVA.VALOR) as ValorIVA
-            FROM INV_ARTICULOS 
-            INNER JOIN dbo.INV_IVA AS IVA on IVA.CODIGO = INV_ARTICULOS.TipoIva
+            FROM INV_ARTICULOS WITH(NOLOCK) 
+            INNER JOIN dbo.INV_IVA AS IVA WITH(NOLOCK) on IVA.CODIGO = INV_ARTICULOS.TipoIva
             WHERE INV_ARTICULOS.Codigo = :codigo"; 
 
         $stmt = $this->instancia->prepare($query);
-        $stmt->bindParam(':codigoCosto', $busqueda); 
-        $stmt->bindParam(':codigoStock', $busqueda); 
-        $stmt->bindParam(':codigo', $busqueda); 
+        $stmt->bindParam(':codigoCosto', $codigo); 
+        $stmt->bindParam(':codigoStock', $codigo); 
+        $stmt->bindParam(':codigo', $codigo); 
+       
+            if($stmt->execute()){
+                $resulset = $stmt->fetch( \PDO::FETCH_ASSOC );
+            }else{
+                $resulset = false;
+            }
+        return $resulset;  
+    }
+
+    public function getDescuento(object $busqueda) {
+        $grupoProducto = $busqueda->grupoProducto.'%';
+        $query = "
+            SELECT * FROM VEN_DESCMOV WITH(NOLOCK) WHERE CODIGO = :codigoDescuento AND CODGRUPO LIKE :grupoProducto
+        "; 
+
+        $stmt = $this->instancia->prepare($query);
+        $stmt->bindParam(':codigoDescuento', $busqueda->codigoDescuento); 
+        $stmt->bindParam(':grupoProducto', $grupoProducto); 
        
             if($stmt->execute()){
                 $resulset = $stmt->fetch( \PDO::FETCH_ASSOC );

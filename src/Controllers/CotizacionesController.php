@@ -47,12 +47,8 @@ class CotizacionesController  {
         return $this->model->getProducto($codigo);
     }
 
-    public function getStock(object $busqueda) {
-        $response = array('stock' => $this->model->SQL_getStock($busqueda->texto),
-                          'stockComponentes' => $this->model->SQL_getStockComponentes($busqueda),
-                          'stockRetazos' => $this->model->SQL_getStockRetazos($busqueda->texto)
-                        );
-        return $response; 
+    public function getDescuento(object $busqueda) {
+        return $this->model->getDescuento($busqueda);
     }
 
     public function getBodegas(){
@@ -103,7 +99,11 @@ class CotizacionesController  {
     public function saveCotizacion(object $documento){
         $response =  $this->winfenixModel->SP_VENGRACAB($documento);
         return $response;
+    }
 
+    public function getProveedores(object $busqueda){
+        $response =  $this->winfenixModel->SP_PAGCONPRO($busqueda);
+        return $response;
     }
     
 

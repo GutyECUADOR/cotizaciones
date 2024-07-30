@@ -12,6 +12,7 @@ class LoginController  {
     {
         $this->loginModel = new LoginModel();
         $this->winfenixModel = new WinfenixModel();
+        
     }
     
     public function loadtemplate() {
@@ -21,33 +22,48 @@ class LoginController  {
     public function actionCatcherController(){
         if (isset($_POST['login_username']) && isset($_POST['login_password']) && isset($_POST['select_empresa'])) {
                 $codigoDB = $_POST['select_empresa']; // recuperamos el codigo del select
-                $arrayDatos = array("usuario"=>$_POST['login_username'],"password"=>$_POST['login_password']);
+                $arrayDatos = array("usuario"=>strtoupper($_POST['login_username']),"password"=>$_POST['login_password']);
                 $preaction = !empty($_POST['preaction']) ? $_POST['preaction'] : 'inicio';
 
                 //$dataBaseName = $this->loginModel->getDBNameByCodigo($codigoDB); // Obtenemos nombre de la DB segun codigo, retorno de un array
                 $arrayResultados = $this->loginModel->validaIngreso($arrayDatos, $codigoDB); // Validamos info del usuario en esa DB
+                if (!$arrayResultados) {
+                    echo '
+                    <div class="alert alert-danger text-center">
+                        Credenciales para el usuario: <strong>'. $arrayDatos['usuario'].' </strong> no válidas, reintente.
+                
+                    </div>';
+                    return ;
+                }
                 $arrayModulosAccess = $this->loginModel->getModulosAccess($arrayResultados); // Retorna la lista de rutas disponibles para el tipo de usuario
+                $arrayBodegaDefualt = $this->winfenixModel->SQL_getBodegaDefault($arrayDatos['usuario'], $codigoDB);
                 $arrayDatosEmpresa = $this->winfenixModel->getDatosEmpresa();
+                $arrayTramacoKEYS = $this->loginModel->validaTramacoKEYS($codigoDB); //Obetenemos las credenciales para el API Taramaco
 
                 //Funcion validar acceso retorna array de resultados
-                    if (!empty($arrayResultados)) {
+                    if (trim($arrayResultados['Codigo']) == trim($arrayDatos['usuario'])) {
                         session_start();
-                        $_SESSION["usuarioRUC".APP_UNIQUE_KEY] =  $arrayResultados['Codigo'];
-                        $_SESSION["usuarioNOMBRE".APP_UNIQUE_KEY] =  $arrayResultados['Nombre'];
+                        $_SESSION["usuarioRUC".APP_UNIQUE_KEY] =  $arrayResultados['Codigo'] ;
+                        $_SESSION["usuarioNOMBRE".APP_UNIQUE_KEY] = trim($arrayResultados['Nombre']);
                         $_SESSION["isSupervisor".APP_UNIQUE_KEY] = $arrayResultados['Supervisor'];
                         $_SESSION["usuarioGRUPO".APP_UNIQUE_KEY] = trim($arrayResultados['Grupo']);
-                        $_SESSION["arrayModulosAccess".APP_UNIQUE_KEY] = array_map('trim', $arrayModulosAccess);
-                        $_SESSION["empresaNombre".APP_UNIQUE_KEY] = trim($arrayDatosEmpresa['NomCia']);
+                        $_SESSION["arrayModulosAccess".APP_UNIQUE_KEY] = array_map('trim', $arrayModulosAccess);;
                         $_SESSION["empresaRUC".APP_UNIQUE_KEY] = trim($arrayDatosEmpresa['RucCia']);
+                        $_SESSION["empresaNombre".APP_UNIQUE_KEY] = trim($arrayDatosEmpresa['NomCia']);
                         $_SESSION["empresaAUTH".APP_UNIQUE_KEY] = $codigoDB;
-                        $_SESSION["bodegaDefault".APP_UNIQUE_KEY] = 'B01';
+                        $_SESSION["bodegaDefault".APP_UNIQUE_KEY] = $arrayBodegaDefualt['CODIGO'];
+                        $_SESSION["DEFAULT_TRAMACO_SERVER".APP_UNIQUE_KEY] = trim($arrayTramacoKEYS['URL']);
+                        $_SESSION["DEFAULT_TRAMACO_USER".APP_UNIQUE_KEY] = trim($arrayTramacoKEYS['usuario']);
+                       
+                        
                         header("Location: index.php?&action=$preaction");
                     
                     }else{
                         echo '
                             <div class="alert alert-danger text-center">
-                                No se pudo ingresar con el usuario: <strong>'. $arrayDatos['usuario'] .'</strong> en la empresa seleccionada, reintente.
-                            </div>
+                            No se ha podido ingresar con el usuario <strong>'. $arrayDatos['usuario'].'</strong>, reintente.
+                    
+                        </div>
                         ';
                        
                     }
@@ -89,13 +105,12 @@ class LoginController  {
         
     }
     
-
     public function resetPassword(){
 
         if (isset($_POST['txt_recuperaMail'])&& isset($_POST['action'])) {
 
             $maildestinatario = $_POST['txt_recuperaMail'];
-            $mailenDB = $maildestinatario.";".EDOCS_MAIL;
+            $mailenDB = $maildestinatario;
            
             $arrayResultados = $this->loginModel->validaMail($mailenDB);
 
@@ -163,7 +178,7 @@ class LoginController  {
             $codigo = $opcion['dbname'];
             $texto = $opcion['nombre'];
             echo "<option value='$codigo'>$texto</option>";
-    
-        }
+
     }
+}
 }

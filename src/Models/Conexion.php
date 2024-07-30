@@ -15,7 +15,7 @@
 * Retorna FALSE si no se pudo realizar la conexión
 * 
 */
-class conexion {
+class Conexion {
     //Atributos
     private $driver, $host, $port, $user, $pass, $dbname, $charset ;
     public $instancia;

@@ -30,7 +30,7 @@
             </div>
         </div>
 
-        <!-- <div class="panel panel-default">
+        <div class="panel panel-default">
             <div class="panel-heading">Tramaco Session</div>
             <div class="panel-body">
             <?php  
@@ -38,7 +38,7 @@
               echo ' - ' . $_SESSION["DEFAULT_TRAMACO_USER".APP_UNIQUE_KEY];
             ?>
             </div>
-        </div> -->
+        </div>
 
       </div>
       <div class="modal-footer">

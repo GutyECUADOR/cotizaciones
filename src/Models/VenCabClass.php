@@ -61,7 +61,7 @@ class VenCabClass {
     }
 
     function calculaIVA(){
-        $totalIVA =  round($this->calculaSubtotal() * .12, 4);
+        $totalIVA =  round($this->calculaSubtotal() * .15, 4);
         $this->impuesto = $totalIVA;
         return $totalIVA;
     }

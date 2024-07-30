@@ -1,6 +1,7 @@
 <?php
 
 use App\Controllers\CotizacionesController;
+use App\Controllers\VentaPorMayorController;
 use App\Controllers\EmailController;
 use App\Controllers\WhatsAppController;
 use App\Controllers\FTPController;
@@ -16,6 +17,7 @@ $dotenv = Dotenv::createImmutable('../../');
 $dotenv->load();
 
 $cotizacionesController = new CotizacionesController();
+$ventaPorMayorController = new VentaPorMayorController();
 $ventasController = new VentasController();
 $emailController = new EmailController();
 $whatsAppController = new WhatsAppController();
@@ -53,10 +55,38 @@ $ftpController = new FTPController();
 
         break;
 
+        case 'getClientes_VentasPorMayor':
+          if (isset($_GET['busqueda'])) {
+            $busqueda = json_decode($_GET['busqueda']);
+            $respuesta = $ventaPorMayorController->getClientes($busqueda);
+            $rawdata = array('status' => 'OK', 'message' => 'respuesta correcta', 'clientes' => $respuesta);
+          }else{
+            http_response_code(400);
+            $rawdata = array('status' => 'ERROR', 'message' => 'No se ha indicado parámetros de búsqueda..');
+          }
+          
+          echo json_encode($rawdata);
+
+        break;
+
         case 'getCliente':
           if (isset($_GET['RUC'])) {
             $RUC = $_GET['RUC'];
             $respuesta = $cotizacionesController->getCliente($RUC);
+            $rawdata = array('status' => 'OK', 'message' => 'respuesta correcta', 'data' => $respuesta);
+          }else{
+            http_response_code(400);
+            $rawdata = array('status' => 'ERROR', 'message' => 'No se ha indicado parámetros.');
+          }
+          
+          echo json_encode($rawdata);
+
+        break;
+
+        case 'getCliente_VentasPorMayor':
+          if (isset($_GET['RUC'])) {
+            $RUC = $_GET['RUC'];
+            $respuesta = $ventaPorMayorController->getCliente($RUC);
             $rawdata = array('status' => 'OK', 'message' => 'respuesta correcta', 'data' => $respuesta);
           }else{
             http_response_code(400);
@@ -109,16 +139,17 @@ $ftpController = new FTPController();
 
         break;
 
-        case 'getStock':
+        case 'getDescuento':
           if (isset($_GET['busqueda'])) {
             $busqueda = json_decode($_GET['busqueda']);
-            $respuesta = $cotizacionesController->getStock($busqueda);
-            $rawdata = array('status' => 'OK', 'message' => 'respuesta correcta', 'data' => $respuesta);
+            $respuesta = $cotizacionesController->getDescuento($busqueda);
+            $rawdata = array('status' => 'OK', 'message' => 'Busqueda finalizada', 'descuento' => $respuesta);
+            
           }else{
             http_response_code(400);
-            $rawdata = array('status' => 'ERROR', 'message' => 'No se ha indicado parámetros de búsqueda.');
+            $rawdata = array('status' => 'ERROR', 'message' => 'No se ha recibido extra data.');
           }
-          
+        
           echo json_encode($rawdata);
 
         break;
@@ -127,13 +158,15 @@ $ftpController = new FTPController();
           if (isset($_POST['documento'])) {
             $formData = json_decode($_POST['documento']);
             $rawdata = $cotizacionesController->saveCotizacion($formData);
+            echo json_encode($rawdata);
             
           }else{
             http_response_code(400);
             $rawdata = array('status' => 'ERROR', 'message' => 'No se ha indicado parámetros.');
+            echo json_encode($rawdata);
           }
         
-          echo json_encode($rawdata);
+         
 
         break;
        
@@ -178,8 +211,6 @@ $ftpController = new FTPController();
             echo json_encode($rawdata);
           }
         
-        
-
         break;
 
         case 'getInfoProducto':
@@ -297,8 +328,6 @@ $ftpController = new FTPController();
 
         break;
 
-
-
         case 'uploadFtpFile':
           if (isset($_GET['whatsApp']) ) {
             $whatsApp = json_decode($_GET['whatsApp']);
@@ -311,6 +340,49 @@ $ftpController = new FTPController();
           echo json_encode($rawdata);
 
         break;
+
+        case 'getSaldoCliente':
+          if (isset($_GET['RUC'])) {
+            $RUC = $_GET['RUC'];
+            $respuesta = $ventaPorMayorController->getSaldo($RUC);
+            $rawdata = array('status' => 'OK', 'message' => 'respuesta correcta', 'saldo' => $respuesta);
+          }else{
+            http_response_code(400);
+            $rawdata = array('status' => 'ERROR', 'message' => 'No se ha indicado parámetros.');
+          }
+          
+          echo json_encode($rawdata);
+
+        break;
+        
+        case 'getDocsPendientesCliente':
+          if (isset($_GET['RUC'])) {
+            $RUC = $_GET['RUC'];
+            $respuesta = $ventaPorMayorController->getDocsPendientes($RUC);
+            $rawdata = array('status' => 'OK', 'message' => 'respuesta correcta', 'data' => $respuesta);
+          }else{
+            http_response_code(400);
+            $rawdata = array('status' => 'ERROR', 'message' => 'No se ha indicado parámetros.');
+          }
+          
+          echo json_encode($rawdata);
+
+        break;
+
+        case 'saveDocumento_VentasPorMayor':
+          if (isset($_POST['documento'])) {
+            $formData = json_decode($_POST['documento']);
+            $rawdata = $ventaPorMayorController->saveDocumento_VentasPorMayor($formData);
+            
+          }else{
+            http_response_code(400);
+            $rawdata = array('status' => 'ERROR', 'message' => 'No se ha indicado parámetros.');
+          }
+        
+          echo json_encode($rawdata);
+
+        break;
+
 
         default:
             $rawdata = array('status' => 'ERROR', 'message' =>'El API no ha podido responder la solicitud, revise el tipo de action');

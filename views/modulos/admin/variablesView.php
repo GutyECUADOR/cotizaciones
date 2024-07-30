@@ -61,7 +61,7 @@ $routeMiddleware->checkIsSupervidor();
                                                     </td>
                                                     <td class="text-right">
                                                         <button @click="updateVariable(variable)" class="btn btn-success btn-sm" type="button">
-                                                            <span class="fa fa-sync" aria-hidden="true"></span> Actualizar Variable
+                                                            <span class="fa fa-trash" aria-hidden="true"></span> Actualizar Variable
                                                         </button>
                                                         
                                                     </td>

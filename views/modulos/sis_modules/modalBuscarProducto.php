@@ -21,7 +21,7 @@
 
             <div class="panel panel-default"> 
                 <div class="panel-heading">Resultados</div> 
-                    <div class="table-responsive"> 
+                    <div class="responsibetable"> 
                         <table id="tblResultadosBusquedaProductos" class="table"> 
                             <thead>
                                 <tr> 

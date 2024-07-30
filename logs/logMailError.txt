@@ -22,3 +22,7 @@ User: ninguna - October 9, 2021, 10:13 am
 PCid: S1
 Detail: Message body empty No se pudo enviar correo a: gutiecuador@gmail.com
 -------------------------
+User: ninguna - August 26, 2023, 10:29 am
+PCid: S01
+Detail: SMTP Error: Could not authenticate. No se pudo enviar correo a: nduque@sudcompu.net
+-------------------------

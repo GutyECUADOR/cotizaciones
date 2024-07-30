@@ -339,7 +339,7 @@
                                 <tbody>
                                     <tr>
                                     <td style="text-align: center">
-                                    <img src="http://www.agricolabaquero.com/img/resources/logo.png" alt="Logo"> </td>
+                                    <img src="http://www.adfolsa.com.ec/img/resources/logo.png" alt="Logo"> </td>
                                     </tr>
                                 </tbody>
                                 </table>

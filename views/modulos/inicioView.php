@@ -7,17 +7,19 @@
     <div id="menu_circle">
       <div class='selector'>
           <ul>
-            
-            <li onclick="location.href='?action=ventas';">
-                <input id='c3' type='checkbox' />
-                <label for='c3' title='VENTAS'><i class="fa fa fa-shopping-bag fa-3x" aria-hidden="true"></i></i></label>   
-              </a>
+            <li>
+                <input id='opcion2' type='checkbox' />
+                <label for='opcion2' title='Ventas'><i onclick="location.href='?action=ventas';" class="fas fa-cash-register fa-3x"></i></label>
             </li>
-
+        
           </ul>
           <button id='center_logo'></button>
           
       </div>
+
+       <!-- Modal Info sesion -->
+       <?php require_once 'sis_modules/modal_info_session.php'?>
+       
     </div>
       
     <!-- USO JQUERY, y Bootstrap CDN-->

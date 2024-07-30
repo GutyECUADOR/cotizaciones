@@ -4,6 +4,7 @@ use App\Models\RouteModel;
 class RouteController {
     
     public $routeModel;
+    public $defaulDataBase;
     
     public function __construct() {
         $this->defaulDataBase = (!isset($_SESSION["empresaAUTH".APP_UNIQUE_KEY])) ? DEFAULT_DBName : $_SESSION["empresaAUTH".APP_UNIQUE_KEY] ;

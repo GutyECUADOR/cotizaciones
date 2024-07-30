@@ -19,9 +19,9 @@ class EmailController  {
       
         $arrayCorreos =  explode( ';', $arrayEmails );
 
-        $smtpserver = DEFAULT_SMTP;
-        $userEmail = DEFAULT_SENDER_EMAIL;
-        $pwdEmail = DEFAULT_EMAILPASS; 
+        $smtpserver = $_ENV['DEFAULT_SMTP'];
+        $userEmail = $_ENV['DEFAULT_SENDER_EMAIL'];
+        $pwdEmail = $_ENV['DEFAULT_EMAILPASS']; 
 
         $mail = new PHPMailer(true);  // Passing `true` enables exceptions
         try {
@@ -42,7 +42,7 @@ class EmailController  {
                 $mail->addAddress($correo, 'Cliente'); // Add a recipient
             }
 
-            $mail->AddCC(DEFAULT_EMAIL);
+            //$mail->AddCC(DEFAULT_EMAIL);
             //Content
             $mail->CharSet = "UTF-8";
             $mail->isHTML(true);                  // Set email format to HTML

@@ -7,7 +7,6 @@ $menus = $routeController->getMenus();
 $routeMiddleware = new RouteMiddleware();
 $routeMiddleware->checkisLogin();
 
-
 ?>
 
 <!-- CSS Propios -->
@@ -25,17 +24,27 @@ $routeMiddleware->checkisLogin();
           <h2>Módulo de Ventas</h2>
           
           <div class="row">
+            <?php 
+              unset($menus[0]);
+              foreach ($menus as $menu) {
+
+                if (trim($menu["activo"])) {
+                 
+            ?>
+
             <div class="col-md-4">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">Punto de Venta - Cotizaciones</h4>
-                  <h6 class="card-subtitle mb-2 text-muted">Ventas</h6>
-                  <p class="card-text">Permite crear Cotizaciones de Venta, enviarlas por email o WhatsApp.</p>
-                  <a href="?action=puntodeVenta" class="btn btn-primary" role="button">Ir al Formulario</a>
+                  <h4 class="card-title"><?php echo trim($menu["nombre"])?></h4>
+                  <h6 class="card-subtitle mb-2 text-muted"><?php echo trim(ucfirst($menu["modulo"]))?></h6>
+                  <p class="card-text"><?php echo trim($menu["descripcion"])?></p>
+                  <a href="?action=<?php echo trim($menu["action"])?>" class="btn btn-primary" role="button">Ir al Formulario</a>
                 </div>
               </div> 
             </div> <!-- end col -->
             
+            <?php } 
+            } ?>
            
             
           </div>

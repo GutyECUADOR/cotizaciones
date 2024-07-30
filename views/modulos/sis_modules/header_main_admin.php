@@ -27,7 +27,10 @@
             }else{
               echo trim($_SESSION["empresaNombre".APP_UNIQUE_KEY]);
             }
-          ?></a></li>
+            
+           
+          ?>
+          </a></li>
         <li><a> <?php echo trim($_SESSION["empresaRUC".APP_UNIQUE_KEY])?></a></li>
       </ul>
 

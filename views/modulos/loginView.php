@@ -2,7 +2,7 @@
 
 use App\Controllers\LoginController;
 
-if (isset($_SESSION["usuarioRUC".APP_UNIQUE_KEY])){
+if (isset($_SESSION["usuarioRUC"])){
         echo "Sigue Logeado";
         header('location:index.php?action=inicio');  
     }
@@ -11,21 +11,26 @@ if (isset($_SESSION["usuarioRUC".APP_UNIQUE_KEY])){
     
 ?>
     <!-- login CSS - Only for this case here -->
-    <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\css\signin.css">
-    <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\css\sticky-footer-navbar.css">
+    <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\css\signin.css?<?php echo date('Ymdhiiss')?>">
+    <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\css\sticky-footer-navbar.css?<?php echo date('Ymdhiiss')?>">
    
-    <div class="container" style="display: flex; align-items: center; justify-content: center;">   
+    <div class="container">   
         <div class="div col">
             <div class="row">
             <form class="form-signin" method="POST" autocomplete="off"  class="formulario" name="formulario_registro">
             <div class="text-center">
-                <img style="max-width: 100%;" src="<?php echo LOGO_NAME?>" alt="Logo">
+                <img style="max-width: 100%;" src="<?php echo LOGO_NAME?>?<?php echo date('Ymdhiiss')?>" alt="Logo">
             </div>
             
         
             <h2 class="form-signin-heading text-center"><?php echo APP_NAME?></h2>
-            
+
+            <div class="alert alert-success text-center">
+                <strong>Recuerde</strong>, No comparta sus credenciales de acceso y seleecione la empresa correcta.
+            </div>
+
             <?php $login->actionCatcherController(); ?>
+
             <input type="hidden" name="preaction" value="<?php echo isset($_GET['preaction']) ? $_GET['preaction'] : ''?>">
             
             <select class="form-control" name="select_empresa" id="select_empresa" required autofocus>
