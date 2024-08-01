@@ -27,6 +27,8 @@ class LoginController  {
 
                 //$dataBaseName = $this->loginModel->getDBNameByCodigo($codigoDB); // Obtenemos nombre de la DB segun codigo, retorno de un array
                 $arrayResultados = $this->loginModel->validaIngreso($arrayDatos, $codigoDB); // Validamos info del usuario en esa DB
+                
+                
                 if (!$arrayResultados) {
                     echo '
                     <div class="alert alert-danger text-center">
@@ -41,7 +43,7 @@ class LoginController  {
                 $arrayTramacoKEYS = $this->loginModel->validaTramacoKEYS($codigoDB); //Obetenemos las credenciales para el API Taramaco
 
                 //Funcion validar acceso retorna array de resultados
-                    if (trim($arrayResultados['Codigo']) == trim($arrayDatos['usuario'])) {
+                    if (trim(strtoupper($arrayResultados['Codigo'])) == trim(strtoupper($arrayDatos['usuario']))) {
                         session_start();
                         $_SESSION["usuarioRUC".APP_UNIQUE_KEY] =  $arrayResultados['Codigo'] ;
                         $_SESSION["usuarioNOMBRE".APP_UNIQUE_KEY] = trim($arrayResultados['Nombre']);
