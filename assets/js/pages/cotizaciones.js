@@ -472,8 +472,6 @@ $(document).ready(function() {
         document.getElementById("inputNuevoProductoSubtotal").value = "";
         document.getElementById("inputNuevoProductoStock1").value = "";
         document.getElementById("inputNuevoProductoStock2").value = "";
-        document.getElementById("inputNuevoProductoStock3").value = "";
-        document.getElementById("inputNuevoProductoStock4").value = "";
 
         //tinyMCE.get('extraDetailContent').setContent('');
         
@@ -485,8 +483,6 @@ $(document).ready(function() {
        document.getElementById("inputNuevoProductoCantidad").value = producto.cantidad;
        document.getElementById("inputNuevoProductoStock1").value = parseFloat(producto.stock).toFixed(2);
        document.getElementById("inputNuevoProductoStock2").value = parseFloat(producto.stock1).toFixed(2);
-       document.getElementById("inputNuevoProductoStock3").value = parseFloat(producto.stock2).toFixed(2);
-       document.getElementById("inputNuevoProductoStock4").value = parseFloat(producto.stock3).toFixed(2);
        document.getElementById("inputNuevoProductoPrecioUnitario").value = producto.precio;
        document.getElementById("inputNuevoProductoSubtotal").value = producto.getSubtotal();
     }

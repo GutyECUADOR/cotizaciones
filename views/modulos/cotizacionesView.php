@@ -264,10 +264,8 @@ $vendedores = $cotizacion->getVendedores();
                                         <th style="min-width: 140px;" class="text-center headerTablaProducto">Codigo</th>
                                         <th style="min-width:150px;" class="text-center headerTablaProducto">Nombre del Articulo</th>
                                         <th style="min-width: 80px;"  class="text-center headerTablaProducto">Cantidad</th>
-                                        <th style="min-width: 80px;" class="text-center headerTablaProducto">Stock Principal</th>
-                                        <th style="min-width: 80px;" class="text-center headerTablaProducto">Stock Galpon</th>
-                                        <th style="min-width: 80px;" class="text-center headerTablaProducto">Stock Portoviejo</th>
-                                        <th style="min-width: 80px;" class="text-center headerTablaProducto">Stock Riobamba</th>
+                                        <th style="min-width: 80px;" class="text-center headerTablaProducto">Stock Quito - B01</th>
+                                        <th style="min-width: 80px;" class="text-center headerTablaProducto">Stock Guayaquil - B02</th>
                                         <th style="min-width: 80px;" class="text-center headerTablaProducto">Precio</th>
                                         <th style="min-width: 80px;" class="text-center headerTablaProducto">Subtotal</th>
                                     </tr>
@@ -298,9 +296,7 @@ $vendedores = $cotizacion->getVendedores();
                                             <td><input type="number" id="inputNuevoProductoCantidad" class="form-control text-center input-sm" value="0"></td>
                                             <td><input type="text" id="inputNuevoProductoStock1" class="form-control text-center input-sm" readonly></td>
                                             <td><input type="text" id="inputNuevoProductoStock2" class="form-control text-center input-sm" readonly></td>
-                                            <td><input type="text" id="inputNuevoProductoStock3" class="form-control text-center input-sm" readonly></td>
-                                            <td><input type="text" id="inputNuevoProductoStock4" class="form-control text-center input-sm" readonly></td>
-                                            
+                                           
                                             <td>
                                                 <input type="text" id="inputNuevoProductoPrecioUnitario" class="form-control text-center input-sm" readonly>
                                                 <input type="hidden">

@@ -36,7 +36,7 @@
 
             <div class="panel panel-default"> 
                 <div class="panel-heading">Resultados</div> 
-                    <div class="table-responsive">  
+                    <div class="table-responsive" style="padding-bottom: 130px;">  
                         <table id="tblResultadosBusquedaDocumentos" class="table"> 
                             <thead>
                                 <tr> 

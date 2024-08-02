@@ -278,12 +278,12 @@ class AjaxController  {
                             
                                     <tr>
                                         <td style="font-weight: bold;" class="text-right" colspan="2">Base Imp 0:</td>
-                                        <td class="text-right">'.round( $VEN_CAB["BASCERO"],4).'</td>
+                                        <td class="text-right">'.round( $VEN_CAB["BASCERO"],2).'</td>
                                     </tr>
                             
                                     <tr>
                                         <td style="font-weight: bold;" class="text-right" colspan="2">Base Imp:</td>
-                                        <td class="text-right">'.round($VEN_CAB["SUBTOTAL"],4).'</td>
+                                        <td class="text-right">'.round($VEN_CAB["SUBTOTAL"],2).'</td>
                                     </tr>
                                     
 
@@ -291,12 +291,12 @@ class AjaxController  {
                             
                                     <tr>
                                         <td style="font-weight: bold;" class="text-right" colspan="2">IVA 15%:</td>
-                                        <td class="text-right">'.round($VEN_CAB["IMPUESTO"],4).'</td>
+                                        <td class="text-right">'.round($VEN_CAB["IMPUESTO"],2).'</td>
                                     </tr>
                             
                                     <tr>
                                         <td style="font-weight: bold;" class="text-right" colspan="2"><b>Total a Pagar:</b></td>
-                                        <td class="text-right"><b>'.round($VEN_CAB["TOTAL"],4).'</b></td>
+                                        <td class="text-right"><b>'.round($VEN_CAB["TOTAL"],2).'</b></td>
                                     </tr>
                         
                         </tbody>
