@@ -13,7 +13,7 @@ class AjaxModel extends Conexion  {
 
         //Query de consulta con parametros para bindear si es necesario.
         $query = " 
-            SELECT NomCia, DirCia, RucCia, TelCia, Ciudad FROM dbo.DATOSEMPRESA    
+            SELECT * FROM dbo.DATOSEMPRESA
         ";  // Final del Query SQL 
 
         try{
@@ -190,7 +190,8 @@ class AjaxModel extends Conexion  {
                 VEN_MOV.tipoiva,
                 VEN_MOV.IVA,
                 VEN_MOV.PRECIOTOT,
-                VEN_MOV.DESCU
+                VEN_MOV.DESCU,
+                VEN_MOV.UNIDAD
             FROM 
                 dbo.VEN_MOV
                 INNER JOIN dbo.INV_ARTICULOS as ARTICULO ON ARTICULO.Codigo = VEN_MOV.CODIGO

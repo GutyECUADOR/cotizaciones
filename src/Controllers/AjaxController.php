@@ -210,39 +210,44 @@ class AjaxController  {
             <div class="row">
                 <div class="col text-center">
                     <img src="../../assets/img/logo.png" alt="Logo" style="width: 150px;">
-                    <h5>'.$empresaData["NomCia"].'</h5>
-                    <h5>Direccion: '.$empresaData["DirCia"].'</h5>
-                    <h5>Telefono: '.$empresaData["TelCia"].'</h5>
-                    <h4 style="font-weight: bold;">PROFORMA</strong></h4>
+                    <h5 style="font-weight: bold;">http://www.adfolsa.com.ec</strong></h5>
+                    <h5 style="line-height: 0.5;">'.$empresaData["NomCia"].'</h5>
+                    <h5 style="line-height: 0.5;">Direccion: '.$empresaData["DirCia"].'</h5>
+                    <h5 style="line-height: 0.5;">email: ventas@adfolsa.com.ec</h5>
+                    <h5 style="line-height: 0.5;">Telefono: '.$empresaData["TelCia"].'</h5>
+                    <h5 style="line-height: 0.5;">RUC: '.$empresaData["RucCia"].'</h5>
+                    <h4 style="font-weight: bold;">PROFORMA '.$VEN_CAB["TIPO"].'-'.$VEN_CAB["NUMERO"].'</strong></h4>
                 </div>
                 
             </div>
 
             <div class="row" style="border:1px solid #000000; border-radius: 4px; padding: 5px; font-size: 12px;">
                 <div class="col-xs-6 text-left">
-                    <div><span style="font-weight: bold; text-align: right;">LOCAL:</span>('. $VEN_CAB["BODEGA"].')</div>
+                    <div><span style="font-weight: bold; text-align: right;">OFICINA:</span>('. $VEN_CAB["BODEGA"].')</div>
                     <div><span style="font-weight: bold;">CLIENTE:</span> '.$VEN_CAB["NOMBRE"].'</div>
                     <div><span style="font-weight: bold;">RUC:</span> '.$VEN_CAB["RUC"].'</div>
                     <div><span style="font-weight: bold;">DIRECCION:</span> '.$VEN_CAB["DIRECCION1"].' </div>
-                    <div><span style="font-weight: bold;">TELEFONO:</span> '.$VEN_CAB["TELEFONO1"].' </div>
+                   
                     
                 </div>
                 <div class="col-xs-4 text-left">
-                    <div><span style="font-weight: bold;">SISTEMA # </span> '.$VEN_CAB["TIPO"].'-'.$VEN_CAB["NUMERO"].' </div>
-                    <div><span style="font-weight: bold;">FECHA # </span> '.$VEN_CAB["CREADODATE"].' </div>
+                    <div><span style="font-weight: bold;">FECHA: </span> '.$VEN_CAB["CREADODATE"].' </div>
+                    <div><span style="font-weight: bold;">TELEFONO:</span> '.$VEN_CAB["TELEFONO1"].' </div>
+                    <div><span style="font-weight: bold;">F. PAGO:</span> '.$VEN_CAB["FORMAPAGO"].' </div>
                     <div><span style="font-weight: bold;">VENDEDOR:</span>('.$VEN_CAB["CodigoVendedor"].')'. $VEN_CAB["VendedorName"].' </div>
                 </div>
             </div>
 
             <div class="row" style="padding-top:10px;">
                 <div class="col">
-                    <table style="border-collapse: collapse;" class="table" cellpadding="8">
+                    <table style="border-collapse: collapse;" class="table" cellpadding="9">
                         <thead>
                             <tr>
                                 <td style="font-weight: bold;" class="text-center" width="15%">Codigo</td>
                                 <td style="font-weight: bold;" class="text-center" width="55%">Descripcion</td>
-                                <td style="font-weight: bold;" class="text-right" width="15%">Cant.</td>
-                                <td style="font-weight: bold;" class="text-right" width="15%">Precio</td>
+                                <td style="font-weight: bold;" class="text-right" width="10%">Unidad</td>
+                                <td style="font-weight: bold;" class="text-right" width="10%">Cant.</td>
+                                <td style="font-weight: bold;" class="text-right" width="10%">Precio</td>
                                 <td style="font-weight: bold;" class="text-right" width="10%">% Desc.</td>
                                 <td style="font-weight: bold;" class="text-right" width="15%">P. Total</td>
                             </tr>
@@ -258,6 +263,7 @@ class AjaxController  {
                                 <tr>
                                     <td class="text-left">'.$row["CODIGO"].'</td>
                                     <td class="text-left">'.$row["Nombre"].'</td>
+                                    <td class="text-right">'.$row["UNIDAD"].'</td>
                                     <td class="text-right">'.$row["CANTIDAD"].'</td>
                                     <td class="text-right">'.round($row["PRECIO"],4).'</td>
                                     <td class="text-right">'.round($row["DESCU"],2).'</td>
@@ -269,17 +275,17 @@ class AjaxController  {
                                 $html .= ' 
                                
                                     <tr>
-                                        <td colspan="3" rowspan="5">
+                                        <td colspan="4" rowspan="5">
                                             <p><span style="font-weight: bold;">Observaciones:</span> '.$VEN_CAB["OBSERVA"].'</p> 
                                         </td>
-                                        <td style="font-weight: bold;" class="text-right" colspan="2">Subtotal:</td>
-                                        <td class="text-right">'.round($VEN_CAB["BASIVA"]+$VEN_CAB["BASCERO"],4).'</td>
+                                        <td style="font-weight: bold;" class="text-right" colspan="2">Total Factura:</td>
+                                        <td class="text-right">'.round($VEN_CAB["BASIVA"]+$VEN_CAB["BASCERO"],2).'</td>
                                     
                                     </tr>
                             
                                     <tr>
-                                        <td style="font-weight: bold;" class="text-right" colspan="2">Base Imp 0:</td>
-                                        <td class="text-right">'.round( $VEN_CAB["BASCERO"],2).'</td>
+                                        <td style="font-weight: bold;" class="text-right" colspan="2">Descuento:</td>
+                                        <td class="text-right">'.round( $VEN_CAB["DESCUENTO"],2).'</td>
                                     </tr>
                             
                                     <tr>
@@ -310,17 +316,18 @@ class AjaxController  {
                    <span style="font-weight: bold;">Aprobado por</span>
                 </div>
                 <div class="col-xs-3 text-center">
-                    <span style="font-weight: bold;">Recibi conforme</span>
+                    <span style="font-weight: bold;">Aceptado /Cliente</span>
                 </div>
                 <div class="col-xs-4 text-center">
                     <div><span style="font-weight: bold;">FAVOR EMITIR EL CHEQUE A NOMBRE '.$empresaData["NomCia"].'</span> </div>
-                    <div><span>Estos precios NO incluyen costo de flete, Cotización Válida por 8 dias.</span> </div>
+                   
                 </div>
             </div> 
 
             <div class="row">
                 <div class="col-xs-12 text-center">
-                    <h5 style="font-weight: bold;">ES UN PLACER ATENDERLE</h5>
+                    <h5 style="font-style: italic;"> Proforma válida por 30 días y depende del stock disponible.
+                    </h5>
                 </div>
             </div>
           
