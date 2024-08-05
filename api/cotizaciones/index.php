@@ -41,8 +41,8 @@ class ajax{
       return $this->ajaxController->getAllProductosController($terminoBusqueda,  $tipoBusqueda);
     }
 
-    public function getAllDocumentos($fechaINI, $fechaFIN, $stringBusqueda) {
-      return $this->ajaxController->getAllDocumentosController($fechaINI,  $fechaFIN, $stringBusqueda);
+    public function getAllDocumentos($fechaINI, $fechaFIN, $stringBusqueda, $codBodega) {
+      return $this->ajaxController->getAllDocumentosController($fechaINI,  $fechaFIN, $stringBusqueda, $codBodega);
     }
 
     public function getInfoProducto($codigoProducto, $clienteRUC) {
@@ -180,8 +180,9 @@ class ajax{
             $fechaINI = date("Ymd", strtotime($_GET['fechaINI']));
             $fechaFIN = date("Ymd", strtotime($_GET['fechaFIN']));
             $stringBusqueda = $_GET['stringBusqueda'];
+            $codBodega = $_GET['bodega'];
 
-            $respuesta = $ajax->getAllDocumentos($fechaINI,  $fechaFIN, $stringBusqueda);
+            $respuesta = $ajax->getAllDocumentos($fechaINI,  $fechaFIN, $stringBusqueda, $codBodega);
             $rawdata = array('status' => 'OK', 'mensaje' => 'respuesta correcta', 'data' => $respuesta);
           }else{
             http_response_code(400);

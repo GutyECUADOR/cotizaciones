@@ -69,8 +69,8 @@ class AjaxController  {
     }
 
     /* Retorna la respuesta del modelo ajax*/
-    public function getAllDocumentosController($fechaINI, $fechaFIN, $stringBusqueda){
-        $response = $this->ajaxModel->getAllDocumentosModel($fechaINI, $fechaFIN, $stringBusqueda);
+    public function getAllDocumentosController($fechaINI, $fechaFIN, $stringBusqueda, $codBodega){
+        $response = $this->ajaxModel->getAllDocumentosModel($fechaINI, $fechaFIN, $stringBusqueda, $codBodega);
         return $response;
     }
 
@@ -97,7 +97,7 @@ class AjaxController  {
     public function insertCotizacion($formData){
         date_default_timezone_set('America/Lima');
         $VEN_CAB = new VenCabClass();
-        $tipoDOC = 'COT';
+        $tipoDOC = trim($formData->tipoDoc);
 
       
         if (!empty($formData)) {
@@ -129,7 +129,7 @@ class AjaxController  {
                 $VEN_CAB->setNumeroDoc($newCodigoWith0);
                 $VEN_CAB->setFecha(date('Ymd'));
                 
-                $VEN_CAB->setBodega('B01');
+                $VEN_CAB->setBodega($formData->bodega);
                 $VEN_CAB->setDivisa('DOL');
                 $VEN_CAB->setProductos($formData->productos);
                 $VEN_CAB->setSubtotal($VEN_CAB->calculaSubtotal());
@@ -160,7 +160,7 @@ class AjaxController  {
                         $VEN_MOV->setVendedor($datosCliente['VENDEDOR']);
                         $VEN_MOV->setNumeroDoc($newCodigoWith0);
                         $VEN_MOV->setFecha(date('Ymd h:i:s'));
-                        $VEN_MOV->setBodega('B01');
+                        $VEN_MOV->setBodega($formData->bodega);
                         $VEN_MOV->setCodProducto(strtoupper($producto->codigo));
                         $VEN_MOV->setCantidad($producto->cantidad);
                         $VEN_MOV->setPrecioProducto($producto->precio);
@@ -176,6 +176,7 @@ class AjaxController  {
 
                     }
                 }
+                
             } catch (Exception $e) {
                 return array('status' => 'ERROR', 
                     'mensaje'  => 'No se pudo completar la operacion'. $e->getMessage(),

@@ -1,6 +1,8 @@
 class Cotizacion {
     constructor() {
         this.cliente = null,
+        this.tipoDoc = null,
+        this.bodega = null,
         this.productos = [],
         this.comentario = 'proforma'
     }
@@ -216,8 +218,23 @@ $(document).ready(function() {
     $("#btnGuardar").on('click', function(event) {
         event.preventDefault();
        
-        let cotizacionJSON = JSON.stringify((cotizacion));
+       
+
+        let tipoDOC = document.querySelector('#selectTipoDoc').value; 
+        let bodega = document.querySelector('#selectBodega').value; 
+
+        console.log(tipoDOC,bodega);
+
+        cotizacion.tipoDoc = tipoDOC;
+        cotizacion.bodega = bodega;
+
+        if (cotizacion.tipoDoc == null || cotizacion.bodega == null || cotizacion.tipoDoc == '' || cotizacion.bodega == '') {
+            alert('Tipo de documento o bodega no disponibles. Seleccione una bodega.');
+            return
+        }
+
         if (cotizacion.cliente != null && cotizacion.productos.length > 0) {
+            let cotizacionJSON = JSON.stringify((cotizacion));
             $(this).prop("disabled", true);
             saveData(cotizacionJSON);
         }else{
@@ -354,8 +371,11 @@ $(document).ready(function() {
         let fechaINI = document.getElementById("fechaINIDoc").value;
         let fechaFIN = document.getElementById("fechaFINDoc").value;
         let busqueda = document.getElementById("terminoBusquedaModalDocument").value;
+        let bodega = document.getElementById("selectTipoDoc").value;
+
+        console.log(bodega);
         if (fechaINI.length > 0) {
-            buscarDocumentos(fechaINI, fechaFIN, busqueda);
+            buscarDocumentos(fechaINI, fechaFIN, busqueda, bodega);
             
         }else{
             alert('Indique rango de fechas');
@@ -784,7 +804,7 @@ $(document).ready(function() {
 
     }
 
-    function buscarDocumentos(fechaINI, fechaFIN, stringBusqueda) {
+    function buscarDocumentos(fechaINI, fechaFIN, stringBusqueda, bodega) {
         $("#loaderDocumentos").css("display", "block");
        
         $.ajax({
@@ -792,7 +812,7 @@ $(document).ready(function() {
             url: './api/cotizaciones/index.php?action=searchDocumentos',
             dataType: "json",
     
-            data: { fechaINI:fechaINI, fechaFIN:fechaFIN, stringBusqueda: stringBusqueda },
+            data: { fechaINI:fechaINI, fechaFIN:fechaFIN, stringBusqueda: stringBusqueda, bodega:bodega },
             
             success: function(response) {
                 console.log(response);

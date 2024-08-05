@@ -303,7 +303,7 @@ class AjaxModel extends Conexion  {
    
     }
 
-    public function getAllDocumentosModel($fechaINI, $fechaFIN, $stringBusqueda) {
+    public function getAllDocumentosModel($fechaINI, $fechaFIN, $stringBusqueda, $tipoDoc) {
 
         //Query de consulta con parametros para bindear si es necesario.
         $query = "
@@ -322,8 +322,8 @@ class AjaxModel extends Conexion  {
             LEFT OUTER JOIN  COB_CLIENTES CLI ON (CLI.CODIGO = VEN.CLIENTE)  
         WHERE 
             VEN.TIPO = @P1  AND VEN.OFI = @P2  AND Ven.fecha BETWEEN @P3  AND @P4  AND CLI.NOMBRE LIKE @P5
-        ORDER BY VEN.FECHA DESC,VEN.TIPO,VEN.NUMERO'
-        ,'COT','99','$fechaINI','$fechaFIN','$stringBusqueda%'
+        ORDER BY VEN.NUMERO DESC, VEN.FECHA DESC,VEN.TIPO '
+        ,'$tipoDoc','99','$fechaINI','$fechaFIN','$stringBusqueda%'
 
         ";
         $stmt = $this->instancia->prepare($query); 

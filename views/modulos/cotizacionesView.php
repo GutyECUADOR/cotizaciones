@@ -11,9 +11,11 @@ $routeMiddleware = new RouteMiddleware();
 $routeMiddleware->checkisLogin();
 
 $cotizacion = new CotizacionController();
-$bodegas = $cotizacion->getBodegas();
+//$bodegas = $cotizacion->getBodegas();
 $vendedores = $cotizacion->getVendedores();
 
+$documentosDisponibles = $cotizacion->getTiposDocsDiponiblesByUserName($_SESSION["usuarioRUC".APP_UNIQUE_KEY]);
+$bodegas = $cotizacion->getBodegasDiponiblesByUsername($_SESSION["usuarioRUC".APP_UNIQUE_KEY]);
 ?>
 <!-- CSS Propios -->
 <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\css\cotizacionStyles.css">
@@ -42,9 +44,18 @@ $vendedores = $cotizacion->getVendedores();
                         <div class="col">
                             <div class="form-group formextra col-lg-12">
                                 <div class="input-group">
-                                        <span class="input-group-addon">Tipo Doc</span>
-                                        <select class="form-control input-sm">
-                                            <option>Cotizacion</option>
+                                        <span class="input-group-addon">Tipo Documento</span>
+                                        <select id="selectTipoDoc" class="form-control input-sm" required>
+                                        <?php
+                                            foreach ($documentosDisponibles as $documento => $row) {
+
+                                                $codigo = $row['CODIGO'];
+                                                $texto= $row['NOMBRE'];  
+
+                                                echo "<option value='$codigo'>$codigo - $texto</option>";
+                                            }
+                                            
+                                            ?>
                                         </select>
                                 </div>
                             </div>
@@ -86,8 +97,8 @@ $vendedores = $cotizacion->getVendedores();
                             </div>
 
                             <div class="form-group formextra col-lg-2">
-                                <span class="input-group-addon bordederecho">Almacen</span>
-                                    <select class="form-control input-sm centertext">
+                                <span class="input-group-addon bordederecho">Almacen/Bodega</span>
+                                    <select id="selectBodega" class="form-control input-sm centertext">
                                         <?php
                                         foreach ($bodegas as $bodega => $row) {
 
@@ -384,7 +395,7 @@ $vendedores = $cotizacion->getVendedores();
                                     </thead>
                                     <tbody>
                                     <tr>
-                                        <td><input type="text" style="width: 100%; min-width: 50px;" class="form-control text-center" id="txt_unidadesProd"></td>
+                                        <td><input type="text" style="width: 100%; min-width: 50px;" class="form-control text-center" id="txt_unidadesProd" readonly></td>
                                         <td><input type="text" style="width: 100%; min-width: 80px;" class="form-control text-center" id="txt_ivaBienes" readonly></td>
                                         <td><input type="text" style="width: 100%; min-width: 80px;" class="form-control text-center" id="txt_subtotal" value="0" readonly></td>
                                         <td><input type="text" style="width: 100%; min-width: 80px;" class="form-control text-center" id="txt_descuentoResumen" readonly></td>

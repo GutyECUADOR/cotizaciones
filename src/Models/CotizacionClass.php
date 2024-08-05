@@ -47,7 +47,7 @@ class CotizacionClass extends Conexion {
                 }
             return $resulset;  
 
-        }catch(PDOException $exception){
+        }catch(\PDOException $exception){
             return array('status' => 'error', 'mensaje' => $exception->getMessage() );
         }
        
@@ -75,7 +75,65 @@ class CotizacionClass extends Conexion {
             }
         
 
-        }catch(PDOException $exception){
+        }catch(\PDOException $exception){
+            return array('status' => 'error', 'mensaje' => $exception->getMessage() );
+        }
+           
+
+    }
+
+    public function getTiposDocsDiponiblesByUserName(string $username){
+
+        $query  = "
+            SELECT 
+                CODIGO, NOMBRE,TIPMOV, TIPODOC, BODEGA FROM ven_tipos 
+            WHERE codigo in (SELECT dato FROM XASIGDATOUSER WHERE  USERCOD = :username) and TIPODOC='c'
+        ";
+      
+        try{
+            $stmt = $this->instancia->prepare($query); 
+            $stmt->bindValue(':username', $username); 
+    
+            if($stmt->execute()){
+                $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+            }else{
+                $resulset = false;
+            }
+            return $resulset;  
+        
+
+        }catch(\PDOException $exception){
+            return array('status' => 'error', 'mensaje' => $exception->getMessage() );
+        }
+           
+
+    }
+
+    public function getBodegasDiponiblesByUsername(string $username){
+
+        $query  = "
+            SELECT 
+                DATO as CODIGO,
+                NOMBRE,
+                USERCOD,
+                FILTRO,
+                BodegaPorDefault
+            FROM XASIGDATOUSER where FILTRO = 'bod' AND USERCOD = :username
+        ";
+      
+        try{
+            $stmt = $this->instancia->prepare($query); 
+            $stmt->bindValue(':username', $username); 
+    
+            if($stmt->execute()){
+                $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+            }else{
+                $resulset = false;
+            }
+            return $resulset;  
+        
+
+        }catch(\PDOException $exception){
             return array('status' => 'error', 'mensaje' => $exception->getMessage() );
         }
            
@@ -104,7 +162,7 @@ class CotizacionClass extends Conexion {
             }
         
 
-        }catch(PDOException $exception){
+        }catch(\PDOException $exception){
             return array('status' => 'error', 'mensaje' => $exception->getMessage() );
         }
            

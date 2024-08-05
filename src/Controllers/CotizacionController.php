@@ -38,6 +38,16 @@ class CotizacionController  {
         $bodegas =  $this->cotizacion->getBodegasWF();
         return $bodegas;
     }
+    
+    public function getTiposDocsDiponiblesByUserName(string $username){
+        $bodegas =  $this->cotizacion->getTiposDocsDiponiblesByUserName($username);
+        return $bodegas;
+    }
+
+    public function getBodegasDiponiblesByUsername(string $username){
+        $bodegas =  $this->cotizacion->getBodegasDiponiblesByUsername($username);
+        return $bodegas;
+    }
 
     public function getVendedores(){
         $bodegas =  $this->cotizacion->getVendedoresWF();
