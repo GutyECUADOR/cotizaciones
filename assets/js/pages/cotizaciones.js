@@ -57,10 +57,11 @@ class Cliente {
 }
 
 class Producto {
-    constructor(codigo, nombre, cantidad, precio, descuento, stock, tipoIVA, valorIVA) {
+    constructor(codigo, nombre, cantidad, unidad, precio, descuento, stock, tipoIVA, valorIVA) {
       this.codigo = codigo;
       this.nombre = nombre;
       this.cantidad = cantidad;
+      this.unidad = unidad;
       this.precio = precio;
       this.descuento = descuento;
       this.stock = stock;
@@ -468,6 +469,7 @@ $(document).ready(function() {
         document.getElementById("inputNuevoCodProducto").value = "";
         document.getElementById("inputNuevoProductoNombre").value = "";
         document.getElementById("inputNuevoProductoCantidad").value = "";
+        document.getElementById("inputNuevoProductoUnidad").value = "";
         document.getElementById("inputNuevoProductoPrecioUnitario").value = "";
         document.getElementById("inputNuevoProductoSubtotal").value = "";
         document.getElementById("inputNuevoProductoStock1").value = "";
@@ -481,6 +483,7 @@ $(document).ready(function() {
     function printDataProducto(producto){
        document.getElementById("inputNuevoProductoNombre").value = producto.nombre;
        document.getElementById("inputNuevoProductoCantidad").value = producto.cantidad;
+       document.getElementById("inputNuevoProductoUnidad").value = producto.unidad;
        document.getElementById("inputNuevoProductoStock1").value = parseFloat(producto.stock).toFixed(2);
        document.getElementById("inputNuevoProductoStock2").value = parseFloat(producto.stock1).toFixed(2);
        document.getElementById("inputNuevoProductoPrecioUnitario").value = producto.precio;
@@ -680,7 +683,7 @@ $(document).ready(function() {
             console.log(response);
                 let producto = response.data;
                 if (producto) {
-                    newProducto = new Producto(producto.CODIGO, producto.NOMBRE, 1, producto.PRECIO, 0, producto.STOCK, producto.TIPOIVA || 0, parseFloat(producto.VALORIVA));
+                    newProducto = new Producto(producto.CODIGO, producto.NOMBRE, 1, producto.UNIDAD, producto.PRECIO, 0, producto.STOCK, producto.TIPOIVA || 0, parseFloat(producto.VALORIVA));
                     newProducto.stock1 = producto.STOCK2;
                     newProducto.stock2 = producto.STOCK3;
                     newProducto.stock3 = producto.STOCK4;
