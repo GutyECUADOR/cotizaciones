@@ -66,7 +66,7 @@ $bodegas = $cotizacion->getBodegasDiponiblesByUsername($_SESSION["usuarioRUC".AP
                     <div class="row">
                         
                         <div class="col">
-                            <div class="form-group formextra col-lg-3 hidden-sm hidden-xs">
+                            <div class="form-group formextra col-lg-3 hidden-sm">
                                 <span class="input-group-addon bordederecho">Buscar</span>
                                 <div class="input-group input-group-sm">
                                     <input type="text" class="form-control">

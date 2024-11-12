@@ -853,7 +853,7 @@ $(document).ready(function() {
     function mySwal(mensajem, tipoAlerta = 'info', newcodigoVENCAB) {
         Swal.fire({
             title: 'Atención',
-            text: mensajem + ', desea inviar email con la cotizacion al cliente?',
+            text: mensajem + ', desea inviar email con la cotización al cliente?',
             type: tipoAlerta,
             allowOutsideClick: false,
             showCancelButton: true,
