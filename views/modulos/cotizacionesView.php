@@ -231,7 +231,7 @@ $bodegas = $cotizacion->getBodegasDiponiblesByUsername($_SESSION["usuarioRUC".AP
                                 </div>
                         </div>
 
-                        <div class="col-lg-3 col-md-12 hidden-sm hidden-xs">
+                        <div class="col-lg-3 col-md-12 hidden-sm">
                             <div class="panel panel-default">
                                     <div class="panel-heading">Detalle</div>
                                     <div class="panel-body">
