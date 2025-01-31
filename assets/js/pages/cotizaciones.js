@@ -586,7 +586,7 @@ $(document).ready(function() {
                 break;
         
             default:
-                precioDisplay = 'PREC'+cotizacion.cliente.tipoPrecio;
+                precioDisplay = 'PRECA';
                 break;
         }
        
