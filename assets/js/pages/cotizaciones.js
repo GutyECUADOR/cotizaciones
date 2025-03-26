@@ -587,6 +587,7 @@ $(document).ready(function() {
         
             default:
                 precioDisplay = 'PRECA';
+                cotizacion.cliente.tipoPrecio = 'PRECA'
                 break;
         }
        
