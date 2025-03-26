@@ -16,6 +16,7 @@ class VenCabClass {
     public $impuesto;
     public $total;
     public $formaPago;
+    public $diasPago;
     public $serie;
     public $secuencia;
     public $observacion;
@@ -146,6 +147,10 @@ class VenCabClass {
         return $this->formaPago;
     }
 
+    function getDiasPago() {
+        return $this->diasPago;
+    }
+
     function getSerie() {
         return $this->serie;
     }
@@ -208,6 +213,10 @@ class VenCabClass {
 
     function setFormaPago($formaPago) {
         $this->formaPago = $formaPago;
+    }
+
+    function setDiasPago($diasPago) {
+        $this->diasPago = $diasPago;
     }
 
     function setSerie($serie) {

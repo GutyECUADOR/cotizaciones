@@ -137,6 +137,7 @@ class AjaxController  {
                 $VEN_CAB->setImpuesto($VEN_CAB->calculaIVA());
                 $VEN_CAB->setTotal($VEN_CAB->calculaTOTAL());
                 $VEN_CAB->setFormaPago($formData->cliente->formaPago);
+                $VEN_CAB->setDiasPago($formData->cliente->diasPago);
                 $VEN_CAB->setSerie($serieDocs); 
                 $VEN_CAB->setSecuencia('0'.$newCodigoWith0); //Agregar 0 extra segun winfenix
                 $VEN_CAB->setObservacion('WebForms, ' . $formData->comentario);
