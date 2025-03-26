@@ -77,6 +77,9 @@ class AjaxController  {
     /* Retorna la respuesta del modelo ajax*/
     public function getInfoProductoController($codigoProducto, $clienteRUC){
         $tipoPrecio = $this->ajaxModel->getInfoClienteModel($clienteRUC)['TIPOPRECIO'];
+        if (!$tipoPrecio) {
+            $tipoPrecio = 'A';
+        }
         $response = $this->ajaxModel->getInfoProductoModel($codigoProducto, $tipoPrecio);
         return $response;
     }
