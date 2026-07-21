@@ -154,7 +154,12 @@ class RouteModel extends Conexion {
 
             case 'guiasShopify':
                 $contenido = "views/modulos/guiasShopifyTramacoView.php";
-                break;   
+                break;  
+
+            /* CORTES Y KITS */
+            case 'creacion-recetas':
+                $contenido = "views/modulos/creacionRecetaView.php";
+                break;
            
             // ADMINISTRACION 
             case 'dashboard':

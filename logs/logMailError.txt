@@ -54,3 +54,15 @@ User: ninguna - January 16, 2025, 4:39 pm
 PCid: S01
 Detail: SMTP Error: Could not authenticate. No se pudo enviar correo a: no-reply@adfolsa.com.ec
 -------------------------
+User: ninguna - March 13, 2025, 2:04 pm
+PCid: S01
+Detail: SMTP Error: Could not authenticate. No se pudo enviar correo a: no-reply@adfolsa.com.ec
+-------------------------
+User: ninguna - March 21, 2025, 5:27 pm
+PCid: S01
+Detail: SMTP Error: Could not authenticate. No se pudo enviar correo a: no-reply@adfolsa.com.ec
+-------------------------
+User: ninguna - September 3, 2025, 7:31 pm
+PCid: S01
+Detail: Invalid address:  (to): mgranja@adfolsa.com.ec. No se pudo enviar correo a: no-reply@adfolsa.com.ec
+-------------------------

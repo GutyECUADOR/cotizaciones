@@ -229,6 +229,7 @@ $(document).ready(function() {
         cotizacion.bodega = bodega;
 
         if (cotizacion.tipoDoc == null || cotizacion.bodega == null || cotizacion.tipoDoc == '' || cotizacion.bodega == '') {
+            console.log(cotizacion);
             alert('Tipo de documento o bodega no disponibles. Seleccione una bodega.');
             return
         }

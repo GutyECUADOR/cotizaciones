@@ -6,6 +6,7 @@
             <h4 class="modal-title"> Buscar Documento </h4>
         </div>
         <div class="modal-body">
+            
             <div class="input-group input-daterange">
                 <input type="date" v-model="search_documentos.busqueda.fechaINI" class="form-control">
                 <div class="input-group-addon">hasta</div>
@@ -26,7 +27,7 @@
 
             <div class="panel panel-default"> 
                 <div class="panel-heading">Resultados: <b>{{ search_documentos.results.length}}</b> documentos</div> 
-                    <div class="responsibetable" style="padding-bottom: 20px;"> 
+                    <div class="responsibetable"> 
                         <table class="table"> 
                             <thead>
                                 <tr> 
